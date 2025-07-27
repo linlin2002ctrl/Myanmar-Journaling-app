@@ -114,21 +114,7 @@
                     <option value="ကျေနပ်">ကျေနပ် 👍</option>
                 </select>
             </div>
-
-            <!-- New Prompt Type Selection -->
-            <div class="mb-8">
-                <label class="block text-gray-700 text-base font-semibold mb-2">မေးခွန်းအမျိုးအစား ရွေးချယ်ပါ:</label>
-                <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                    <label class="inline-flex items-center">
-                        <input type="radio" class="form-radio h-5 w-5 text-blue-600" name="promptType" value="moodBased" id="moodBasedPromptsRadio" checked>
-                        <span class="ml-2 text-gray-700">စိတ်ခံစားမှုအလိုက် မေးခွန်းများ</span>
-                    </label>
-                    <label class="inline-flex items-center">
-                        <input type="radio" class="form-radio h-5 w-5 text-blue-600" name="promptType" value="original" id="originalPromptsRadio">
-                        <span class="ml-2 text-gray-700">မူရင်းမေးခွန်းများ</span>
-                    </label>
-                </div>
-            </div>
+            <!-- Removed Prompt Type Selection - now always dynamic based on mood or general -->
         </div>
 
         <!-- Main Action Buttons Section (Initially hidden) -->
@@ -314,10 +300,20 @@
                 <p id="analysisSummary" class="text-lg leading-relaxed"></p>
             </div>
 
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 mt-8">အဓိက အကြောင်းအရာများ</h2> <!-- New Heading -->
+            <ul id="keyThemesList" class="list-disc list-inside bg-white p-6 rounded-lg shadow-inner border border-gray-200 text-gray-700 space-y-2 mb-4">
+                <!-- Key themes will be listed here -->
+            </ul>
+
             <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 mt-8">လုပ်ဆောင်ရန်တာဝန်များ</h2> <!-- Responsive font size -->
             <ul id="actionItemsList" class="list-disc list-inside bg-white p-6 rounded-lg shadow-inner border border-gray-200 text-gray-700 space-y-2">
                 <!-- Action items will be listed here -->
             </ul>
+
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 mt-8">✨ အပြုသဘောဆောင်သော မက်ဆေ့ချ်</h2> <!-- New Heading -->
+            <div id="affirmationDisplay" class="bg-blue-50 p-6 rounded-lg shadow-inner border border-blue-200 text-blue-800 text-lg font-semibold text-center leading-relaxed">
+                <!-- Affirmation will be displayed here -->
+            </div>
 
             <div class="flex justify-center mt-6">
                 <button id="backToMainJournalBtn" class="section-back-btn">
@@ -375,15 +371,14 @@
         const copyCombinedTextBtn = document.getElementById('copyCombinedTextBtn');
         const analysisSummary = document.getElementById('analysisSummary');
         const actionItemsList = document.getElementById('actionItemsList');
+        const keyThemesList = document.getElementById('keyThemesList'); // New element
+        const affirmationDisplay = document.getElementById('affirmationDisplay'); // New element
 
-        const messageBox = document.getElementById('messageBox');
-        const messageText = document.getElementById('messageText');
+        // Removed radio button references as they are no longer needed
+        // const moodBasedPromptsRadio = document.getElementById('moodBasedPromptsRadio');
+        // const originalPromptsRadio = document.getElementById('originalPromptsRadio');
 
-        // New radio button references
-        const moodBasedPromptsRadio = document.getElementById('moodBasedPromptsRadio');
-        const originalPromptsRadio = document.getElementById('originalPromptsRadio');
-
-        // Default Journaling Prompts in Burmese
+        // Default Journaling Prompts in Burmese (only used as fallback now)
         const defaultJournalingPrompts = [
             "ဒီနေ့အတွက် ကျေးဇူးတင်စရာ ဘာတွေရှိလဲ။",
             "ဒီနေ့ ဘယ်အရာက သင့်ကို ပျော်ရွှင်စေခဲ့လဲ။",
@@ -403,6 +398,8 @@
 
         // Function to show a temporary message
         function showMessage(message, type = 'success') {
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
             messageText.textContent = message;
             if (type === 'success') {
                 messageBox.style.backgroundColor = '#4CAF50'; // Green
@@ -434,7 +431,6 @@
             mainActionButtons.classList.remove('hidden'); // Show main buttons
             setTodayDate();
             journalMoodSelect.value = ""; // Clear mood selection
-            moodBasedPromptsRadio.checked = true; // Default to mood-based prompts
         }
 
 
@@ -487,12 +483,12 @@
             }
         }
 
-        // Function to call Gemini API for analysis (summary and action items)
-        async function getJournalAnalysis(journalText) {
+        // Function to call Gemini API for analysis (summary, action items, key themes, affirmation)
+        async function getJournalAnalysis(journalText, mood) {
             showMessage("သုံးသပ်ချက် ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပါ။", "success");
             try {
                 let chatHistory = [];
-                const prompt = `အောက်ပါ ဂျာနယ်မှတ်တမ်းကို မြန်မာဘာသာဖြင့် အကျဉ်းချုပ်သုံးသပ်ချက်ပေးပါ။ ထို့အပြင် ၎င်းမှတ်တမ်းမှ လုပ်ဆောင်ရန် တာဝန်များကို စာရင်းပြုစုဖော်ပြပါ။ JSON format ဖြင့်သာ ပြန်လည်ဖြေကြားပါ။ ဥပမာ: {"summary": "...", "action_items": ["...", "..."]}\n\nဂျာနယ်မှတ်တမ်း:\n${journalText}`;
+                const prompt = `အောက်ပါ ဂျာနယ်မှတ်တမ်းကို မြန်မာဘာသာဖြင့် အကျဉ်းချုပ်သုံးသပ်ချက်ပေးပါ။ ၎င်းမှတ်တမ်းမှ လုပ်ဆောင်ရန် တာဝန်များကို စာရင်းပြုစုဖော်ပြပါ။ ထို့အပြင် မှတ်တမ်း၏ အဓိက အကြောင်းအရာ (၃) ခုကို ဖော်ပြပြီး၊ မှတ်တမ်းပါ စိတ်ခံစားမှု '${mood}' နှင့် ကိုက်ညီသော (သို့မဟုတ် ယေဘုယျ) အပြုသဘောဆောင်သော မက်ဆေ့ချ် (affirmation) တစ်ခုကိုလည်း ဖန်တီးပေးပါ။ JSON format ဖြင့်သာ ပြန်လည်ဖြေကြားပါ။ ဥပမာ: {"summary": "...", "action_items": ["...", "..."], "key_themes": ["...", "...", "..."], "affirmation": "..."}\n\nဂျာနယ်မှတ်တမ်း:\n${journalText}`;
                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
                 const payload = {
@@ -506,17 +502,40 @@
                                 "action_items": {
                                     "type": "ARRAY",
                                     "items": { "type": "STRING" }
-                                }
+                                },
+                                "key_themes": { // New field
+                                    "type": "ARRAY",
+                                    "items": { "type": "STRING" }
+                                },
+                                "affirmation": { "type": "STRING" } // New field
                             },
-                            "propertyOrdering": ["summary", "action_items"]
+                            "propertyOrdering": ["summary", "action_items", "key_themes", "affirmation"]
                         }
-                    }
+                    },
+                    safetySettings: [ // Added safety settings to allow more content through
+                        {
+                            category: "HARM_CATEGORY_HARASSMENT",
+                            threshold: "BLOCK_NONE",
+                        },
+                        {
+                            category: "HARM_CATEGORY_HATE_SPEECH",
+                            threshold: "BLOCK_NONE",
+                        },
+                        {
+                            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                            threshold: "BLOCK_NONE",
+                        },
+                        {
+                            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                            threshold: "BLOCK_NONE",
+                        },
+                    ],
                 };
 
                 const apiKey = localStorage.getItem('geminiApiKey'); // Get API key from local storage
                 if (!apiKey) {
                     showMessage("API Key မရှိသေးပါ။ ကျေးဇူးပြု၍ API Key ထည့်သွင်းပေးပါ။", "error");
-                    return { summary: "API Key မရှိပါ။", action_items: [] };
+                    return { summary: "API Key မရှိပါ။", action_items: [], key_themes: [], affirmation: "API Key မရှိသေးပါ။" };
                 }
 
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -528,8 +547,23 @@
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'API request failed');
+                    let errorData = {};
+                    try {
+                        errorData = await response.json(); // Try to parse error response
+                    } catch (e) {
+                        console.error("Error parsing API response:", e);
+                    }
+                    
+                    let detailedErrorMessage = '';
+                    if (errorData && errorData.error && errorData.error.message) {
+                        detailedErrorMessage = ` (အသေးစိတ်: ${errorData.error.message})`;
+                    }
+
+                    if (response.status === 403) {
+                        throw new Error(`API Key မှားယွင်းနေပါသည်။ ကျေးဇူးပြု၍ API Key ကို ပြန်လည်စစ်ဆေးပါ။${detailedErrorMessage}`);
+                    } else {
+                        throw new Error(`API ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။ Status: ${response.status} ${response.statusText}${detailedErrorMessage}`);
+                    }
                 }
 
                 const result = await response.json();
@@ -537,27 +571,39 @@
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0 &&
                     result.candidates[0].content.parts[0].text) {
-                    const jsonString = result.candidates[0].content.parts[0].text;
-                    const parsedJson = JSON.parse(jsonString);
+                    let parsedJson;
+                    try {
+                        parsedJson = JSON.parse(result.candidates[0].content.parts[0].text);
+                    } catch (e) {
+                        console.error("Error parsing JSON from Gemini API response:", e);
+                        showMessage("AI မှ ပြန်လာသော အချက်အလက်ပုံစံ မှားယွင်းနေပါသည်။", "error");
+                        return { summary: "AI မှ ပြန်လာသော အချက်အလက်ပုံစံ မှားယွင်းနေပါသည်။", action_items: [], key_themes: [], affirmation: "AI မှ ပြန်လာသော အချက်အလက်ပုံစံ မှားယွင်းနေပါသည်။" };
+                    }
                     return parsedJson;
                 } else {
                     console.error("Unexpected API response structure:", result);
                     showMessage("သုံးသပ်ချက်ရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
-                    return { summary: "သုံးသပ်ချက်ရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", action_items: [] };
+                    return { summary: "သုံးသပ်ချက်ရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", action_items: [], key_themes: [], affirmation: "သုံးသပ်ချက် မရရှိပါ။" };
                 }
             } catch (error) {
                 console.error("Error calling Gemini API for analysis:", error);
-                showMessage(`သုံးသပ်ချက်ရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
-                return { summary: "သုံးသပ်ချက်ရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။", action_items: [] };
+                showMessage(`သုံးသပ်ချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
+                return { summary: `သုံးသပ်ချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, action_items: [], key_themes: [], affirmation: `သုံးသပ်ချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}` };
             }
         }
 
-        // New function to get mood-based prompts from Gemini API
-        async function getMoodBasedPrompts(mood) {
-            showMessage(`'${mood}' စိတ်ခံစားမှုအတွက် မေးခွန်းများ ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပါ။`, "success");
+        // Function to get mood-based or general prompts from Gemini API
+        async function getDynamicPrompts(mood) {
+            showMessage(`မေးခွန်းများ ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပါ။`, "success");
             try {
                 let chatHistory = [];
-                const prompt = `Generate 10 distinct journaling prompts in Burmese, suitable for someone experiencing a '${mood}' mood. Format the response as a JSON array of strings, where each string is a prompt. Example: [\"prompt1\", \"prompt2\", ... \"prompt10\"]`;
+                let prompt;
+                if (mood && mood !== "") {
+                    prompt = `Generate 10 distinct journaling prompts in Burmese, suitable for someone experiencing a '${mood}' mood. Format the response as a JSON array of strings, where each string is a prompt. Example: [\"prompt1\", \"prompt2\", ... \"prompt10\"]`;
+                } else {
+                    prompt = `Generate 10 distinct general journaling prompts in Burmese. Format the response as a JSON array of strings, where each string is a prompt. Example: [\"prompt1\", \"prompt2\", ... \"prompt10\"]`;
+                }
+                
                 chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
                 const payload = {
@@ -570,7 +616,25 @@
                                 type: "STRING"
                             }
                         }
-                    }
+                    },
+                    safetySettings: [ // Added safety settings to allow more content through
+                        {
+                            category: "HARM_CATEGORY_HARASSMENT",
+                            threshold: "BLOCK_NONE",
+                        },
+                        {
+                            category: "HARM_CATEGORY_HATE_SPEECH",
+                            threshold: "BLOCK_NONE",
+                        },
+                        {
+                            category: "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                            threshold: "BLOCK_NONE",
+                        },
+                        {
+                            category: "HARM_CATEGORY_DANGEROUS_CONTENT",
+                            threshold: "BLOCK_NONE",
+                        },
+                    ],
                 };
 
                 const apiKey = localStorage.getItem('geminiApiKey'); // Get API key from local storage
@@ -588,8 +652,23 @@
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || 'API request failed');
+                    let errorData = {};
+                    try {
+                        errorData = await response.json(); // Try to parse error response
+                    } catch (e) {
+                        console.error("Error parsing API response:", e);
+                    }
+                    
+                    let detailedErrorMessage = '';
+                    if (errorData && errorData.error && errorData.error.message) {
+                        detailedErrorMessage = ` (အသေးစိတ်: ${errorData.error.message})`;
+                    }
+
+                    if (response.status === 403) {
+                        throw new Error(`API Key မှားယွင်းနေပါသည်။ ကျေးဇူးပြု၍ API Key ကို ပြန်လည်စစ်ဆေးပါ။${detailedErrorMessage}`);
+                    } else {
+                        throw new Error(`API ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။ Status: ${response.status} ${response.statusText}${detailedErrorMessage}`);
+                    }
                 }
 
                 const result = await response.json();
@@ -597,22 +676,30 @@
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0 &&
                     result.candidates[0].content.parts[0].text) {
-                    const jsonString = result.candidates[0].content.parts[0].text;
-                    const parsedPrompts = JSON.parse(jsonString);
+                    let parsedPrompts;
+                    try {
+                        parsedPrompts = JSON.parse(result.candidates[0].content.parts[0].text);
+                    } catch (e) {
+                        console.error("Error parsing JSON from Gemini API response:", e);
+                        showMessage("AI မှ ပြန်လာသော မေးခွန်းပုံစံ မှားယွင်းနေပါသည်။", "error");
+                        return defaultJournalingPrompts;
+                    }
+                    
                     if (Array.isArray(parsedPrompts) && parsedPrompts.length > 0) {
                         return parsedPrompts;
                     } else {
                         console.error("API returned empty or invalid prompts array:", parsedPrompts);
+                        showMessage("မေးခွန်းများရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
                         return defaultJournalingPrompts; // Fallback to default
                     }
                 } else {
-                    console.error("Unexpected API response structure for mood prompts:", result);
-                    showMessage("စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
+                    console.error("Unexpected API response structure for prompts:", result);
+                    showMessage("မေးခွန်းများရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
                     return defaultJournalingPrompts; // Fallback to default
                 }
             } catch (error) {
-                console.error("Error calling Gemini API for mood prompts:", error);
-                showMessage(`စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
+                console.error("Error calling Gemini API for prompts:", error);
+                showMessage(`မေးခွန်းများရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
                 return defaultJournalingPrompts; // Fallback to default
             }
         }
@@ -624,19 +711,9 @@
             promptsContainer.classList.remove('hidden'); // Show prompts container
             dateMoodContainer.classList.remove('hidden'); // Show date/mood when journaling
 
-            const selectedPromptType = document.querySelector('input[name="promptType"]:checked').value;
             const selectedMood = journalMoodSelect.value;
-
-            if (selectedPromptType === 'moodBased') {
-                if (selectedMood && selectedMood !== "") {
-                    activeJournalingPrompts = await getMoodBasedPrompts(selectedMood);
-                } else {
-                    showMessage("စိတ်ခံစားမှုအလိုက် မေးခွန်းများအတွက် စိတ်ခံစားမှု ရွေးချယ်ပါ။ မူရင်းမေးခွန်းများဖြင့် ဆက်လက်ဆောင်ရွက်ပါမည်။", "error");
-                    activeJournalingPrompts = [...defaultJournalingPrompts]; // Fallback to default if mood not selected
-                }
-            } else { // original prompts selected
-                activeJournalingPrompts = [...defaultJournalingPrompts];
-            }
+            // Always call getDynamicPrompts, passing the selected mood (can be empty)
+            activeJournalingPrompts = await getDynamicPrompts(selectedMood);
             
             currentPromptIndex = 0;
             promptAnswers = Array(activeJournalingPrompts.length).fill('');
@@ -682,14 +759,16 @@
                 return;
             }
             
-            const analysis = await getJournalAnalysis(combinedText); // Get analysis before saving
+            const analysis = await getJournalAnalysis(combinedText, mood); // Pass mood to analysis function
 
             const newEntry = { 
                 date, 
                 mood, // Save mood
                 text: combinedText,
                 summary: analysis.summary, // Save summary
-                action_items: analysis.action_items // Save action items
+                action_items: analysis.action_items, // Save action items
+                key_themes: analysis.key_themes, // Save key themes
+                affirmation: analysis.affirmation // Save affirmation
             };
             const entries = loadEntries();
             const existingEntryIndex = entries.findIndex(entry => entry.date === date);
@@ -708,6 +787,7 @@
 
             // Display analysis results
             analysisSummary.textContent = analysis.summary || "သုံးသပ်ချက် မရရှိပါ။";
+            
             actionItemsList.innerHTML = '';
             if (analysis.action_items && analysis.action_items.length > 0) {
                 analysis.action_items.forEach(item => {
@@ -718,6 +798,19 @@
             } else {
                 actionItemsList.innerHTML = '<li>လုပ်ဆောင်ရန်တာဝန်များ မရှိပါ။</li>';
             }
+
+            keyThemesList.innerHTML = ''; // Clear previous themes
+            if (analysis.key_themes && analysis.key_themes.length > 0) {
+                analysis.key_themes.forEach(theme => {
+                    const li = document.createElement('li');
+                    li.textContent = theme;
+                    keyThemesList.appendChild(li);
+                });
+            } else {
+                keyThemesList.innerHTML = '<li>အဓိက အကြောင်းအရာများ မရရှိပါ။</li>';
+            }
+
+            affirmationDisplay.textContent = analysis.affirmation || "အပြုသဘောဆောင်သော မက်ဆေ့ချ် မရရှိပါ။";
 
             showMessage("အဖြေများ စုစည်းပြီး သုံးသပ်ချက် ရယူပြီးပါပြီ။", "success");
         });
@@ -773,16 +866,30 @@
 
                 exportContent += `${entry.text}\n\n`; // Journal entry text
 
+                // Add key themes if available
+                if (entry.key_themes && entry.key_themes.length > 0) {
+                    exportContent += `### အဓိက အကြောင်းအရာများ\n`;
+                    entry.key_themes.forEach(theme => {
+                        exportContent += `- ${theme}\n`;
+                    });
+                    exportContent += `\n`;
+                }
+
                 // Add action items if available
                 if (entry.action_items && entry.action_items.length > 0) {
                     exportContent += `### လုပ်ဆောင်ရန်တာဝန်များ\n`;
                     entry.action_items.forEach(item => {
-                        const li = document.createElement('li'); // Create li to parse HTML entities
-                        li.innerHTML = item; // Use innerHTML to render HTML entities
-                        exportContent += `- ${li.textContent}\n`; // Get plain text content
+                        exportContent += `- ${item}\n`;
                     });
                     exportContent += `\n`; // Add a newline after action items
                 }
+
+                // Add affirmation if available
+                if (entry.affirmation && entry.affirmation.trim() !== '') {
+                    exportContent += `### အပြုသဘောဆောင်သော မက်ဆေ့ချ်\n`;
+                    exportContent += `> ${entry.affirmation}\n\n`;
+                }
+
                 exportContent += `---\n\n`; // Separator
             });
 
