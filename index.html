@@ -27,10 +27,12 @@
             font-family: 'Pyidaungsu', "Inter", sans-serif; /* Prioritize Pyidaungsu */
             background-color: #f0f4fF; /* Lighter, calming blue-gray for zen feel */
             display: flex;
-            justify-content: center;
-            align-items: center; /* Changed to center for better vertical alignment on all screens */
-            min-height: 100vh;
+            flex-direction: column; /* Stack children vertically */
+            justify-content: flex-start; /* Align content to the top */
+            align-items: center; /* Center horizontally */
+            min-height: 100vh; /* Ensure it takes full viewport height */
             box-sizing: border-box;
+            overflow-y: auto; /* Allow body to scroll if content overflows */
         }
         /* Style for the custom message box */
         .message-box {
@@ -77,7 +79,7 @@
             max-height: 85vh; /* Allow scrolling */
             overflow-y: auto;
             position: relative;
-            margin-top: 2rem; /* Spacing from top elements */
+            /* margin-top: 2rem; Removed fixed margin-top from CSS */
         }
         .section-back-btn {
             background-color: #6b7280; /* Gray for back button */
@@ -88,7 +90,7 @@
     </style>
 </head>
 <body class="p-4 sm:p-8"> <!-- Responsive padding for body -->
-    <div class="container bg-white p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl w-full max-w-lg md:max-w-xl lg:max-w-2xl"> <!-- Responsive padding for container -->
+    <div class="container bg-white p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl w-full max-w-lg md:max-w-xl lg:max-w-2xl mt-6"> <!-- Responsive padding for container, added mt-6 -->
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-center text-blue-800 mb-8 tracking-wide">နေ့စဉ်မှတ်တမ်း</h1> <!-- Responsive font size -->
 
         <!-- Date Input and Mood Selection -->
@@ -107,7 +109,7 @@
                     <option value="စိတ်တို">စိတ်တို 😠</option>
                     <option value="စိတ်လှုပ်ရှား">စိတ်လှုပ်ရှား 🤩</option>
                     <option value="ငြိမ်သက်">ငြိမ်သက် 😌</option>
-                    <option value="ပင်ပန်း">ပင်ပန်း ired️</option>
+                    <option value="ပင်ပန်း">ပင်ပန်း 😴</option> <!-- Changed emoji for 'tired' -->
                     <option value="စိတ်ရှုပ်">စိတ်ရှုပ် 😕</option>
                     <option value="ကျေနပ်">ကျေနပ် 👍</option>
                 </select>
@@ -462,57 +464,37 @@
         async function getJournalAnalysis(journalText) {
             showMessage("သုံးသပ်ချက် ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပါ။", "success");
             try {
-                let chatHistory = [];
                 const prompt = `အောက်ပါ ဂျာနယ်မှတ်တမ်းကို မြန်မာဘာသာဖြင့် အကျဉ်းချုပ်သုံးသပ်ချက်ပေးပါ။ ထို့အပြင် ၎င်းမှတ်တမ်းမှ လုပ်ဆောင်ရန် တာဝန်များကို စာရင်းပြုစုဖော်ပြပါ။ JSON format ဖြင့်သာ ပြန်လည်ဖြေကြားပါ။ ဥပမာ: {"summary": "...", "action_items": ["...", "..."]}\n\nဂျာနယ်မှတ်တမ်း:\n${journalText}`;
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-
-                const payload = {
-                    contents: chatHistory,
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "OBJECT",
-                            properties: {
-                                "summary": { "type": "STRING" },
-                                "action_items": {
-                                    "type": "ARRAY",
-                                    "items": { "type": "STRING" }
-                                }
-                            },
-                            "propertyOrdering": ["summary", "action_items"]
+                const schema = {
+                    type: "OBJECT",
+                    properties: {
+                        "summary": { "type": "STRING" },
+                        "action_items": {
+                            "type": "ARRAY",
+                            "items": { "type": "STRING" }
                         }
-                    }
+                    },
+                    "propertyOrdering": ["summary", "action_items"]
                 };
 
-                // NOTE: For production, do NOT hardcode API_KEY like this.
-                // Use Vercel Environment Variables and ideally a Serverless Function to proxy API calls securely.
-                // For development, replace with your actual API key, but be aware of security risks.
-                const apiKey = ""; // Canvas will inject the API key at runtime.
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                const response = await fetch(apiUrl, {
+                // Call the Vercel Serverless Function
+                const response = await fetch('/api/gemini', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ prompt: prompt, schema: schema })
                 });
 
-                const result = await response.json();
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0 &&
-                    result.candidates[0].content.parts[0].text) {
-                    const jsonString = result.candidates[0].content.parts[0].text;
-                    const parsedJson = JSON.parse(jsonString);
-                    return parsedJson;
-                } else {
-                    console.error("Unexpected API response structure:", result);
-                    showMessage("သုံးသပ်ချက်ရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
-                    return { summary: "သုံးသပ်ချက်ရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", action_items: [] };
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'API request failed');
                 }
+
+                const result = await response.json(); // Serverless function already parses JSON
+                return result;
             } catch (error) {
-                console.error("Error calling Gemini API for analysis:", error);
-                showMessage("သုံးသပ်ချက်ရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။", "error");
-                return { summary: "သုံးသပ်ချက်ရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။", action_items: [] };
+                console.error("Error getting journal analysis:", error);
+                showMessage(`သုံးသပ်ချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
+                return { summary: "သုံးသပ်ချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။", action_items: [] };
             }
         }
 
@@ -520,56 +502,36 @@
         async function getMoodBasedPrompts(mood) {
             showMessage(`'${mood}' စိတ်ခံစားမှုအတွက် မေးခွန်းများ ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပါ။`, "success");
             try {
-                let chatHistory = [];
                 const prompt = `Generate 10 distinct journaling prompts in Burmese, suitable for someone experiencing a '${mood}' mood. Format the response as a JSON array of strings, where each string is a prompt. Example: [\"prompt1\", \"prompt2\", ... \"prompt10\"]`;
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-
-                const payload = {
-                    contents: chatHistory,
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        responseSchema: {
-                            type: "ARRAY",
-                            items: {
-                                type: "STRING"
-                            }
-                        }
+                const schema = {
+                    type: "ARRAY",
+                    items: {
+                        type: "STRING"
                     }
                 };
 
-                // NOTE: For production, do NOT hardcode API_KEY like this.
-                // Use Vercel Environment Variables and ideally a Serverless Function to proxy API calls securely.
-                // For development, replace with your actual API key, but be aware of security risks.
-                const apiKey = ""; // Canvas will inject the API key at runtime.
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                const response = await fetch(apiUrl, {
+                // Call the Vercel Serverless Function
+                const response = await fetch('/api/gemini', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ prompt: prompt, schema: schema })
                 });
 
-                const result = await response.json();
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0 &&
-                    result.candidates[0].content.parts[0].text) {
-                    const jsonString = result.candidates[0].content.parts[0].text;
-                    const parsedPrompts = JSON.parse(jsonString);
-                    if (Array.isArray(parsedPrompts) && parsedPrompts.length > 0) {
-                        return parsedPrompts;
-                    } else {
-                        console.error("API returned empty or invalid prompts array:", parsedPrompts);
-                        return defaultJournalingPrompts; // Fallback to default
-                    }
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'API request failed');
+                }
+
+                const result = await response.json(); // Serverless function already parses JSON
+                if (Array.isArray(result) && result.length > 0) {
+                    return result;
                 } else {
-                    console.error("Unexpected API response structure for mood prompts:", result);
-                    showMessage("စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
+                    console.error("API returned empty or invalid prompts array:", result);
                     return defaultJournalingPrompts; // Fallback to default
                 }
             } catch (error) {
-                console.error("Error calling Gemini API for mood prompts:", error);
-                showMessage("စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။", "error");
+                console.error("Error getting mood prompts:", error);
+                showMessage(`စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
                 return defaultJournalingPrompts; // Fallback to default
             }
         }
@@ -734,7 +696,9 @@
                 if (entry.action_items && entry.action_items.length > 0) {
                     exportContent += `### လုပ်ဆောင်ရန်တာဝန်များ\n`;
                     entry.action_items.forEach(item => {
-                        exportContent += `- ${item}\n`;
+                        const li = document.createElement('li'); // Create li to parse HTML entities
+                        li.innerHTML = item; // Use innerHTML to render HTML entities
+                        exportContent += `- ${li.textContent}\n`; // Get plain text content
                     });
                     exportContent += `\n`; // Add a newline after action items
                 }
