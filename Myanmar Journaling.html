@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>နေ့စဉ်မှတ်တမ်း</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for Burmese text - Inter is a good default, but a Burmese font would be better if available via CDN */
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #f0f4fF; /* Lighter, calming blue-gray for zen feel */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem; /* More padding for spacious feel */
+            box-sizing: border-box;
+        }
+        /* Style for the custom message box */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem; /* More rounded */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Softer shadow */
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .message-box.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* General button styling for premium look */
+        button {
+            transition: all 0.2s ease-in-out;
+            border-radius: 0.75rem; /* Consistent rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+        button:hover {
+            transform: translateY(-2px); /* Lift effect on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Slightly larger shadow on hover */
+        }
+        button:active {
+            transform: translateY(0); /* Press effect */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Section specific styles (replacing modals) */
+        .content-section {
+            background-color: white;
+            padding: 2.5rem; /* More padding */
+            border-radius: 1rem; /* Even more rounded for soft look */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* Deeper, softer shadow */
+            width: 100%;
+            max-width: 700px; /* Slightly wider for content */
+            max-height: 85vh; /* Allow scrolling */
+            overflow-y: auto;
+            position: relative;
+            margin-top: 2rem; /* Spacing from top elements */
+        }
+        .section-back-btn {
+            background-color: #6b7280; /* Gray for back button */
+            color: white;
+            font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 shadow-md;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container bg-white p-8 rounded-xl shadow-2xl w-full max-w-lg md:max-w-xl lg:max-w-2xl">
+        <h1 class="text-4xl font-extrabold text-center text-blue-800 mb-8 tracking-wide">နေ့စဉ်မှတ်တမ်း</h1>
+
+        <!-- Date Input and Mood Selection -->
+        <div id="dateMoodContainer" class="hidden">
+            <div class="mb-6">
+                <label for="journalDate" class="block text-gray-700 text-base font-semibold mb-2">ရက်စွဲ:</label>
+                <input type="date" id="journalDate" class="shadow-md appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+            </div>
+
+            <div class="mb-8">
+                <label for="journalMood" class="block text-gray-700 text-base font-semibold mb-2">စိတ်ခံစားမှု:</label>
+                <select id="journalMood" class="shadow-md appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                    <option value="">ရွေးချယ်ပါ</option>
+                    <option value="ပျော်ရွှင်">ပျော်ရွှင် 😊</option>
+                    <option value="ဝမ်းနည်း">ဝမ်းနည်း 😢</option>
+                    <option value="စိတ်တို">စိတ်တို 😠</option>
+                    <option value="စိတ်လှုပ်ရှား">စိတ်လှုပ်ရှား 🤩</option>
+                    <option value="ငြိမ်သက်">ငြိမ်သက် 😌</option>
+                    <option value="ပင်ပန်း">ပင်ပန်း ired️</option>
+                    <option value="စိတ်ရှုပ်">စိတ်ရှုပ် 😕</option>
+                    <option value="ကျေနပ်">ကျေနပ် 👍</option>
+                </select>
+            </div>
+
+            <!-- New Prompt Type Selection -->
+            <div class="mb-8">
+                <label class="block text-gray-700 text-base font-semibold mb-2">မေးခွန်းအမျိုးအစား ရွေးချယ်ပါ:</label>
+                <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                    <label class="inline-flex items-center">
+                        <input type="radio" class="form-radio h-5 w-5 text-blue-600" name="promptType" value="moodBased" id="moodBasedPromptsRadio" checked>
+                        <span class="ml-2 text-gray-700">စိတ်ခံစားမှုအလိုက် မေးခွန်းများ</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" class="form-radio h-5 w-5 text-blue-600" name="promptType" value="original" id="originalPromptsRadio">
+                        <span class="ml-2 text-gray-700">မူရင်းမေးခွန်းများ</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Action Buttons Section (Initially hidden) -->
+        <div id="mainActionButtons" class="flex flex-col sm:flex-row flex-wrap justify-center gap-4 mb-8 hidden">
+            <button id="promptsBtn" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-3.5 px-7 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-75 shadow-lg">
+                ✨ မေးခွန်းများဖြင့် ဂျာနယ်ရေးမည်
+            </button>
+            <button id="exportToNotionBtn" class="bg-pink-700 hover:bg-pink-800 text-white font-bold py-3.5 px-7 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-opacity-75 shadow-lg">
+                မှတ်တမ်းများ Notion သို့ ထုတ်မည်
+            </button>
+        </div>
+
+        <!-- Initial Privacy Policy Section (Visible on load) -->
+        <div id="initialPrivacyPolicySection" class="content-section hidden">
+            <h2 class="text-3xl font-bold text-center text-orange-700 mb-6">ကိုယ်ရေးအချက်အလက်ကာကွယ်မှု</h2>
+            <div class="text-gray-700 space-y-4 text-base leading-relaxed">
+                <p>ဤ နေ့စဉ်မှတ်တမ်း App သည် သုံးစွဲသူများ၏ ကိုယ်ရေးအချက်အလက် လုံခြုံရေးကို အလေးထားပါသည်။</p>
+                <h3 class="text-xl font-semibold text-gray-800">၁။ အချက်အလက်သိမ်းဆည်းခြင်း</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>သင့်၏ ဂျာနယ်မှတ်တမ်းများ (ရက်စွဲ၊ စိတ်ခံစားမှု၊ မှတ်တမ်းစာသား၊ အကျဉ်းချုပ်၊ လုပ်ဆောင်ရန်တာဝန်များ) အားလုံးကို သင့်၏ Web Browser ၏ Local Storage တွင်သာ သိမ်းဆည်းထားပါသည်။</li>
+                    <li>မည်သည့် Server သို့မှ အချက်အလက်များ ပေးပို့ခြင်း သို့မဟုတ် သိမ်းဆည်းခြင်း မရှိပါ။</li>
+                    <li>၎င်းသည် သင့်အချက်အလက်များကို သင့်ထိန်းချုပ်မှုအောက်တွင်သာ ရှိစေပါသည်။</li>
+                </ul>
+                <h3 class="text-xl font-semibold text-gray-800">၂။ အချက်အလက်ပေါက်ကြားမှု ကာကွယ်ခြင်း</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>အချက်အလက်များ Local Storage တွင်သာ ရှိသောကြောင့် ပြင်ပ Server များမှ ပေါက်ကြားနိုင်ခြေ မရှိပါ။</li>
+                    <li>သို့သော် သင့်၏ ကွန်ပျူတာ သို့မဟုတ် မိုဘိုင်းလ်ဖုန်းကို လုံခြုံစွာ ထိန်းသိမ်းရန်မှာ သုံးစွဲသူ၏ တာဝန်ဖြစ်ပါသည်။</li>
+                    <li>သင့် Browser ၏ Cache သို့မဟုတ် History ကို ရှင်းလင်းပါက Local Storage မှ မှတ်တမ်းများ ပျောက်ဆုံးနိုင်ပါသည်။ ထို့ကြောင့် အရေးကြီးမှတ်တမ်းများကို Notion သို့ Export လုပ်ထားရန် အကြံပြုပါသည်။</li>
+                </ul>
+                <h3 class="text-xl font-semibold text-gray-800">၃။ ပြင်ပဝန်ဆောင်မှုများ</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>ဤ App သည် ဂျာနယ်မှတ်တမ်းများကို သုံးသပ်ရန်အတွက် Google ၏ Gemini API ကို အသုံးပြုပါသည်။ Gemini API သို့ ပေးပို့သော အချက်အလက်များကို သုံးသပ်ချက်ရယူရန်အတွက်သာ အသုံးပြုပြီး သင့်၏ ကိုယ်ရေးအချက်အလက်များကို သိမ်းဆည်းခြင်း သို့မဟုတ် မျှဝေခြင်း မရှိပါ။</li>
+                    <li>Tailwind CSS CDN ကိုသာ UI အတွက် အသုံးပြုထားပြီး ၎င်းသည် သင့်၏ ကိုယ်ရေးအချက်အလက်များကို စုဆောင်းခြင်း မရှိပါ။</li>
+                </ul>
+                <p class="mt-4">ဤကိုယ်ရေးအချက်အလက်ကာကွယ်မှုမူဝါဒကို အချိန်မရွေး ပြောင်းလဲနိုင်ပါသည်။</p>
+            </div>
+            <div class="flex justify-center mt-8">
+                <button id="agreePrivacyPolicyBtn" class="bg-orange-700 hover:bg-orange-800 text-white font-bold py-3 px-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-opacity-75 shadow-lg">
+                    သဘောတူသည်
+                </button>
+            </div>
+        </div>
+
+        <!-- Initial Terms and Conditions Section (Initially hidden) -->
+        <div id="initialTermsConditionsSection" class="content-section hidden">
+            <h2 class="text-3xl font-bold text-center text-yellow-700 mb-6">စည်းမျဉ်းနှင့် သတ်မှတ်ချက်များ</h2>
+            <div class="text-gray-700 space-y-4 text-base leading-relaxed">
+                <p>ဤ နေ့စဉ်မှတ်တမ်း App ကို အသုံးပြုခြင်းဖြင့် အောက်ပါ စည်းမျဉ်းနှင့် သတ်မှတ်ချက်များကို သဘောတူညီရာ ရောက်ပါသည်။</p>
+                <h3 class="text-xl font-semibold text-gray-800">၁။ App အသုံးပြုခြင်း</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>ဤ App ကို ကိုယ်ပိုင် ဂျာနယ်မှတ်တမ်းရေးသားခြင်းအတွက်သာ အသုံးပြုရပါမည်။</li>
+                    <li>App ၏ လုပ်ဆောင်ချက်များကို မလျော်ကန်သော နည်းလမ်းများဖြင့် အသုံးပြုခြင်းကို တားမြစ်ပါသည်။</li>
+                </ul>
+                <h3 class="text-xl font-semibold text-gray-800">၂။ အချက်အလက်များ</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>သင့်၏ ဂျာနယ်မှတ်တမ်းများကို သင့် Browser ၏ Local Storage တွင်သာ သိမ်းဆည်းထားပါသည်။</li>
+                    <li>Local Storage တွင် သိမ်းဆည်းထားသော အချက်အလက်များ ပျောက်ဆုံးခြင်းအတွက် App ဖန်တီးသူတွင် တာဝန်မရှိပါ။</li>
+                    <li>အရေးကြီးသော မှတ်တမ်းများကို Notion သို့ Export လုပ်၍ Backup လုပ်ထားရန် အကြံပြုပါသည်။</li>
+                </ul>
+                <h3 class="text-xl font-semibold text-gray-800">၃။ ဝန်ဆောင်မှု ပေးခြင်း</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>ဤ App ကို "ရှိပြီးသားအတိုင်း" (as-is) ပေးထားခြင်းဖြစ်ပြီး မည်သည့် အာမခံချက်မျှ မရှိပါ။</li>
+                    <li>App ၏ လုပ်ဆောင်ချက်များ အချိန်မရွေး ပြောင်းလဲနိုင်သည် သို့မဟုတ် ရပ်ဆိုင်းနိုင်ပါသည်။</li>
+                </ul>
+                <h3 class="text-xl font-semibold text-gray-800">၄။ အသုံးပြုသူ၏ တာဝန်</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>App ကို အသုံးပြုခြင်းကြောင့် ဖြစ်ပေါ်လာနိုင်သော မည်သည့် ဆုံးရှုံးမှု သို့မဟုတ် ထိခိုက်မှုအတွက်မဆို သုံးစွဲသူကိုယ်တိုင် တာဝန်ယူရပါမည်။</li>
+                </ul>
+                <p class="mt-4">ဤစည်းမျဉ်းနှင့် သတ်မှတ်ချက်များကို အချိန်မရွေး ပြောင်းလဲနိုင်ပါသည်။</p>
+            </div>
+            <div class="flex justify-center mt-8">
+                <button id="agreeTermsConditionsBtn" class="bg-yellow-700 hover:bg-yellow-800 text-white font-bold py-3 px-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-75 shadow-lg">
+                    သဘောတူသည်
+                </button>
+            </div>
+        </div>
+
+        <!-- User Guide Section (Initially hidden) -->
+        <div id="userGuideSection" class="content-section hidden">
+            <h2 class="text-3xl font-bold text-center text-blue-700 mb-6">အသုံးပြုနည်းလမ်းညွှန်</h2>
+            <div class="text-gray-700 space-y-4 text-base leading-relaxed">
+                <p>ဒီ နေ့စဉ်မှတ်တမ်း App ကို အသုံးပြုပုံ အဆင့်ဆင့်ကို အောက်မှာ ဖော်ပြထားပါတယ်။</p>
+                
+                <h3 class="text-xl font-semibold text-gray-800">၁။ ဂျာနယ်စတင်ရေးသားခြင်း</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>App ကို ဖွင့်လိုက်တာနဲ့ လက်ရှိရက်စွဲကို အလိုအလျောက် မြင်ရပါလိမ့်မယ်။ လိုအပ်ရင် ရက်စွဲကို ပြောင်းလဲနိုင်ပါတယ်။</li>
+                    <li><span class="font-semibold text-purple-700">"မေးခွန်းများဖြင့် ဂျာနယ်ရေးမည်"</span> ခလုတ်ကို နှိပ်ပြီး ဂျာနယ်ရေးသားခြင်းကို စတင်ပါ။</li>
+                    <li>မေးခွန်းတစ်ခုချင်းစီအတွက် သင့်အဖြေကို သက်ဆိုင်ရာ စာရေးတဲ့နေရာမှာ ရေးသားပါ။</li>
+                    <li><span class="font-semibold text-blue-700">"နောက်မေးခွန်း"</span> ခလုတ်ကို နှိပ်ပြီး နောက်မေးခွန်းဆီကို ရွှေ့ပါ။ Keyboard က <kbd>Tab</kbd> ခလုတ်ကို နှိပ်ပြီးလည်း ရွှေ့နိုင်ပါတယ်။</li>
+                    <li><span class="font-semibold text-gray-700">"ယခင်မေးခွန်း"</span> ခလုတ်ကို နှိပ်ပြီး ယခင်မေးခွန်းဆီကို ပြန်သွားနိုင်ပါတယ်။</li>
+                    <li>မေးခွန်းအားလုံး ဖြေပြီးသွားရင် <span class="font-semibold text-purple-700">"အဖြေများ စုစည်းမည်"</span> ခလုတ် ပေါ်လာပါလိမ့်မယ်။ ၎င်းကို နှိပ်ပါ။</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-gray-800">၂။ မှတ်တမ်းသိမ်းဆည်းခြင်းနှင့် သုံးသပ်ချက်ကြည့်ရှုခြင်း</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li><span class="font-semibold text-purple-700">"အဖြေများ စုစည်းမည်"</span> ကို နှိပ်လိုက်တာနဲ့ သင့်ရဲ့ ဂျာနယ်မှတ်တမ်းကို အလိုအလျောက် သိမ်းဆည်းပေးပါလိမ့်မယ်။</li>
+                    <li>ထို့အပြင် AI ကနေ သင့်ရဲ့ ဂျာနယ်မှတ်တမ်းကို အကျဉ်းချုပ်သုံးသပ်ချက် (Summary) နဲ့ လုပ်ဆောင်ရန်တာဝန်များ (Action Items) ကို ဖော်ပြပေးပါလိမ့်မယ်။</li>
+                    <li><span class="font-semibold text-green-700">"စာသားအားလုံး Copy ကူးမည်"</span> ခလုတ်ကို နှိပ်ပြီး သင့်ရဲ့ ဂျာနယ်မှတ်တမ်း အပြည့်အစုံကို ကူးယူနိုင်ပါတယ်။</li>
+                    <li><span class="font-semibold text-blue-700">"ပင်မဂျာနယ်သို့ ပြန်သွားမည်"</span> ခလုတ်ကို နှိပ်ပြီး ပင်မစာမျက်နှာကို ပြန်သွားနိုင်ပါတယ်။</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-gray-800">၃။ Notion သို့ မှတ်တမ်းများ ထုတ်ယူခြင်း</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>ပင်မစာမျက်နှာရှိ <span class="font-semibold text-pink-700">"မှတ်တမ်းများ Notion သို့ ထုတ်မည်"</span> ခလုတ်ကို နှိပ်ပါ။</li>
+                    <li>သင့်ရဲ့ ဂျာနယ်မှတ်တမ်းအားလုံးကို Markdown (.md) ဖိုင်အဖြစ် Download လုပ်ပေးပါလိမ့်မယ်။</li>
+                    <li>ဖိုင်နာမည်ဟာ ယနေ့ ဂျာနယ်မှတ်တမ်းရဲ့ အကျဉ်းချုပ် (Summary) ကို အခြေခံပြီး ပေါ်လာပါလိမ့်မယ်။ (ဥပမာ: `ပျော်ရွှင်သော_နေ့လေး.md`)</li>
+                    <li>Download လုပ်ထားတဲ့ .md ဖိုင်ကို Notion Page တစ်ခုထဲကို Drag & Drop (ဆွဲထည့်) ခြင်းဖြင့်ဖြစ်စေ၊ Notion ရဲ့ Import option မှတစ်ဆင့်ဖြစ်စေ ထည့်သွင်းနိုင်ပါတယ်။</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-gray-800">အရေးကြီးအချက်များ</h3>
+                <ul class="list-disc list-inside space-y-2">
+                    <li>သင့်ရဲ့ ဂျာနယ်မှတ်တမ်းတွေဟာ သင့် Browser ရဲ့ Local Storage မှာသာ သိမ်းဆည်းထားတာဖြစ်ပါတယ်။ Browser History ရှင်းလင်းတာမျိုး၊ Browser ပြောင်းလဲတာမျိုး လုပ်ရင် မှတ်တမ်းတွေ ပျောက်ဆုံးနိုင်တာကြောင့် Notion ကို Export လုပ်ပြီး Backup လုပ်ထားဖို့ အကြံပြုလိုပါတယ်။</li>
+                    <li>ဒီ App က Notion Database Properties တွေထဲကို တိုက်ရိုက် Data ထည့်သွင်းပေးနိုင်ခြင်း မရှိသေးပါဘူး။ Markdown ဖိုင်ကို Import လုပ်ပြီးမှ Notion ထဲမှာ ကိုယ်တိုင် ချိန်ညှိပေးရပါမယ်။</li>
+                </ul>
+            </div>
+            <div class="flex justify-center mt-8">
+                <button id="startJournalingBtn" class="bg-teal-700 hover:bg-teal-800 text-white font-bold py-3 px-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-opacity-75 shadow-lg">
+                    ဂျာနယ်စတင်မည်
+                </button>
+            </div>
+        </div>
+
+        <!-- Journaling Prompts Area (Initially hidden) -->
+        <div id="promptsContainer" class="content-section hidden">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">ဂျာနယ်ရေးရန် မေးခွန်းများ</h2>
+
+            <!-- Default Prompts Section -->
+            <div id="defaultPromptsSection" class="mb-6">
+                <div id="promptDisplay" class="bg-blue-50 p-6 rounded-lg shadow-inner border border-blue-200 mb-4">
+                    <p id="currentPromptText" class="text-lg font-semibold text-blue-800 mb-4"></p>
+                    <textarea id="promptAnswerTextarea" rows="6" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-y" placeholder="သင့်အဖြေကို ဤနေရာတွင် ရေးသားပါ။"></textarea>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
+                    <button id="prevPromptBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+                        ယခင်မေးခွန်း
+                    </button>
+                    <span id="promptCounter" class="text-gray-600 font-medium text-lg">1/10</span>
+                    <button id="nextPromptBtn" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-75 shadow-md">
+                        နောက်မေးခွန်း
+                    </button>
+                    <button id="combineAnswersBtn" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-75 shadow-md hidden">
+                        အဖြေများ စုစည်းမည်
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-center mt-6">
+                <button id="backToJournalBtn" class="section-back-btn">
+                    ပင်မစာမျက်နှာသို့ ပြန်သွားမည်
+                </button>
+            </div>
+        </div>
+
+        <!-- Combined Answers & Analysis Area (Initially hidden) -->
+        <div id="combinedOutputContainer" class="content-section hidden">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">သင့်ဂျာနယ်မှတ်တမ်း</h2>
+            <div class="bg-white p-6 rounded-lg shadow-inner border border-gray-200 mb-4">
+                <textarea id="combinedJournalText" rows="15" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 resize-y" readonly></textarea>
+                <button id="copyCombinedTextBtn" class="mt-4 bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-75 shadow-md">
+                    စာသားအားလုံး Copy ကူးမည်
+                </button>
+            </div>
+
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6 mt-8">သုံးသပ်ချက်</h2>
+            <div id="analysisResult" class="bg-white p-6 rounded-lg shadow-inner border border-gray-200 mb-4 text-gray-700">
+                <p id="analysisSummary" class="text-lg leading-relaxed"></p>
+            </div>
+
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6 mt-8">လုပ်ဆောင်ရန်တာဝန်များ</h2>
+            <ul id="actionItemsList" class="list-disc list-inside bg-white p-6 rounded-lg shadow-inner border border-gray-200 text-gray-700 space-y-2">
+                <!-- Action items will be listed here -->
+            </ul>
+
+            <div class="flex justify-center mt-6">
+                <button id="backToMainJournalBtn" class="section-back-btn">
+                    ပင်မစာမျက်နှာသို့ ပြန်သွားမည်
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Custom Message Box (remains fixed) -->
+    <div id="messageBox" class="message-box">
+        <span id="messageText"></span>
+    </div>
+
+    <script>
+        // Get references to HTML elements
+        const journalDateInput = document.getElementById('journalDate');
+        const journalMoodSelect = document.getElementById('journalMood');
+        const dateMoodContainer = document.getElementById('dateMoodContainer'); // New container for date and mood
+
+        const promptsBtn = document.getElementById('promptsBtn');
+        const exportToNotionBtn = document.getElementById('exportToNotionBtn');
+        
+        const mainActionButtons = document.getElementById('mainActionButtons'); // Main buttons container
+
+        // Initial flow sections and buttons
+        const initialPrivacyPolicySection = document.getElementById('initialPrivacyPolicySection');
+        const agreePrivacyPolicyBtn = document.getElementById('agreePrivacyPolicyBtn');
+        const initialTermsConditionsSection = document.getElementById('initialTermsConditionsSection');
+        const agreeTermsConditionsBtn = document.getElementById('agreeTermsConditionsBtn');
+        const userGuideSection = document.getElementById('userGuideSection');
+        const startJournalingBtn = document.getElementById('startJournalingBtn'); // New button in user guide
+
+        // Journaling flow sections and buttons
+        const promptsContainer = document.getElementById('promptsContainer');
+        const combinedOutputContainer = document.getElementById('combinedOutputContainer');
+        const backToJournalBtn = document.getElementById('backToJournalBtn'); // In promptsContainer
+        const backToMainJournalBtn = document.getElementById('backToMainJournalBtn'); // In combinedOutputContainer
+
+        const currentPromptText = document.getElementById('currentPromptText');
+        const promptAnswerTextarea = document.getElementById('promptAnswerTextarea');
+        const prevPromptBtn = document.getElementById('prevPromptBtn');
+        const nextPromptBtn = document.getElementById('nextPromptBtn');
+        const combineAnswersBtn = document.getElementById('combineAnswersBtn');
+        const promptCounter = document.getElementById('promptCounter');
+        const combinedJournalText = document.getElementById('combinedJournalText');
+        const copyCombinedTextBtn = document.getElementById('copyCombinedTextBtn');
+        const analysisSummary = document.getElementById('analysisSummary');
+        const actionItemsList = document.getElementById('actionItemsList');
+
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+
+        // New radio button references
+        const moodBasedPromptsRadio = document.getElementById('moodBasedPromptsRadio');
+        const originalPromptsRadio = document.getElementById('originalPromptsRadio');
+
+        // Default Journaling Prompts in Burmese
+        const defaultJournalingPrompts = [
+            "ဒီနေ့အတွက် ကျေးဇူးတင်စရာ ဘာတွေရှိလဲ။",
+            "ဒီနေ့ ဘယ်အရာက သင့်ကို ပျော်ရွှင်စေခဲ့လဲ။",
+            "ဒီနေ့ သင်ယူခဲ့ရတဲ့ အရာတစ်ခုခု ရှိလား။",
+            "ဒီနေ့ ဘယ်လို စိတ်ခံစားမှုမျိုး ခံစားခဲ့ရလဲ။ ဘာကြောင့်လဲ။",
+            "ကိုယ့်ကိုယ်ကို ပိုကောင်းအောင် ဘာတွေ လုပ်နိုင်ခဲ့လဲ။",
+            "ဒီနေ့ ဘယ်သူ့ကို ကူညီပေးခဲ့လဲ၊ ဒါမှမဟုတ် ဘယ်သူက သင့်ကို ကူညီခဲ့လဲ။",
+            "မနက်ဖြန်အတွက် ဘာတွေ မျှော်လင့်ထားလဲ။",
+            "ဒီနေ့ ကြုံတွေ့ခဲ့ရတဲ့ စိန်ခေါ်မှုတစ်ခုခုရှိလား။ ဘယ်လို ကျော်လွှားခဲ့လဲ။",
+            "သင့်ရဲ့ ရည်မှန်းချက်တွေဆီကို တစ်လှမ်းနီးအောင် ဒီနေ့ ဘာတွေ လုပ်ဆောင်နိုင်ခဲ့လဲ။",
+            "ဒီနေ့အတွက် သင်ကိုယ်တိုင် ဘာမက်ဆေ့ချ် ပေးချင်လဲ။"
+        ];
+
+        let activeJournalingPrompts = [...defaultJournalingPrompts];
+        let currentPromptIndex = 0;
+        let promptAnswers = [];
+
+        // Function to show a temporary message
+        function showMessage(message, type = 'success') {
+            messageText.textContent = message;
+            if (type === 'success') {
+                messageBox.style.backgroundColor = '#4CAF50'; // Green
+            } else if (type === 'error') {
+                messageBox.style.backgroundColor = '#f44336'; // Red
+            }
+            messageBox.classList.add('show');
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, 2000); // Message disappears after 2 seconds
+        }
+
+        // Helper function to hide all main content sections
+        function hideAllSections() {
+            initialPrivacyPolicySection.classList.add('hidden');
+            initialTermsConditionsSection.classList.add('hidden');
+            userGuideSection.classList.add('hidden');
+            promptsContainer.classList.add('hidden');
+            combinedOutputContainer.classList.add('hidden');
+            mainActionButtons.classList.add('hidden');
+            dateMoodContainer.classList.add('hidden'); // Hide date/mood when not in main view
+        }
+
+        // Helper function to show main action buttons and reset date/mood
+        function showMainButtons() {
+            hideAllSections(); // Hide all other sections first
+            dateMoodContainer.classList.remove('hidden'); // Show date/mood
+            mainActionButtons.classList.remove('hidden'); // Show main buttons
+            setTodayDate();
+            journalMoodSelect.value = ""; // Clear mood selection
+            moodBasedPromptsRadio.checked = true; // Default to mood-based prompts
+        }
+
+
+        // Set today's date as default
+        function setTodayDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const day = String(today.getDate()).padStart(2, '0');
+            journalDateInput.value = `${year}-${month}-${day}`;
+        }
+
+        // Load entries from local storage
+        function loadEntries() {
+            try {
+                const entries = JSON.parse(localStorage.getItem('journalEntries')) || [];
+                return entries;
+            } catch (e) {
+                console.error("Error loading entries from local storage:", e);
+                return []; // Return empty array on error
+            }
+        }
+
+        // Save entries to local storage
+        function saveEntries(entries) {
+            try {
+                localStorage.setItem('journalEntries', JSON.stringify(entries));
+            } catch (e) {
+                console.error("Error saving entries to local storage:", e);
+                showMessage("မှတ်တမ်းသိမ်းဆည်းရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error"); // Error message in Burmese
+            }
+        }
+
+        // Display current prompt and manage navigation buttons
+        function displayCurrentPrompt() {
+            currentPromptText.textContent = `${currentPromptIndex + 1}. ${activeJournalingPrompts[currentPromptIndex]}`;
+            promptAnswerTextarea.value = promptAnswers[currentPromptIndex];
+            promptAnswerTextarea.focus();
+            promptAnswerTextarea.select();
+
+            promptCounter.textContent = `${currentPromptIndex + 1}/${activeJournalingPrompts.length}`;
+
+            prevPromptBtn.disabled = (currentPromptIndex === 0);
+            if (currentPromptIndex === activeJournalingPrompts.length - 1) {
+                nextPromptBtn.classList.add('hidden');
+                combineAnswersBtn.classList.remove('hidden');
+            } else {
+                nextPromptBtn.classList.remove('hidden');
+                combineAnswersBtn.classList.add('hidden');
+            }
+        }
+
+        // Function to call Gemini API for analysis (summary and action items)
+        async function getJournalAnalysis(journalText) {
+            showMessage("သုံးသပ်ချက် ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပါ။", "success");
+            try {
+                let chatHistory = [];
+                const prompt = `အောက်ပါ ဂျာနယ်မှတ်တမ်းကို မြန်မာဘာသာဖြင့် အကျဉ်းချုပ်သုံးသပ်ချက်ပေးပါ။ ထို့အပြင် ၎င်းမှတ်တမ်းမှ လုပ်ဆောင်ရန် တာဝန်များကို စာရင်းပြုစုဖော်ပြပါ။ JSON format ဖြင့်သာ ပြန်လည်ဖြေကြားပါ။ ဥပမာ: {"summary": "...", "action_items": ["...", "..."]}\n\nဂျာနယ်မှတ်တမ်း:\n${journalText}`;
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                "summary": { "type": "STRING" },
+                                "action_items": {
+                                    "type": "ARRAY",
+                                    "items": { "type": "STRING" }
+                                }
+                            },
+                            "propertyOrdering": ["summary", "action_items"]
+                        }
+                    }
+                };
+
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0 &&
+                    result.candidates[0].content.parts[0].text) {
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    const parsedJson = JSON.parse(jsonString);
+                    return parsedJson;
+                } else {
+                    console.error("Unexpected API response structure:", result);
+                    showMessage("သုံးသပ်ချက်ရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
+                    return { summary: "သုံးသပ်ချက်ရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", action_items: [] };
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API for analysis:", error);
+                showMessage("သုံးသပ်ချက်ရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။", "error");
+                return { summary: "သုံးသပ်ချက်ရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။", action_items: [] };
+            }
+        }
+
+        // New function to get mood-based prompts from Gemini API
+        async function getMoodBasedPrompts(mood) {
+            showMessage(`'${mood}' စိတ်ခံစားမှုအတွက် မေးခွန်းများ ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပါ။`, "success");
+            try {
+                let chatHistory = [];
+                const prompt = `Generate 10 distinct journaling prompts in Burmese, suitable for someone experiencing a '${mood}' mood. Format the response as a JSON array of strings, where each string is a prompt. Example: [\"prompt1\", \"prompt2\", ... \"prompt10\"]`;
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "ARRAY",
+                            items: {
+                                type: "STRING"
+                            }
+                        }
+                    }
+                };
+
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0 &&
+                    result.candidates[0].content.parts[0].text) {
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    const parsedPrompts = JSON.parse(jsonString);
+                    if (Array.isArray(parsedPrompts) && parsedPrompts.length > 0) {
+                        return parsedPrompts;
+                    } else {
+                        console.error("API returned empty or invalid prompts array:", parsedPrompts);
+                        return defaultJournalingPrompts; // Fallback to default
+                    }
+                } else {
+                    console.error("Unexpected API response structure for mood prompts:", result);
+                    showMessage("စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
+                    return defaultJournalingPrompts; // Fallback to default
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API for mood prompts:", error);
+                showMessage("စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။", "error");
+                return defaultJournalingPrompts; // Fallback to default
+            }
+        }
+
+
+        // Event listener for Prompts button
+        promptsBtn.addEventListener('click', async () => { // Made async to await API call
+            hideAllSections(); // Hide all other sections
+            promptsContainer.classList.remove('hidden'); // Show prompts container
+            dateMoodContainer.classList.remove('hidden'); // Show date/mood when journaling
+
+            const selectedPromptType = document.querySelector('input[name="promptType"]:checked').value;
+            const selectedMood = journalMoodSelect.value;
+
+            if (selectedPromptType === 'moodBased' && selectedMood && selectedMood !== "") {
+                activeJournalingPrompts = await getMoodBasedPrompts(selectedMood);
+            } else {
+                activeJournalingPrompts = [...defaultJournalingPrompts];
+                if (selectedPromptType === 'moodBased' && (!selectedMood || selectedMood === "")) {
+                    showMessage("စိတ်ခံစားမှုအလိုက် မေးခွန်းများအတွက် စိတ်ခံစားမှု ရွေးချယ်ပါ။ မူရင်းမေးခွန်းများဖြင့် ဆက်လက်ဆောင်ရွက်ပါမည်။", "error");
+                }
+            }
+            
+            currentPromptIndex = 0;
+            promptAnswers = Array(activeJournalingPrompts.length).fill('');
+            setTodayDate(); // Ensure date is set for new journaling session
+            displayCurrentPrompt();
+        });
+
+        // Event listener for Previous Prompt button
+        prevPromptBtn.addEventListener('click', () => {
+            promptAnswers[currentPromptIndex] = promptAnswerTextarea.value.trim();
+            currentPromptIndex--;
+            displayCurrentPrompt();
+        });
+
+        // Event listener for Next Prompt button
+        nextPromptBtn.addEventListener('click', () => {
+            promptAnswers[currentPromptIndex] = promptAnswerTextarea.value.trim();
+            currentPromptIndex++;
+            displayCurrentPrompt();
+        });
+
+        // Event listener for Combine Answers button
+        combineAnswersBtn.addEventListener('click', async () => {
+            promptAnswers[currentPromptIndex] = promptAnswerTextarea.value.trim();
+
+            const combinedText = promptAnswers
+                .map((answer, index) => {
+                    if (answer) {
+                        return `${index + 1}. ${activeJournalingPrompts[index]}\nအဖြေ: ${answer}`;
+                    }
+                    return '';
+                })
+                .filter(item => item !== '')
+                .join('\n\n---\n\n');
+
+            combinedJournalText.value = combinedText;
+
+            // Automatically save the combined entry
+            const date = journalDateInput.value;
+            const mood = journalMoodSelect.value; // Get selected mood
+            if (!date) {
+                showMessage("ရက်စွဲ ထည့်သွင်းပါ။", "error");
+                return;
+            }
+            
+            const analysis = await getJournalAnalysis(combinedText); // Get analysis before saving
+
+            const newEntry = { 
+                date, 
+                mood, // Save mood
+                text: combinedText,
+                summary: analysis.summary, // Save summary
+                action_items: analysis.action_items // Save action items
+            };
+            const entries = loadEntries();
+            const existingEntryIndex = entries.findIndex(entry => entry.date === date);
+            if (existingEntryIndex > -1) {
+                entries[existingEntryIndex] = newEntry;
+                showMessage("မှတ်တမ်း အပ်ဒိတ်လုပ်ပြီးပါပြီ။", "success");
+            } else {
+                entries.push(newEntry);
+                showMessage("မှတ်တမ်း သိမ်းဆည်းပြီးပါပြီ။", "success");
+            }
+            saveEntries(entries);
+
+            hideAllSections(); // Hide prompts container
+            combinedOutputContainer.classList.remove('hidden'); // Show combined output container
+            dateMoodContainer.classList.add('hidden'); // Hide date/mood in combined output view
+
+            // Display analysis results
+            analysisSummary.textContent = analysis.summary || "သုံးသပ်ချက် မရရှိပါ။";
+            actionItemsList.innerHTML = '';
+            if (analysis.action_items && analysis.action_items.length > 0) {
+                analysis.action_items.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    actionItemsList.appendChild(li);
+                });
+            } else {
+                actionItemsList.innerHTML = '<li>လုပ်ဆောင်ရန်တာဝန်များ မရှိပါ။</li>';
+            }
+
+            showMessage("အဖြေများ စုစည်းပြီး သုံးသပ်ချက် ရယူပြီးပါပြီ။", "success");
+        });
+
+        // Event listener for Copy Combined Text button
+        copyCombinedTextBtn.addEventListener('click', () => {
+            combinedJournalText.select();
+            document.execCommand('copy');
+            showMessage("စာသားအားလုံး ကူးယူပြီးပါပြီ။", "success");
+        });
+
+        // Event listener for Export to Notion button
+        exportToNotionBtn.addEventListener('click', () => {
+            const entries = loadEntries();
+            if (entries.length === 0) {
+                showMessage("ထုတ်ယူရန် မှတ်တမ်းများ မရှိပါ။", "error");
+                return;
+            }
+
+            // Get the current date from the input field
+            const currentDate = journalDateInput.value;
+            // Find the entry for the current date
+            const currentDayEntry = entries.find(entry => entry.date === currentDate);
+
+            let filename = `Journal_${currentDate}.md`; // Default filename based on current date
+
+            if (currentDayEntry && currentDayEntry.summary && currentDayEntry.summary.trim() !== '') {
+                // Sanitize the summary for use as a filename
+                let sanitizedSummary = currentDayEntry.summary.replace(/[/\\?%*:|"<>]/g, '').trim();
+                sanitizedSummary = sanitizedSummary.replace(/\s+/g, '_'); // Replace spaces with underscores
+                if (sanitizedSummary.length > 50) { // Limit filename length if summary is too long
+                    sanitizedSummary = sanitizedSummary.substring(0, 50);
+                }
+                if (sanitizedSummary) { // Ensure it's not empty after sanitization
+                    filename = `${sanitizedSummary}.md`;
+                }
+            }
+            
+            let exportContent = `# နေ့စဉ်မှတ်တမ်းများ\n\n`; // Main heading for the Notion page
+
+            // Sort by date ascending for chronological export
+            entries.sort((a, b) => new Date(a.date) - new Date(b.date)); 
+            
+            entries.forEach(entry => {
+                // Use summary as main heading if available, otherwise use date
+                exportContent += `## ${entry.summary ? entry.summary : entry.date}\n\n`; 
+                exportContent += `**ရက်စွဲ:** ${entry.date}\n\n`; // Add date property explicitly
+                
+                // Add mood if available
+                if (entry.mood && entry.mood.trim() !== '') {
+                    exportContent += `**စိတ်ခံစားမှု:** ${entry.mood}\n\n`;
+                }
+
+                exportContent += `${entry.text}\n\n`; // Journal entry text
+
+                // Add action items if available
+                if (entry.action_items && entry.action_items.length > 0) {
+                    exportContent += `### လုပ်ဆောင်ရန်တာဝန်များ\n`;
+                    entry.action_items.forEach(item => {
+                        exportContent += `- ${item}\n`;
+                    });
+                    exportContent += `\n`; // Add a newline after action items
+                }
+                exportContent += `---\n\n`; // Separator
+            });
+
+            const blob = new Blob([exportContent], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename; // Use the dynamically generated filename
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showMessage("Notion အတွက် မှတ်တမ်းများ ထုတ်ယူပြီးပါပြီ။", "success");
+            setTimeout(() => {
+                showMessage("Notion ထဲသို့ ဖိုင်ကို ဆွဲထည့်ခြင်း (သို့) Import option မှတစ်ဆင့် ထည့်သွင်းနိုင်ပါသည်။", "success");
+            }, 2500);
+        });
+
+        // Event listener for Back to Journal button (from prompts view)
+        backToJournalBtn.addEventListener('click', showMainButtons);
+
+        // Event listener for Back to Main Journal button (from combined output view)
+        backToMainJournalBtn.addEventListener('click', showMainButtons);
+
+        // Initial Flow Event Listeners
+        agreePrivacyPolicyBtn.addEventListener('click', () => {
+            hideAllSections();
+            initialTermsConditionsSection.classList.remove('hidden');
+        });
+
+        agreeTermsConditionsBtn.addEventListener('click', () => {
+            hideAllSections();
+            userGuideSection.classList.remove('hidden');
+        });
+
+        startJournalingBtn.addEventListener('click', () => {
+            localStorage.setItem('agreedToTerms', 'true'); // Set flag in local storage
+            showMainButtons(); // This will hide all initial sections and show main buttons
+        });
+
+
+        // Global keydown listener for Tab key
+        document.addEventListener('keydown', (event) => {
+            // Check if Tab key is pressed, prompts container is visible, and it's not a repeated keydown event
+            if (event.key === 'Tab' && !event.repeat && !promptsContainer.classList.contains('hidden')) {
+                event.preventDefault(); // Prevent default Tab behavior (e.g., focusing on next element)
+                // Simulate click on the next prompt button
+                if (!nextPromptBtn.classList.contains('hidden') && !nextPromptBtn.disabled) {
+                    nextPromptBtn.click();
+                } else if (!combineAnswersBtn.classList.contains('hidden') && !combineAnswersBtn.disabled) {
+                    // If at the last prompt, simulate click on combine answers button
+                    combineAnswersBtn.click();
+                }
+            }
+        });
+
+
+        // Initialize the app when the page loads
+        window.onload = function() {
+            // Check if user has already agreed to terms
+            if (localStorage.getItem('agreedToTerms') === 'true') {
+                showMainButtons(); // If agreed, go directly to main buttons
+            } else {
+                // Otherwise, start the agreement flow
+                hideAllSections(); // Ensure all are hidden initially
+                initialPrivacyPolicySection.classList.remove('hidden'); // Show privacy policy
+            }
+        };
+    </script>
+</body>
+</html>
