@@ -139,6 +139,25 @@
             <button id="exportToNotionBtn" class="bg-pink-700 hover:bg-pink-800 text-white font-bold py-3.5 px-7 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-600 focus:ring-opacity-75 shadow-lg">
                 မှတ်တမ်းများ Notion သို့ ထုတ်မည်
             </button>
+            <button id="clearApiKeyBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3.5 px-7 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75 shadow-lg">
+                API Key ဖျက်မည်
+            </button>
+        </div>
+
+        <!-- API Key Input Section (New) -->
+        <div id="apiKeyInputSection" class="content-section p-4 sm:p-6 md:p-8 pb-4 max-w-md md:max-w-lg lg:max-w-xl hidden">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-blue-700 mb-6">Gemini API Key ထည့်ပါ</h2>
+            <div class="text-gray-700 space-y-4 text-base leading-relaxed">
+                <p>ဂျာနယ်သုံးသပ်ချက်နှင့် စိတ်ခံစားမှုအလိုက် မေးခွန်းများ အသုံးပြုနိုင်ရန်အတွက် Google Gemini API Key ထည့်သွင်းပေးပါ။</p>
+                <p class="text-sm text-gray-500">API Key ကို <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-500 hover:underline">Google AI Studio</a> မှ ရယူနိုင်ပါသည်။</p>
+                <label for="apiKeyInput" class="block text-gray-700 text-base font-semibold mb-2">သင့် API Key:</label>
+                <input type="password" id="apiKeyInput" class="shadow-md appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-800 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent" placeholder="API Key ကို ဤနေရာတွင် ထည့်ပါ။">
+            </div>
+            <div class="flex justify-center mt-8">
+                <button id="saveApiKeyBtn" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-3 px-6 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-75 shadow-lg">
+                    API Key သိမ်းမည်
+                </button>
+            </div>
         </div>
 
         <!-- Initial Privacy Policy Section (Visible on load) -->
@@ -333,6 +352,13 @@
         const userGuideSection = document.getElementById('userGuideSection');
         const startJournalingBtn = document.getElementById('startJournalingBtn'); // New button in user guide
 
+        // New references for API Key input section
+        const apiKeyInputSection = document.getElementById('apiKeyInputSection');
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const saveApiKeyBtn = document.getElementById('saveApiKeyBtn');
+        const clearApiKeyBtn = document.getElementById('clearApiKeyBtn');
+
+
         // Journaling flow sections and buttons
         const promptsContainer = document.getElementById('promptsContainer');
         const combinedOutputContainer = document.getElementById('combinedOutputContainer');
@@ -398,6 +424,7 @@
             combinedOutputContainer.classList.add('hidden');
             mainActionButtons.classList.add('hidden');
             dateMoodContainer.classList.add('hidden'); // Hide date/mood when not in main view
+            apiKeyInputSection.classList.add('hidden'); // Hide API key input section
         }
 
         // Helper function to show main action buttons and reset date/mood
@@ -486,7 +513,12 @@
                     }
                 };
 
-                const apiKey = ""; // Canvas will inject the API key at runtime.
+                const apiKey = localStorage.getItem('geminiApiKey'); // Get API key from local storage
+                if (!apiKey) {
+                    showMessage("API Key မရှိသေးပါ။ ကျေးဇူးပြု၍ API Key ထည့်သွင်းပေးပါ။", "error");
+                    return { summary: "API Key မရှိပါ။", action_items: [] };
+                }
+
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -541,7 +573,12 @@
                     }
                 };
 
-                const apiKey = ""; // Canvas will inject the API key at runtime.
+                const apiKey = localStorage.getItem('geminiApiKey'); // Get API key from local storage
+                if (!apiKey) {
+                    showMessage("API Key မရှိသေးပါ။ ကျေးဇူးပြု၍ API Key ထည့်သွင်းပေးပါ။", "error");
+                    return defaultJournalingPrompts; // Fallback to default
+                }
+
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -787,6 +824,36 @@
             showMainButtons(); // This will hide all initial sections and show main buttons
         });
 
+        // Event listener for saveApiKeyBtn
+        saveApiKeyBtn.addEventListener('click', () => {
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                localStorage.setItem('geminiApiKey', key);
+                showMessage("API Key သိမ်းဆည်းပြီးပါပြီ။", "success");
+                // After saving, proceed to privacy policy or main buttons based on terms agreement
+                if (localStorage.getItem('agreedToTerms') === 'true') {
+                    showMainButtons();
+                } else {
+                    hideAllSections();
+                    initialPrivacyPolicySection.classList.remove('hidden');
+                }
+            } else {
+                showMessage("API Key ထည့်သွင်းပါ။", "error");
+            }
+        });
+
+        // Event listener for clearApiKeyBtn
+        if (clearApiKeyBtn) { // Check if the button exists
+            clearApiKeyBtn.addEventListener('click', () => {
+                localStorage.removeItem('geminiApiKey');
+                apiKeyInput.value = ''; // Clear input field
+                showMessage("API Key ဖျက်လိုက်ပါပြီ။", "success");
+                // Go back to the API key input section
+                hideAllSections();
+                apiKeyInputSection.classList.remove('hidden');
+            });
+        }
+
 
         // Global keydown listener for Tab key
         document.addEventListener('keydown', (event) => {
@@ -806,13 +873,17 @@
 
         // Initialize the app when the page loads
         window.onload = function() {
-            // Check if user has already agreed to terms
-            if (localStorage.getItem('agreedToTerms') === 'true') {
-                showMainButtons(); // If agreed, go directly to main buttons
+            const agreedToTerms = localStorage.getItem('agreedToTerms');
+            const storedApiKey = localStorage.getItem('geminiApiKey');
+
+            if (!storedApiKey) {
+                hideAllSections();
+                apiKeyInputSection.classList.remove('hidden');
+            } else if (agreedToTerms === 'true') {
+                showMainButtons();
             } else {
-                // Otherwise, start the agreement flow
-                hideAllSections(); // Ensure all are hidden initially
-                initialPrivacyPolicySection.classList.remove('hidden'); // Show privacy policy
+                hideAllSections();
+                initialPrivacyPolicySection.classList.remove('hidden');
             }
         };
     </script>
