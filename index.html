@@ -6,16 +6,30 @@
     <title>နေ့စဉ်မှတ်တမ်း</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Pyidaungsu Font - Directly linked from MCF for better Burmese rendering -->
     <style>
-        /* Custom font for Burmese text - Inter is a good default, but a Burmese font would be better if available via CDN */
+        /* Pyidaungsu Font Integration */
+        @font-face {
+            font-family: 'Pyidaungsu';
+            src: url('https://mmunicode.org.mm/downloads/fonts/Pyidaungsu-2.5.3_Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pyidaungsu';
+            src: url('https://mmunicode.org.mm/downloads/fonts/Pyidaungsu-2.5.3_Bold.ttf') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        /* Custom font for Burmese text - Pyidaungsu prioritized */
         body {
-            font-family: "Inter", sans-serif;
+            font-family: 'Pyidaungsu', "Inter", sans-serif; /* Prioritize Pyidaungsu */
             background-color: #f0f4fF; /* Lighter, calming blue-gray for zen feel */
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center; /* Changed to center for better vertical alignment on all screens */
             min-height: 100vh;
-            /* Responsive padding applied directly in HTML body tag for better Tailwind integration */
             box-sizing: border-box;
         }
         /* Style for the custom message box */
@@ -57,7 +71,6 @@
         /* Section specific styles (replacing modals) */
         .content-section {
             background-color: white;
-            padding: 2.5rem; /* More padding */
             border-radius: 1rem; /* Even more rounded for soft look */
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15); /* Deeper, softer shadow */
             width: 100%;
@@ -75,8 +88,8 @@
     </style>
 </head>
 <body class="p-4 sm:p-8"> <!-- Responsive padding for body -->
-    <div class="container bg-white p-8 rounded-xl shadow-2xl w-full max-w-lg md:max-w-xl lg:max-w-2xl">
-        <h1 class="text-4xl font-extrabold text-center text-blue-800 mb-8 tracking-wide">နေ့စဉ်မှတ်တမ်း</h1>
+    <div class="container bg-white p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl w-full max-w-lg md:max-w-xl lg:max-w-2xl"> <!-- Responsive padding for container -->
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-center text-blue-800 mb-8 tracking-wide">နေ့စဉ်မှတ်တမ်း</h1> <!-- Responsive font size -->
 
         <!-- Date Input and Mood Selection -->
         <div id="dateMoodContainer" class="hidden">
@@ -127,23 +140,23 @@
         </div>
 
         <!-- Initial Privacy Policy Section (Visible on load) -->
-        <div id="initialPrivacyPolicySection" class="content-section max-w-md md:max-w-lg lg:max-w-xl hidden"> <!-- Responsive max-width -->
-            <h2 class="text-3xl font-bold text-center text-orange-700 mb-6">ကိုယ်ရေးအချက်အလက်ကာကွယ်မှု</h2>
+        <div id="initialPrivacyPolicySection" class="content-section p-4 sm:p-6 md:p-8 pb-4 max-w-md md:max-w-lg lg:max-w-xl hidden"> <!-- Responsive padding and max-width, added pb-4 -->
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-orange-700 mb-6">ကိုယ်ရေးအချက်အလက်ကာကွယ်မှု</h2> <!-- Responsive font size -->
             <div class="text-gray-700 space-y-4 text-base leading-relaxed">
                 <p>ဤ နေ့စဉ်မှတ်တမ်း App သည် သုံးစွဲသူများ၏ ကိုယ်ရေးအချက်အလက် လုံခြုံရေးကို အလေးထားပါသည်။</p>
-                <h3 class="text-xl font-semibold text-gray-800">၁။ အချက်အလက်သိမ်းဆည်းခြင်း</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၁။ အချက်အလက်သိမ်းဆည်းခြင်း</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>သင့်၏ ဂျာနယ်မှတ်တမ်းများ (ရက်စွဲ၊ စိတ်ခံစားမှု၊ မှတ်တမ်းစာသား၊ အကျဉ်းချုပ်၊ လုပ်ဆောင်ရန်တာဝန်များ) အားလုံးကို သင့်၏ Web Browser ၏ Local Storage တွင်သာ သိမ်းဆည်းထားပါသည်။</li>
                     <li>မည်သည့် Server သို့မှ အချက်အလက်များ ပေးပို့ခြင်း သို့မဟုတ် သိမ်းဆည်းခြင်း မရှိပါ။</li>
                     <li>၎င်းသည် သင့်အချက်အလက်များကို သင့်ထိန်းချုပ်မှုအောက်တွင်သာ ရှိစေပါသည်။</li>
                 </ul>
-                <h3 class="text-xl font-semibold text-gray-800">၂။ အချက်အလက်ပေါက်ကြားမှု ကာကွယ်ခြင်း</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၂။ အချက်အလက်ပေါက်ကြားမှု ကာကွယ်ခြင်း</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>အချက်အလက်များ Local Storage တွင်သာ ရှိသောကြောင့် ပြင်ပ Server များမှ ပေါက်ကြားနိုင်ခြေ မရှိပါ။</li>
                     <li>သို့သော် သင့်၏ ကွန်ပျူတာ သို့မဟုတ် မိုဘိုင်းလ်ဖုန်းကို လုံခြုံစွာ ထိန်းသိမ်းရန်မှာ သုံးစွဲသူ၏ တာဝန်ဖြစ်ပါသည်။</li>
                     <li>သင့် Browser ၏ Cache သို့မဟုတ် History ကို ရှင်းလင်းပါက Local Storage မှ မှတ်တမ်းများ ပျောက်ဆုံးနိုင်ပါသည်။ ထို့ကြောင့် အရေးကြီးမှတ်တမ်းများကို Notion သို့ Export လုပ်ထားရန် အကြံပြုပါသည်။</li>
                 </ul>
-                <h3 class="text-xl font-semibold text-gray-800">၃။ ပြင်ပဝန်ဆောင်မှုများ</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၃။ ပြင်ပဝန်ဆောင်မှုများ</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>ဤ App သည် ဂျာနယ်မှတ်တမ်းများကို သုံးသပ်ရန်အတွက် Google ၏ Gemini API ကို အသုံးပြုပါသည်။ Gemini API သို့ ပေးပို့သော အချက်အလက်များကို သုံးသပ်ချက်ရယူရန်အတွက်သာ အသုံးပြုပြီး သင့်၏ ကိုယ်ရေးအချက်အလက်များကို သိမ်းဆည်းခြင်း သို့မဟုတ် မျှဝေခြင်း မရှိပါ။</li>
                     <li>Tailwind CSS CDN ကိုသာ UI အတွက် အသုံးပြုထားပြီး ၎င်းသည် သင့်၏ ကိုယ်ရေးအချက်အလက်များကို စုဆောင်းခြင်း မရှိပါ။</li>
@@ -158,27 +171,27 @@
         </div>
 
         <!-- Initial Terms and Conditions Section (Initially hidden) -->
-        <div id="initialTermsConditionsSection" class="content-section hidden max-w-md md:max-w-lg lg:max-w-xl"> <!-- Responsive max-width -->
-            <h2 class="text-3xl font-bold text-center text-yellow-700 mb-6">စည်းမျဉ်းနှင့် သတ်မှတ်ချက်များ</h2>
+        <div id="initialTermsConditionsSection" class="content-section hidden p-4 sm:p-6 md:p-8 pb-4 max-w-md md:max-w-lg lg:max-w-xl"> <!-- Responsive padding and max-width, added pb-4 -->
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-yellow-700 mb-6">စည်းမျဉ်းနှင့် သတ်မှတ်ချက်များ</h2> <!-- Responsive font size -->
             <div class="text-gray-700 space-y-4 text-base leading-relaxed">
                 <p>ဤ နေ့စဉ်မှတ်တမ်း App ကို အသုံးပြုခြင်းဖြင့် အောက်ပါ စည်းမျဉ်းနှင့် သတ်မှတ်ချက်များကို သဘောတူညီရာ ရောက်ပါသည်။</p>
-                <h3 class="text-xl font-semibold text-gray-800">၁။ App အသုံးပြုခြင်း</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၁။ App အသုံးပြုခြင်း</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>ဤ App ကို ကိုယ်ပိုင် ဂျာနယ်မှတ်တမ်းရေးသားခြင်းအတွက်သာ အသုံးပြုရပါမည်။</li>
                     <li>App ၏ လုပ်ဆောင်ချက်များကို မလျော်ကန်သော နည်းလမ်းများဖြင့် အသုံးပြုခြင်းကို တားမြစ်ပါသည်။</li>
                 </ul>
-                <h3 class="text-xl font-semibold text-gray-800">၂။ အချက်အလက်များ</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၂။ အချက်အလက်များ</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>သင့်၏ ဂျာနယ်မှတ်တမ်းများကို သင့် Browser ၏ Local Storage တွင်သာ သိမ်းဆည်းထားပါသည်။</li>
                     <li>Local Storage တွင် သိမ်းဆည်းထားသော အချက်အလက်များ ပျောက်ဆုံးခြင်းအတွက် App ဖန်တီးသူတွင် တာဝန်မရှိပါ။</li>
                     <li>အရေးကြီးသော မှတ်တမ်းများကို Notion သို့ Export လုပ်၍ Backup လုပ်ထားရန် အကြံပြုပါသည်။</li>
                 </ul>
-                <h3 class="text-xl font-semibold text-gray-800">၃။ ဝန်ဆောင်မှု ပေးခြင်း</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၃။ ဝန်ဆောင်မှု ပေးခြင်း</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>ဤ App ကို "ရှိပြီးသားအတိုင်း" (as-is) ပေးထားခြင်းဖြစ်ပြီး မည်သည့် အာမခံချက်မျှ မရှိပါ။</li>
                     <li>App ၏ လုပ်ဆောင်ချက်များ အချိန်မရွေး ပြောင်းလဲနိုင်သည် သို့မဟုတ် ရပ်ဆိုင်းနိုင်ပါသည်။</li>
                 </ul>
-                <h3 class="text-xl font-semibold text-gray-800">၄။ အသုံးပြုသူ၏ တာဝန်</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၄။ အသုံးပြုသူ၏ တာဝန်</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>App ကို အသုံးပြုခြင်းကြောင့် ဖြစ်ပေါ်လာနိုင်သော မည်သည့် ဆုံးရှုံးမှု သို့မဟုတ် ထိခိုက်မှုအတွက်မဆို သုံးစွဲသူကိုယ်တိုင် တာဝန်ယူရပါမည်။</li>
                 </ul>
@@ -192,12 +205,12 @@
         </div>
 
         <!-- User Guide Section (Initially hidden) -->
-        <div id="userGuideSection" class="content-section hidden max-w-md md:max-w-lg lg:max-w-xl"> <!-- Responsive max-width -->
-            <h2 class="text-3xl font-bold text-center text-blue-700 mb-6">အသုံးပြုနည်းလမ်းညွှန်</h2>
+        <div id="userGuideSection" class="content-section hidden p-4 sm:p-6 md:p-8 pb-4 max-w-md md:max-w-lg lg:max-w-xl"> <!-- Responsive padding and max-width, added pb-4 -->
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-blue-700 mb-6">အသုံးပြုနည်းလမ်းညွှန်</h2> <!-- Responsive font size -->
             <div class="text-gray-700 space-y-4 text-base leading-relaxed">
                 <p>ဒီ နေ့စဉ်မှတ်တမ်း App ကို အသုံးပြုပုံ အဆင့်ဆင့်ကို အောက်မှာ ဖော်ပြထားပါတယ်။</p>
                 
-                <h3 class="text-xl font-semibold text-gray-800">၁။ ဂျာနယ်စတင်ရေးသားခြင်း</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၁။ ဂျာနယ်စတင်ရေးသားခြင်း</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>App ကို ဖွင့်လိုက်တာနဲ့ လက်ရှိရက်စွဲကို အလိုအလျောက် မြင်ရပါလိမ့်မယ်။ လိုအပ်ရင် ရက်စွဲကို ပြောင်းလဲနိုင်ပါတယ်။</li>
                     <li><span class="font-semibold text-purple-700">"မေးခွန်းများဖြင့် ဂျာနယ်ရေးမည်"</span> ခလုတ်ကို နှိပ်ပြီး ဂျာနယ်ရေးသားခြင်းကို စတင်ပါ။</li>
@@ -207,7 +220,7 @@
                     <li>မေးခွန်းအားလုံး ဖြေပြီးသွားရင် <span class="font-semibold text-purple-700">"အဖြေများ စုစည်းမည်"</span> ခလုတ် ပေါ်လာပါလိမ့်မယ်။ ၎င်းကို နှိပ်ပါ။</li>
                 </ul>
 
-                <h3 class="text-xl font-semibold text-gray-800">၂။ မှတ်တမ်းသိမ်းဆည်းခြင်းနှင့် သုံးသပ်ချက်ကြည့်ရှုခြင်း</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၂။ မှတ်တမ်းသိမ်းဆည်းခြင်းနှင့် သုံးသပ်ချက်ကြည့်ရှုခြင်း</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li><span class="font-semibold text-purple-700">"အဖြေများ စုစည်းမည်"</span> ကို နှိပ်လိုက်တာနဲ့ သင့်ရဲ့ ဂျာနယ်မှတ်တမ်းကို အလိုအလျောက် သိမ်းဆည်းပေးပါလိမ့်မယ်။</li>
                     <li>ထို့အပြင် AI ကနေ သင့်ရဲ့ ဂျာနယ်မှတ်တမ်းကို အကျဉ်းချုပ်သုံးသပ်ချက် (Summary) နဲ့ လုပ်ဆောင်ရန်တာဝန်များ (Action Items) ကို ဖော်ပြပေးပါလိမ့်မယ်။</li>
@@ -215,7 +228,7 @@
                     <li><span class="font-semibold text-blue-700">"ပင်မဂျာနယ်သို့ ပြန်သွားမည်"</span> ခလုတ်ကို နှိပ်ပြီး ပင်မစာမျက်နှာကို ပြန်သွားနိုင်ပါတယ်။</li>
                 </ul>
 
-                <h3 class="text-xl font-semibold text-gray-800">၃။ Notion သို့ မှတ်တမ်းများ ထုတ်ယူခြင်း</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">၃။ Notion သို့ မှတ်တမ်းများ ထုတ်ယူခြင်း</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>ပင်မစာမျက်နှာရှိ <span class="font-semibold text-pink-700">"မှတ်တမ်းများ Notion သို့ ထုတ်မည်"</span> ခလုတ်ကို နှိပ်ပါ။</li>
                     <li>သင့်ရဲ့ ဂျာနယ်မှတ်တမ်းအားလုံးကို Markdown (.md) ဖိုင်အဖြစ် Download လုပ်ပေးပါလိမ့်မယ်။</li>
@@ -223,7 +236,7 @@
                     <li>Download လုပ်ထားတဲ့ .md ဖိုင်ကို Notion Page တစ်ခုထဲကို Drag & Drop (ဆွဲထည့်) ခြင်းဖြင့်ဖြစ်စေ၊ Notion ရဲ့ Import option မှတစ်ဆင့်ဖြစ်စေ ထည့်သွင်းနိုင်ပါတယ်။</li>
                 </ul>
 
-                <h3 class="text-xl font-semibold text-gray-800">အရေးကြီးအချက်များ</h3>
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">အရေးကြီးအချက်များ</h3> <!-- Responsive font size -->
                 <ul class="list-disc list-inside space-y-2">
                     <li>သင့်ရဲ့ ဂျာနယ်မှတ်တမ်းတွေဟာ သင့် Browser ရဲ့ Local Storage မှာသာ သိမ်းဆည်းထားတာဖြစ်ပါတယ်။ Browser History ရှင်းလင်းတာမျိုး၊ Browser ပြောင်းလဲတာမျိုး လုပ်ရင် မှတ်တမ်းတွေ ပျောက်ဆုံးနိုင်တာကြောင့် Notion ကို Export လုပ်ပြီး Backup လုပ်ထားဖို့ အကြံပြုလိုပါတယ်။</li>
                     <li>ဒီ App က Notion Database Properties တွေထဲကို တိုက်ရိုက် Data ထည့်သွင်းပေးနိုင်ခြင်း မရှိသေးပါဘူး။ Markdown ဖိုင်ကို Import လုပ်ပြီးမှ Notion ထဲမှာ ကိုယ်တိုင် ချိန်ညှိပေးရပါမယ်။</li>
@@ -237,27 +250,25 @@
         </div>
 
         <!-- Journaling Prompts Area (Initially hidden) -->
-        <div id="promptsContainer" class="content-section hidden max-w-md md:max-w-lg lg:max-w-xl"> <!-- Responsive max-width -->
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">ဂျာနယ်ရေးရန် မေးခွန်းများ</h2>
+        <div id="promptsContainer" class="content-section hidden p-4 sm:p-6 md:p-8 pb-4 max-w-md md:max-w-lg lg:max-w-xl"> <!-- Responsive padding and max-width, added pb-4 -->
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">ဂျာနယ်ရေးရန် မေးခွန်းများ</h2> <!-- Responsive font size -->
 
             <!-- Default Prompts Section -->
-            <div id="defaultPromptsSection" class="mb-6">
-                <div id="promptDisplay" class="bg-blue-50 p-6 rounded-lg shadow-inner border border-blue-200 mb-4">
-                    <p id="currentPromptText" class="text-lg font-semibold text-blue-800 mb-4"></p>
-                    <textarea id="promptAnswerTextarea" rows="6" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-y" placeholder="သင့်အဖြေကို ဤနေရာတွင် ရေးသားပါ။"></textarea>
-                </div>
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
-                    <button id="prevPromptBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
-                        ယခင်မေးခွန်း
-                    </button>
-                    <span id="promptCounter" class="text-gray-600 font-medium text-lg">1/10</span>
-                    <button id="nextPromptBtn" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-75 shadow-md">
-                        နောက်မေးခွန်း
-                    </button>
-                    <button id="combineAnswersBtn" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-75 shadow-md hidden">
-                        အဖြေများ စုစည်းမည်
-                    </button>
-                </div>
+            <div id="promptDisplay" class="bg-blue-50 p-4 sm:p-6 rounded-lg shadow-inner border border-blue-200 mb-4"> <!-- Responsive padding -->
+                <p id="currentPromptText" class="text-lg sm:text-xl font-semibold text-blue-800 mb-4"></p> <!-- Responsive font size -->
+                <textarea id="promptAnswerTextarea" rows="4" class="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-y min-h-[120px]" placeholder="သင့်အဖြေကို ဤနေရာတွင် ရေးသားပါ။"></textarea> <!-- Reduced rows to 4, added min-height -->
+            </div>
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-4 mt-4"> <!-- Responsive gap -->
+                <button id="prevPromptBtn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-75 shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+                    ယခင်မေးခွန်း
+                </button>
+                <span id="promptCounter" class="text-base sm:text-lg text-gray-600 font-medium">1/10</span> <!-- Responsive font size -->
+                <button id="nextPromptBtn" class="bg-blue-700 hover:bg-blue-800 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-75 shadow-md">
+                    နောက်မေးခွန်း
+                </button>
+                <button id="combineAnswersBtn" class="bg-purple-700 hover:bg-purple-800 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-75 shadow-md hidden">
+                    အဖြေများ စုစည်းမည်
+                </button>
             </div>
 
             <div class="flex justify-center mt-6">
@@ -268,8 +279,8 @@
         </div>
 
         <!-- Combined Answers & Analysis Area (Initially hidden) -->
-        <div id="combinedOutputContainer" class="content-section hidden max-w-md md:max-w-lg lg:max-w-xl"> <!-- Responsive max-width -->
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">သင့်ဂျာနယ်မှတ်တမ်း</h2>
+        <div id="combinedOutputContainer" class="content-section hidden p-4 sm:p-6 md:p-8 pb-4 max-w-md md:max-w-lg lg:max-w-xl"> <!-- Responsive padding and max-width, added pb-4 -->
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">သင့်ဂျာနယ်မှတ်တမ်း</h2> <!-- Responsive font size -->
             <div class="bg-white p-6 rounded-lg shadow-inner border border-gray-200 mb-4">
                 <textarea id="combinedJournalText" rows="15" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-800 resize-y" readonly></textarea>
                 <button id="copyCombinedTextBtn" class="mt-4 bg-green-700 hover:bg-green-800 text-white font-bold py-2.5 px-5 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-75 shadow-md">
@@ -277,12 +288,12 @@
                 </button>
             </div>
 
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6 mt-8">သုံးသပ်ချက်</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 mt-8">သုံးသပ်ချက်</h2> <!-- Responsive font size -->
             <div id="analysisResult" class="bg-white p-6 rounded-lg shadow-inner border border-gray-200 mb-4 text-gray-700">
                 <p id="analysisSummary" class="text-lg leading-relaxed"></p>
             </div>
 
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6 mt-8">လုပ်ဆောင်ရန်တာဝန်များ</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6 mt-8">လုပ်ဆောင်ရန်တာဝန်များ</h2> <!-- Responsive font size -->
             <ul id="actionItemsList" class="list-disc list-inside bg-white p-6 rounded-lg shadow-inner border border-gray-200 text-gray-700 space-y-2">
                 <!-- Action items will be listed here -->
             </ul>
@@ -473,7 +484,10 @@
                     }
                 };
 
-                const apiKey = "";
+                // NOTE: For production, do NOT hardcode API_KEY like this.
+                // Use Vercel Environment Variables and ideally a Serverless Function to proxy API calls securely.
+                // For development, replace with your actual API key, but be aware of security risks.
+                const apiKey = ""; // Canvas will inject the API key at runtime.
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -523,7 +537,10 @@
                     }
                 };
 
-                const apiKey = "";
+                // NOTE: For production, do NOT hardcode API_KEY like this.
+                // Use Vercel Environment Variables and ideally a Serverless Function to proxy API calls securely.
+                // For development, replace with your actual API key, but be aware of security risks.
+                const apiKey = ""; // Canvas will inject the API key at runtime.
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
