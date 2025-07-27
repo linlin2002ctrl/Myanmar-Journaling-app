@@ -464,24 +464,35 @@
         async function getJournalAnalysis(journalText) {
             showMessage("သုံးသပ်ချက် ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပါ။", "success");
             try {
+                let chatHistory = [];
                 const prompt = `အောက်ပါ ဂျာနယ်မှတ်တမ်းကို မြန်မာဘာသာဖြင့် အကျဉ်းချုပ်သုံးသပ်ချက်ပေးပါ။ ထို့အပြင် ၎င်းမှတ်တမ်းမှ လုပ်ဆောင်ရန် တာဝန်များကို စာရင်းပြုစုဖော်ပြပါ။ JSON format ဖြင့်သာ ပြန်လည်ဖြေကြားပါ။ ဥပမာ: {"summary": "...", "action_items": ["...", "..."]}\n\nဂျာနယ်မှတ်တမ်း:\n${journalText}`;
-                const schema = {
-                    type: "OBJECT",
-                    properties: {
-                        "summary": { "type": "STRING" },
-                        "action_items": {
-                            "type": "ARRAY",
-                            "items": { "type": "STRING" }
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "OBJECT",
+                            properties: {
+                                "summary": { "type": "STRING" },
+                                "action_items": {
+                                    "type": "ARRAY",
+                                    "items": { "type": "STRING" }
+                                }
+                            },
+                            "propertyOrdering": ["summary", "action_items"]
                         }
-                    },
-                    "propertyOrdering": ["summary", "action_items"]
+                    }
                 };
 
-                // Call the Vercel Serverless Function
-                const response = await fetch('/api/gemini', {
+                const apiKey = ""; // Canvas will inject the API key at runtime.
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt, schema: schema })
+                    body: JSON.stringify(payload)
                 });
 
                 if (!response.ok) {
@@ -489,12 +500,23 @@
                     throw new Error(errorData.message || 'API request failed');
                 }
 
-                const result = await response.json(); // Serverless function already parses JSON
-                return result;
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0 &&
+                    result.candidates[0].content.parts[0].text) {
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    const parsedJson = JSON.parse(jsonString);
+                    return parsedJson;
+                } else {
+                    console.error("Unexpected API response structure:", result);
+                    showMessage("သုံးသပ်ချက်ရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
+                    return { summary: "သုံးသပ်ချက်ရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", action_items: [] };
+                }
             } catch (error) {
-                console.error("Error getting journal analysis:", error);
-                showMessage(`သုံးသပ်ချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
-                return { summary: "သုံးသပ်ချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။", action_items: [] };
+                console.error("Error calling Gemini API for analysis:", error);
+                showMessage(`သုံးသပ်ချက်ရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
+                return { summary: "သုံးသပ်ချက်ရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။", action_items: [] };
             }
         }
 
@@ -502,19 +524,30 @@
         async function getMoodBasedPrompts(mood) {
             showMessage(`'${mood}' စိတ်ခံစားမှုအတွက် မေးခွန်းများ ပြင်ဆင်နေပါသည်။ ခဏစောင့်ပါ။`, "success");
             try {
+                let chatHistory = [];
                 const prompt = `Generate 10 distinct journaling prompts in Burmese, suitable for someone experiencing a '${mood}' mood. Format the response as a JSON array of strings, where each string is a prompt. Example: [\"prompt1\", \"prompt2\", ... \"prompt10\"]`;
-                const schema = {
-                    type: "ARRAY",
-                    items: {
-                        type: "STRING"
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+                const payload = {
+                    contents: chatHistory,
+                    generationConfig: {
+                        responseMimeType: "application/json",
+                        responseSchema: {
+                            type: "ARRAY",
+                            items: {
+                                type: "STRING"
+                            }
+                        }
                     }
                 };
 
-                // Call the Vercel Serverless Function
-                const response = await fetch('/api/gemini', {
+                const apiKey = ""; // Canvas will inject the API key at runtime.
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt, schema: schema })
+                    body: JSON.stringify(payload)
                 });
 
                 if (!response.ok) {
@@ -522,16 +555,27 @@
                     throw new Error(errorData.message || 'API request failed');
                 }
 
-                const result = await response.json(); // Serverless function already parses JSON
-                if (Array.isArray(result) && result.length > 0) {
-                    return result;
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0 &&
+                    result.candidates[0].content.parts[0].text) {
+                    const jsonString = result.candidates[0].content.parts[0].text;
+                    const parsedPrompts = JSON.parse(jsonString);
+                    if (Array.isArray(parsedPrompts) && parsedPrompts.length > 0) {
+                        return parsedPrompts;
+                    } else {
+                        console.error("API returned empty or invalid prompts array:", parsedPrompts);
+                        return defaultJournalingPrompts; // Fallback to default
+                    }
                 } else {
-                    console.error("API returned empty or invalid prompts array:", result);
+                    console.error("Unexpected API response structure for mood prompts:", result);
+                    showMessage("စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် အမှားအယွင်းရှိခဲ့ပါသည်။", "error");
                     return defaultJournalingPrompts; // Fallback to default
                 }
             } catch (error) {
-                console.error("Error getting mood prompts:", error);
-                showMessage(`စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
+                console.error("Error calling Gemini API for mood prompts:", error);
+                showMessage(`စိတ်ခံစားမှုအလိုက် မေးခွန်းများရယူရာတွင် ကွန်ရက်ချိတ်ဆက်မှု ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, "error");
                 return defaultJournalingPrompts; // Fallback to default
             }
         }
