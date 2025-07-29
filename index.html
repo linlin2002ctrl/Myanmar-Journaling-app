@@ -3,421 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>နေ့စဉ်မှတ်တမ်း</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Mind Therapist Journal (Pro)</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons for settings gear -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <style>
         :root {
-            --primary-color: #3b82f6;
-            --primary-hover: #2563eb;
-            --secondary-color: #64748b;
-            --success-color: #22c55e;
-            --error-color: #ef4444;
-            --background-color: #f1f5f9;
-            --card-background: #ffffff;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            --modal-background: rgba(0, 0, 0, 0.5);
+            --primary-color: #1e40af; --primary-hover: #1d4ed8; --secondary-color: #6b7280;
+            --success-color: #10b981; --error-color: #ef4444; --background-color: #f8f9fa;
+            --card-background: #ffffff; --text-primary: #1f2937; --border-color: #dee2e6;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1); --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
         }
-        body {
-            font-family: 'Pyidaungsu', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-        .card {
-            background: var(--card-background);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-md);
-            margin: 1rem auto;
-            max-width: 900px;
-        }
-        .input-field {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.375rem;
-            font-size: 1rem;
-        }
-        .textarea-field {
-            min-height: 150px;
-            resize: vertical;
-        }
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.375rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-        .btn-secondary {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        .btn-secondary:hover {
-            background-color: #475569;
-        }
-        .btn-success {
-            background-color: var(--success-color);
-            color: white;
-        }
-        .btn-success:hover {
-            background-color: #16a34a;
-        }
-        .btn-danger {
-            background-color: var(--error-color);
-            color: white;
-        }
-        .btn-danger:hover {
-            background-color: #dc2626;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: var(--modal-background);
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.show {
-            display: flex;
-        }
-        .modal-content {
-            background: var(--card-background);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: var(--shadow-lg);
-            text-align: center;
-            max-width: 90%;
-            width: 400px;
-        }
-        .loading-spinner {
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid #f3f4f6;
-            border-top: 2px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-            display: inline-block;
-            vertical-align: middle;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .prompt-transition {
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-        .prompt-display.active {
-            opacity: 1;
-        }
-        .progress-container {
-            width: 100%;
-            background: #e2e8f0;
-            border-radius: 0.25rem;
-            overflow: hidden;
-            margin: 1rem 0;
-        }
-        .progress-bar {
-            height: 0.5rem;
-            background: var(--primary-color);
-            transition: width 0.3s ease;
-        }
-        @media (max-width: 640px) {
-            .card {
-                padding: 1rem;
-            }
-            .grid-cols-2 {
-                grid-template-columns: 1fr;
-            }
-            .btn {
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
-        }
+        body { font-family: 'Pyidaungsu', sans-serif; background-color: var(--background-color); }
+        .card { box-shadow: var(--shadow-lg); border: none; animation: cardFadeIn 0.6s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes cardFadeIn { to { opacity: 1; transform: translateY(0); } }
+        .btn { font-weight: 600; border-radius: 0.5rem; transition: all 0.25s ease-in-out; box-shadow: var(--shadow-md); }
+        .btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.03); box-shadow: var(--shadow-lg); }
+        .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
+        .btn-primary:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
+        .form-control:focus, .form-select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 0.25rem rgb(30 64 175 / 25%); }
+        .loading-spinner { display: inline-block; width: 1rem; height: 1rem; border: 2px solid transparent; border-top-color: currentColor; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 0.5rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .analysis-section { background-color: #f0fff4; border: 1px solid #a7e0b4; }
+        .hidden { display: none !important; }
+        .history-item:hover { background-color: #f1f5f9; cursor: pointer; }
     </style>
 </head>
-<body>
-    <div class="container mx-auto p-4">
-        <div class="card">
-            <h1 class="text-3xl font-bold text-center mb-6 text-blue-700">နေ့စဉ်မှတ်တမ်း</h1>
-            <div id="app-content" class="space-y-6">
-                <!-- Privacy Policy Section -->
-                <div id="privacySection" class="section hidden">
-                    <h2 class="text-2xl font-bold text-center mb-4 text-yellow-600">ကိုယ်ရေးအချက်အလက်ကာကွယ်မှု</h2>
-                    <div class="space-y-4 text-gray-700">
-                        <p>ဤ App သည် သုံးစွဲသူများ၏ ကိုယ်ရေးအချက်အလက် လုံခြုံရေးကို အလေးထားပါသည်။</p>
-                        <div>
-                            <h3 class="text-lg font-semibold mb-2">၁။ အချက်အလက်သိမ်းဆည်းခြင်း</h3>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>ဂျာနယ်မှတ်တမ်းများကို Browser Local Storage တွင်သာ သိမ်းဆည်းထားပါသည်။</li>
-                                <li>Server သို့ အချက်အလက် ပေးပို့ခြင်းမရှိပါ။</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold mb-2">၂။ အချက်အလက်ဖောက်ပြားမှု ကာကွယ်ခြင်း</h3>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>ပြင်ပ Server မှ ပေါက်ကြားနိုင်ခြေ မရှိပါ။</li>
-                                <li>Browser Cache ရှင်းလင်းပါက မှတ်တမ်းများ ပျောက်နိုင်ပါသည်။</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="text-center mt-4">
-                        <button id="agreePrivacyBtn" class="btn btn-primary">သဘောတူသည်</button>
-                    </div>
-                </div>
+<body class="d-flex align-items-start justify-content-center py-4">
+    <div class="container" style="max-width: 768px;">
+        <div class="card p-3 p-md-4">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="display-5 fw-bold text-center flex-grow-1" style="color: var(--primary-color);">Mind Therapist</h1>
+                <button id="settingsBtn" class="btn btn-outline-secondary border-0 fs-4" title="Settings"><i class="bi bi-gear-fill"></i></button>
+            </div>
+            
+            <div id="app-content" role="main">
+                <!-- Sections for Privacy, Terms -->
+                <div id="privacySection" class="section hidden text-center"><h2 class="h3">ကိုယ်ရေးအချက်အလက်ကာကွယ်မှု</h2><p class="mt-3">သင့်မှတ်တမ်းများကို သင့် Browser တွင်သာ သိမ်းဆည်းပါသည်။</p><button id="agreePrivacyBtn" class="btn btn-primary mt-3">သဘောတူသည်</button></div>
+                <div id="termsSection" class="section hidden text-center"><h2 class="h3">စည်းမျဉ်းနှင့် သတ်မှတ်ချက်များ</h2><p class="mt-3">မှတ်တမ်းများ ပျောက်ဆုံးခြင်းအတွက် တာဝန်မယူပါ။</p><button id="agreeTermsBtn" class="btn btn-primary mt-3">သဘောတူသည်</button></div>
 
-                <!-- Terms Section -->
-                <div id="termsSection" class="section hidden">
-                    <h2 class="text-2xl font-bold text-center mb-4 text-yellow-600">စည်းမျဉ်းနှင့် သတ်မှတ်ချက်များ</h2>
-                    <div class="space-y-4 text-gray-700">
-                        <p>App ကို အသုံးပြုခြင်းဖြင့် အောက်ပါ စည်းမျဉ်းများကို သဘောတူပါသည်။</p>
-                        <div>
-                            <h3 class="text-lg font-semibold mb-2">၁။ အသုံးပြုမှု</h3>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>ကိုယ်ပိုင် ဂျာနယ်ရေးသားရန်သာ အသုံးပြုပါ။</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold mb-2">၂။ အချက်အလက်များ</h3>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>မှတ်တမ်းပျောက်ဆုံးခြင်းအတွက် App ဖန်တီးသူမှ တာဝန်မရှိပါ။</li>
-                            </ul>
-                        </div>
+                <!-- NEW: Settings Section -->
+                <div id="settingsSection" class="section hidden">
+                    <h2 class="h3 fw-bold text-center mb-4">Settings</h2>
+                    <div class="mb-3">
+                        <label for="userNameInput" class="form-label">သင်၏အမည်:</label>
+                        <input type="text" id="userNameInput" class="form-control" placeholder="သင့်အမည်ကိုထည့်ပါ">
                     </div>
-                    <div class="text-center mt-4">
-                        <button id="agreeTermsBtn" class="btn btn-primary">သဘောတူသည်</button>
+                    <div class="mb-4">
+                        <label for="apiKeyInput" class="form-label">Gemini API Key:</label>
+                        <input type="password" id="apiKeyInput" class="form-control" placeholder="သင်၏ API Key ကိုထည့်ပါ">
                     </div>
-                </div>
-
-                <!-- User Guide Section -->
-                <div id="guideSection" class="section hidden">
-                    <h2 class="text-2xl font-bold text-center mb-4 text-blue-700">အသုံးပြုနည်းလမ်းညွှန်</h2>
-                    <div class="space-y-4 text-gray-700">
-                        <div>
-                            <h3 class="text-lg font-semibold mb-2">၁။ ဂျာနယ်စတင်ရေးသား</h3>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>ရက်စွဲနဲ့ စိတ်ခံစားမှု ရွေးပြီး "မေးခွန်းများဖြင့် ဂျာနယ်ရေးမည်" ကို နှိပ်ပါ။</li>
-                            </ul>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-semibold mb-2">၂။ မှတ်တမ်းသိမ်းဆည်းခြင်း</h3>
-                            <ul class="list-disc list-inside space-y-1">
-                                <li>"အဖြေများ စုစည်းမည်" ကို နှိပ်ပြီး သိမ်းပါ။</li>
-                            </ul>
-                        </div>
+                    <div class="d-grid gap-2 mb-4">
+                        <button id="saveSettingsBtn" class="btn btn-primary">သိမ်းမည်</button>
                     </div>
-                    <div class="text-center mt-4">
-                        <button id="startJournalingBtn" class="btn btn-primary">ဂျာနယ်စတင်ရေးမည်</button>
-                    </div>
-                </div>
-
-                <!-- API Key Input Section -->
-                <div id="apiKeySection" class="section hidden">
-                    <h2 class="text-2xl font-bold text-center mb-4 text-blue-700">Gemini API Key</h2>
-                    <p class="text-gray-600 mb-2">AI သုံးသပ်ချက်အတွက် API Key ထည့်ပါ။</p>
-                    <p class="text-sm text-gray-500"><a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-blue-600 hover:underline">Google AI Studio</a> မှ ရယူနိုင်ပါသည်။</p>
-                    <input type="password" id="apiKeyInput" class="input-field mb-4" placeholder="Enter your Gemini API Key" required>
-                    <div class="text-center">
-                        <button id="saveApiKeyBtn" class="btn btn-primary">သိမ်းမည်</button>
+                    <hr>
+                    <h4 class="h5 mt-4">Backup & Restore</h4>
+                    <p class="text-muted small">သင်၏ API Key နှင့် အမည်ကို file တစ်ခုအနေဖြင့် သိမ်းဆည်းနိုင်၊ ပြန်လည်ထည့်သွင်းနိုင်သည်။</p>
+                    <div class="d-flex gap-2">
+                        <button id="exportSettingsBtn" class="btn btn-outline-success w-100">Export Settings</button>
+                        <button id="importSettingsBtn" class="btn btn-outline-info w-100">Import Settings</button>
+                        <input type="file" id="importFileInput" class="hidden" accept=".json">
                     </div>
                 </div>
 
                 <!-- Main Journal Section -->
                 <div id="journalSection" class="section hidden">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="journalDate" class="block text-sm font-medium mb-1">ရက်စွဲ:</label>
-                            <input type="date" id="journalDate" class="input-field" required>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium mb-1">စိတ်ခံစားမှု:</label>
-                            <select id="journalMood" class="input-field">
-                                <option value="">ရွေးပါ</option>
-                                <option value="ပျော်ရွှင်">ပျော်ရွှင် 😊</option>
-                                <option value="ဝမ်းနည်း">ဝမ်းနည်း 😢</option>
-                                <option value="စိတ်တို">စိတ်တို 😠</option>
-                            </select>
-                        </div>
+                    <div class="row g-3">
+                        <div class="col-md-6"><label for="journalDate" class="form-label fw-bold">ရက်စွဲ:</label><input type="date" id="journalDate" class="form-control" required></div>
+                        <div class="col-md-6"><label for="journalMood" class="form-label fw-bold">လက်ရှိစိတ်ခံစားမှု:</label><select id="journalMood" class="form-select" required><option value="" selected disabled>စိတ်ခံစားမှု ရွေးပါ</option><option value="ပျော်ရွှင်">ပျော်ရွှင် 😊</option><option value="ဝမ်းနည်း">ဝမ်းနည်း 😢</option><option value="စိတ်တို">စိတ်တို 😠</option><option value="စိတ်လှုပ်ရှား">စိတ်လှုပ်ရှား 🤩</option><option value="ငြိမ်သက်">ငြိမ်သက် 😌</option><option value="ပင်ပန်း">ပင်ပန်း 😴</option><option value="စိတ်ရှုပ်">စိတ်ရှုပ် 😕</option><option value="ကျေနပ်">ကျေနပ် 👍</option></select></div>
                     </div>
-                    <div class="mt-4 bg-blue-50 border-l-4 border-blue-500 p-3 rounded-r">
-                        <h3 class="text-md font-semibold text-blue-800">ဘဝဆိုင်ရာ တွေးတော်မှု</h3>
-                        <p id="philosophyText" class="text-blue-600"></p>
-                        <p id="sourceCredit" class="text-xs text-blue-500"></p>
-                    </div>
-                    <div class="flex justify-center gap-4 mt-4">
-                        <button id="startPromptsBtn" class="btn btn-primary">✨ မေးခွန်းများဖြင့် ဂျာနယ်ရေးမည်</button>
-                        <button id="clearApiKeyBtn" class="btn btn-danger">API Key ဖယ်ရှားမည်</button>
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="text-md font-semibold mb-2">အကြံပြုချက်</h3>
-                        <textarea id="feedbackTextarea" class="input-field textarea-field" placeholder="သင့် အကြံပြုချက်ရေးပါ"></textarea>
-                        <div class="text-center mt-2">
-                            <button id="submitFeedbackBtn" class="btn btn-success">ပေးပို့မည်</button>
+                    <div class="mt-4 text-center">
+                        <h3 class="h4 mb-3 fw-bold">ဘယ်လိုဆွေးနွေးမှုမျိုး စတင်မလဲ။</h3>
+                        <div class="d-grid gap-3">
+                            <div class="row g-3">
+                                <div class="col-md-6"><button id="startMorningBtn" class="btn btn-primary w-100 p-3">🌅 မနက်ခင်း</button></div>
+                                <div class="col-md-6"><button id="startNightBtn" class="btn btn-primary w-100 p-3">🌃 ညပိုင်း</button></div>
+                            </div>
+                            <button id="startGratitudeBtn" class="btn btn-primary p-3" style="background-color: #059669; border-color: #059669;">🙏 ကျေးဇူးတင်ခြင်း</button>
+                            <button id="startGeneralBtn" class="btn btn-secondary p-3">💬 အထွေထွေ</button>
+                            <hr>
+                            <button id="myJournalBtn" class="btn btn-outline-primary p-3">📖 ကျွန်ုပ်၏ မှတ်တမ်းများ</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Prompts Section -->
                 <div id="promptsSection" class="section hidden">
-                    <h2 class="text-2xl font-bold text-center mb-4 text-gray-800">ဂျာနယ်မေးခွန်းများ</h2>
-                    <div class="progress-container">
-                        <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+                    <h2 id="prompt-title" class="h3 fw-bold text-center mb-4"></h2>
+                    <div class="progress mb-3" role="progressbar" style="height: 8px;"><div id="progressBar" class="progress-bar" style="transition: width 0.5s ease-in-out;"></div></div>
+                    <div class="p-4 rounded mb-3" style="background-color: #eef2f7;"><p id="currentPromptText" class="h5 mb-3"></p><textarea id="promptAnswerTextarea" class="form-control" rows="5" placeholder="သင့်အဖြေကို ဤနေရာတွင် ရေးပါ"></textarea></div>
+                    <div class="d-flex justify-content-between align-items-center"><button id="prevPromptBtn" class="btn btn-secondary" disabled>ယခင်</button><span id="promptCounter" class="text-muted fw-bold"></span><button id="nextPromptBtn" class="btn btn-primary">နောက်တစ်ခု</button><button id="combineAnswersBtn" class="btn btn-success hidden">အကြံဉာဏ်ရယူမည်</button></div>
+                    <div class="text-center mt-3"><button id="backToMainFromPromptsBtn" class="btn btn-sm btn-outline-secondary">ပင်မ Screen သို့ ပြန်သွားရန်</button></div>
+                </div>
+                
+                <!-- NEW: Journal History Section -->
+                <div id="journalHistorySection" class="section hidden">
+                    <h2 class="h3 fw-bold text-center mb-4">ကျွန်ုပ်၏ မှတ်တမ်းများ</h2>
+                    <div class="row g-2 mb-3">
+                        <div class="col"><select id="filterMode" class="form-select form-select-sm"><option value="all">အမျိုးအစားအားလုံး</option><option value="morning">မနက်ခင်း</option><option value="night">ညပိုင်း</option><option value="gratitude">ကျေးဇူးတင်ခြင်း</option><option value="general">အထွေထွေ</option></select></div>
+                        <div class="col"><select id="filterMood" class="form-select form-select-sm"><option value="all">စိတ်ခံစားမှုအားလုံး</option><option value="ပျော်ရွှင်">ပျော်ရွှင်</option><option value="ဝမ်းနည်း">ဝမ်းနည်း</option><option value="စိတ်တို">စိတ်တို</option><option value="စိတ်လှုပ်ရှား">စိတ်လှုပ်ရှား</option><option value="ငြိမ်သက်">ငြိမ်သက်</option><option value="ပင်ပန်း">ပင်ပန်း</option><option value="စိတ်ရှုပ်">စိတ်ရှုပ်</option><option value="ကျေနပ်">ကျေနပ်</option></select></div>
                     </div>
-                    <div id="promptDisplay" class="prompt-display mt-4">
-                        <p id="currentPromptText" class="text-lg font-medium text-blue-800 mb-2"></p>
-                        <textarea id="promptAnswerTextarea" class="input-field textarea-field" placeholder="အဖြေရေးပါ"></textarea>
-                    </div>
-                    <div class="flex justify-between items-center mt-4 gap-2">
-                        <button id="prevPromptBtn" class="btn btn-secondary" disabled>ယခင်</button>
-                        <span id="promptCounter" class="text-gray-600">1/5</span>
-                        <div class="flex gap-2">
-                            <button id="nextPromptBtn" class="btn btn-primary">နောက်</button>
-                            <button id="combineAnswersBtn" class="btn btn-success hidden">စုစည်းမည်</button>
-                        </div>
-                    </div>
-                    <div class="text-center mt-4">
-                        <button id="backToJournalBtn" class="btn btn-secondary">ပြန်သွားမည်</button>
-                    </div>
+                    <div id="historyList" class="list-group"></div>
+                    <p id="noHistoryMessage" class="text-center text-muted hidden">မှတ်တမ်းများ မရှိသေးပါ။</p>
+                    <div class="text-center mt-3"><button id="backToMainFromHistoryBtn" class="btn btn-outline-secondary">ပင်မ Screen သို့ ပြန်သွားရန်</button></div>
                 </div>
 
-                <!-- Suggestions Section -->
-                <div id="suggestionsSection" class="section hidden">
-                    <h2 class="text-2xl font-bold text-center mb-4 text-gray-800">အကြံပြုချက်များ</h2>
-                    <div class="bg-green-50 border-l-4 border-green-500 p-3 rounded-r mb-4">
-                        <h3 class="text-md font-semibold text-green-800">အားပေးစကား</h3>
-                        <p id="affirmationText" class="text-green-700"></p>
-                    </div>
-                    <div class="card">
-                        <h3 class="text-md font-semibold mb-2">ဂျာနယ်မှတ်တမ်း</h3>
-                        <textarea id="combinedJournalText" class="input-field textarea-field" style="min-height: 200px;" readonly></textarea>
-                        <div class="flex justify-center gap-4 mt-4">
-                            <button id="copyCombinedTextBtn" class="btn btn-success">ကူးယူမည်</button>
-                            <button id="exportToNotionBtn" class="btn btn-primary">Notion ထုတ်မည်</button>
-                        </div>
-                    </div>
-                    <div class="text-center mt-4">
-                        <button id="backToMainJournalBtn" class="btn btn-secondary">ပြန်သွားမည်</button>
-                    </div>
+                <!-- Analysis Results Section -->
+                <div id="analysisSection" class="section hidden">
+                    <h2 class="h3 fw-bold text-center mb-4">သုံးသပ်ချက်နှင့် အကြံပြုချက်</h2>
+                    <div class="analysis-section p-3 rounded mb-4"><h3 class="h5 mb-2 fw-bold" style="color: #059669;">AI အကြံပြုချက်</h3><p id="aiSuggestionDisplay" class="text-dark whitespace-pre-wrap"></p></div>
+                    <div class="card shadow-sm"><div class="card-body"><h3 class="h5 mb-2 fw-bold">သင်၏ မှတ်တမ်း</h3><textarea id="combinedJournalText" class="form-control" rows="10" readonly></textarea><div class="d-grid gap-2 d-md-flex justify-content-md-center mt-3"><button id="copyCombinedTextBtn" class="btn btn-success">ကူးယူမည်</button><button id="exportToNotionBtn" class="btn btn-dark">Notion သို့ ထုတ်မည်</button></div></div></div>
+                    <div class="text-center mt-3"><button id="backToMainJournalBtn" class="btn btn-outline-secondary">ပင်မ Screen သို့ ပြန်သွားရန်</button></div>
                 </div>
             </div>
         </div>
+        
+        <!-- Toast Container -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
 
-        <!-- Modal -->
-        <div id="modal" class="modal" role="dialog" aria-modal="true">
-            <div class="modal-content">
-                <button id="modalClose" class="modal-close text-2xl">&times;</button>
-                <p id="modalMessage" class="text-lg font-medium"></p>
-            </div>
-        </div>
+        <!-- Reusable Modal for Journal Entry Detail -->
+        <div class="modal fade" id="entryDetailModal" tabindex="-1"><div class="modal-dialog modal-dialog-scrollable modal-lg"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="entryDetailTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body" id="entryDetailBody"></div></div></div></div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const FALLBACK_AFFIRMATIONS = {
-            "ပျော်ရွှင်": ["သင့်ရဲ့ ပျော်ရွှင်မှုကို ဆက်လက်မျှဝေပါ။", "ဒီပျော်ရွှင်မှုကို အမှတ်တရထားပါ။"],
-            "ဝမ်းနည်း": ["သင်တစ်ယောက်တည်း မဟုတ်ပါဘူး။", "အနားယူပြီး စိတ်အေးလိုက်ပါ။"],
-            "စိတ်တို": ["စိတ်အေးအေးထားပါ။", "အတွေးတွေကို ရေးထုတ်ကြည့်ပါ။"]
-        };
-
-        const StorageUtil = {
-            save(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (e) { console.error(e); return false; } },
-            load(key) { try { return JSON.parse(localStorage.getItem(key)) || null; } catch (e) { console.error(e); return null; } },
-            remove(key) { try { localStorage.removeItem(key); return true; } catch (e) { console.error(e); return false; } }
-        };
-
+        const StorageUtil = { save: (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { console.error(e); } }, load: (k) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { console.error(e); return null; } }, remove: (k) => { try { localStorage.removeItem(k); } catch (e) { console.error(e); } } };
         const GeminiAPI = {
-            async fetchPrompts(mood, apiKey) {
-                const prompt = mood ? `Generate 5 journaling prompts in Burmese for '${mood}' mood. Format: JSON array of strings.` : `Generate 5 journaling prompts in Burmese. Format: JSON array of strings.`;
-                return this._makeApiCall(prompt, { type: 'ARRAY', items: { type: 'STRING' } }, apiKey);
-            },
-            async fetchAffirmation(text, mood, apiKey) {
-                const prompt = `Analyze: "${text}"\nMood: ${mood}\nProvide a positive affirmation in Burmese. Return: {"affirmation": "text"}`;
-                return this._makeApiCall(prompt, { type: 'OBJECT', properties: { affirmation: { type: 'STRING' } } }, apiKey);
-            },
-            async _makeApiCall(prompt, schema, apiKey) {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: schema ? { responseSchema: schema } : {} })
-                });
-                if (!response.ok) throw new Error('API error');
-                const result = await response.json();
-                return JSON.parse(result.candidates[0].content.parts[0].text);
-            }
+            async fetchPrompts(mode, mood, name, apiKey) { let instruction = ''; const userName = name ? `Their name is ${name}. Greet them by name.` : ''; switch (mode) { case 'morning': instruction = `As a mind therapist for a Burmese user, generate 5 practical questions for a morning reflection. Their mood is '${mood}'. Focus on setting a positive intention. ${userName}`; break; case 'night': instruction = `As a mind therapist for a Burmese user, generate 5 practical questions for a night reflection. Their mood was '${mood}'. Focus on closure and letting go. ${userName}`; break; case 'gratitude': instruction = `As a guide for a Burmese user doing gratitude journaling, generate 3 simple questions to list three things they are grateful for. Their mood is '${mood}'. ${userName}`; break; default: instruction = `As a mind therapist for a Burmese user feeling '${mood}', generate 5 conversational questions to explore their feelings. ${userName}`; } const prompt = `${instruction} Tone must be gentle. Format as a JSON array of strings.`; return this._makeApiCall(prompt, { type: 'ARRAY', items: { type: 'STRING' } }, apiKey); },
+            async fetchCounselorAdvice(journalText, mood, mode, apiKey) { const prompt = `As a compassionate mind therapist for a Burmese user, they just completed a ${mode} reflection. Their mood is '${mood}'. Their journal entry is below.\n\n---\n${journalText}\n---\n\nRespond in Burmese with empathy and practical guidance relevant to their reflection type (${mode}). 1. Acknowledge feelings. 2. Offer a new perspective. 3. Provide one or two actionable suggestions. 4. End with a warm closing. Your response must be a single, coherent text.`; return this._makeApiCall(prompt, null, apiKey, "text/plain"); },
+            async _makeApiCall(prompt, schema, apiKey, responseMimeType = "application/json") { const model = "gemini-1.5-flash"; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`; const payload = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: schema ? { responseMimeType, responseSchema: schema } : { responseMimeType }, safetySettings: [{ category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' }, { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' }, { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' }, { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }] }) }; const response = await fetch(apiUrl, payload); if (!response.ok) { const err = await response.json().catch(() => ({})); throw new Error(err?.error?.message || `API Error: ${response.status}`); } const result = await response.json(); const text = result.candidates?.[0]?.content?.parts?.[0]?.text; if (!text) throw new Error('Unexpected API response structure.'); return responseMimeType === "application/json" ? JSON.parse(text) : text; }
         };
-
-        const SuggestionModule = {
-            async generateAffirmation(text, mood, apiKey) {
-                try { return await GeminiAPI.fetchAffirmation(text, mood, apiKey); } catch (e) { return { affirmation: FALLBACK_AFFIRMATIONS[mood]?.[0] || "သင်သည် ကောင်းကောင်းလုပ်နိုင်ပါသည်။" }; }
-            }
-        };
-
         const UIUtil = {
-            showSection(id) {
-                document.querySelectorAll('.section').forEach(s => { s.classList.add('hidden'); s.classList.remove('active'); });
-                const section = document.getElementById(id); if (section) { section.classList.remove('hidden'); setTimeout(() => section.classList.add('active'), 50); section.scrollIntoView({ behavior: 'smooth' }); }
-            },
-            showModal(message, type = 'success') {
-                const modal = document.getElementById('modal'); const msg = document.getElementById('modalMessage');
-                msg.textContent = message; modal.className = `modal ${type}`; modal.style.display = 'flex'; setTimeout(() => this.hideModal(), 3000);
-            },
-            hideModal() { document.getElementById('modal').style.display = 'none'; },
-            setLoading(el, isLoading, text = el.textContent, spinner = '<span class="loading-spinner"></span>') { el.disabled = isLoading; el.innerHTML = isLoading ? spinner + text : text; },
-            updateProgressBar(current, total) { document.getElementById('progressBar').style.width = `${(current / total) * 100}%`; }
+            showSection: (id) => { document.querySelectorAll('.section').forEach(s => s.classList.add('hidden')); document.getElementById(id)?.classList.remove('hidden'); },
+            showToast: (msg) => { const toastContainer = document.querySelector('.toast-container'); const toastEl = document.createElement('div'); toastEl.className = 'toast align-items-center text-bg-dark border-0'; toastEl.innerHTML = `<div class="d-flex"><div class="toast-body">${msg}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`; toastContainer.appendChild(toastEl); const toast = new bootstrap.Toast(toastEl, { delay: 3000 }); toast.show(); toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove()); },
+            setLoading: (el, loading, text) => { const spinner = '<span class="loading-spinner"></span>'; el.disabled = loading; el.innerHTML = loading ? spinner + text : text; },
+            updateProgressBar: (current, total) => { document.getElementById('progressBar').style.width = `${(current / total) * 100}%`; }
         };
-
         class JournalApp {
-            constructor() {
-                this.currentPromptIndex = 0; this.promptAnswers = []; this.activePrompts = []; this.defaultPrompts = ["ဒီနေ့ ဘာကို ကျေးဇူးတင်ပါသနည်း။", "ဘာက ပျော်စေခဲ့လဲ။", "ဘာကို သင်ယူခဲ့သလဲ။", "စိတ်ခံစားမှုဘယ်လိုရှိခဲ့လဲ။", "ကိုယ်ကို ဘယ်လိုကောင်းမလဲ။"];
-                this.isLoading = false; this.philosophyTexts = [{ text: "နေ့စဉ် သုံးသပ်တာက ဘဝတိုးတက်ဖို့ အရေးကြီးပါတယ်။", credit: "KO LAPYAE" }];
-                this.init();
-            }
-            init() { this.bindEvents(); this.checkInitialState(); this.displayRandomPhilosophy(); }
+            constructor() { this.currentPromptIndex = 0; this.promptAnswers = []; this.activePrompts = []; this.isLoading = false; this.journalMode = null; this.journalEntries = StorageUtil.load('journalEntries') || []; this.userName = StorageUtil.load('userName') || ''; this.apiKey = StorageUtil.load('geminiApiKey') || ''; this.defaultPrompts = { morning: ["ဒီမနက်ခင်းမှာ ဘယ်အရာအတွက် ကျေးဇူးအတင်ဆုံးဖြစ်မလဲ။", "ဒီနေ့ကို အကောင်းဆုံးနေ့ဖြစ်အောင် ဘယ်လိုရည်ရွယ်ချက်ထားမလဲ။", "သင့်ကိုယ်သင် အားပေးစကားတစ်ခွန်း ပြောပေးပါ။"], night: ["ဒီနေ့ သင်ယူလိုက်ရတဲ့ အရေးကြီးဆုံးအရာက ဘာလဲ။", "ဘယ်အဖြစ်အပျက်က သင့်ကို အပျော်ရွှင်ဆုံးဖြစ်စေခဲ့လဲ။", "ဒီနေ့အတွက် လွှတ်ချချင်တဲ့ စိတ်အနှောင့်အယှက် တစ်ခုခုရှိလား။"], gratitude: ["ဒီနေ့အတွက် ကျေးဇူးတင်မိတဲ့ ပထမဆုံးအရာက ဘာလဲ။", "နောက်ထပ် ကျေးဇူးတင်စရာတစ်ခုက ဘာဖြစ်မလဲ။", "နောက်ဆုံးအနေနဲ့ တတိယမြောက် ကျေးဇူးတင်စရာကရော ဘာဖြစ်မလဲ။"], general: ["ဒီနေ့ သင့်စိတ်ထဲမှာ ဘာတွေဖြစ်နေလဲ။", "အဲ့ဒီခံစားချက်ကို ဖြစ်စေတဲ့ အကြောင်းရင်းက ဘာဖြစ်မလဲ။", "သင့်အတွက် ဘာလုပ်ပေးရင် စိတ်သက်သာရာရမလဲ။"] }; this.init(); }
+            init() { this.bindEvents(); this.checkInitialState(); }
             bindEvents() {
-                document.getElementById('agreePrivacyBtn').addEventListener('click', () => { StorageUtil.save('agreedToPrivacy', 'true'); UIUtil.showSection('termsSection'); });
-                document.getElementById('agreeTermsBtn').addEventListener('click', () => { StorageUtil.save('agreedToTerms', 'true'); UIUtil.showSection('guideSection'); });
-                document.getElementById('startJournalingBtn').addEventListener('click', () => this.promptForApiKeyOrStartJournaling());
-                document.getElementById('saveApiKeyBtn').addEventListener('click', () => this.saveApiKey());
-                document.getElementById('clearApiKeyBtn').addEventListener('click', () => this.clearApiKey());
-                document.getElementById('startPromptsBtn').addEventListener('click', () => this.startPrompts());
-                document.getElementById('submitFeedbackBtn').addEventListener('click', () => this.submitFeedback());
-                document.getElementById('prevPromptBtn').addEventListener('click', () => this.previousPrompt());
-                document.getElementById('nextPromptBtn').addEventListener('click', () => this.nextPrompt());
-                document.getElementById('combineAnswersBtn').addEventListener('click', () => this.combineAnswers());
-                document.getElementById('backToJournalBtn').addEventListener('click', () => this.showJournalSection());
-                document.getElementById('copyCombinedTextBtn').addEventListener('click', () => this.copyJournalText());
-                document.getElementById('exportToNotionBtn').addEventListener('click', () => this.exportToNotion());
-                document.getElementById('backToMainJournalBtn').addEventListener('click', () => this.showJournalSection());
-                document.getElementById('modalClose').addEventListener('click', () => UIUtil.hideModal());
+                document.getElementById('agreePrivacyBtn').onclick = () => { StorageUtil.save('agreedPrivacy', true); UIUtil.showSection('termsSection'); };
+                document.getElementById('agreeTermsBtn').onclick = () => { StorageUtil.save('agreedTerms', true); this.loadSettingsIntoUI(); UIUtil.showSection('settingsSection'); };
+                document.getElementById('settingsBtn').onclick = () => { this.loadSettingsIntoUI(); UIUtil.showSection('settingsSection'); };
+                document.getElementById('saveSettingsBtn').onclick = () => this.saveSettings();
+                document.getElementById('exportSettingsBtn').onclick = () => this.exportSettings();
+                document.getElementById('importSettingsBtn').onclick = () => document.getElementById('importFileInput').click();
+                document.getElementById('importFileInput').onchange = (e) => this.importSettings(e);
+                document.getElementById('startMorningBtn').onclick = () => this.startJournalingSession('morning');
+                document.getElementById('startNightBtn').onclick = () => this.startJournalingSession('night');
+                document.getElementById('startGratitudeBtn').onclick = () => this.startJournalingSession('gratitude');
+                document.getElementById('startGeneralBtn').onclick = () => this.startJournalingSession('general');
+                document.getElementById('myJournalBtn').onclick = () => this.renderJournalHistory();
+                document.getElementById('prevPromptBtn').onclick = () => this.previousPrompt();
+                document.getElementById('nextPromptBtn').onclick = () => this.nextPrompt();
+                document.getElementById('combineAnswersBtn').onclick = () => this.combineAnswers();
+                document.getElementById('copyCombinedTextBtn').onclick = () => this.copyJournalText();
+                document.getElementById('exportToNotionBtn').onclick = () => this.exportToNotion();
+                document.getElementById('backToMainJournalBtn').onclick = () => this.showJournalSection();
+                document.getElementById('backToMainFromPromptsBtn').onclick = () => this.showJournalSection();
+                document.getElementById('backToMainFromHistoryBtn').onclick = () => this.showJournalSection();
+                document.getElementById('filterMode').onchange = () => this.renderJournalHistory();
+                document.getElementById('filterMood').onchange = () => this.renderJournalHistory();
             }
-            checkInitialState() { if (!StorageUtil.load('agreedToPrivacy')) UIUtil.showSection('privacySection'); else if (!StorageUtil.load('agreedToTerms')) UIUtil.showSection('termsSection'); else if (!StorageUtil.load('geminiApiKey')) UIUtil.showSection('apiKeySection'); else this.showJournalSection(); }
-            showJournalSection() { UIUtil.showSection('journalSection'); this.setTodayDate(); document.getElementById('journalMood').value = ""; this.displayRandomPhilosophy(); }
-            setTodayDate() { document.getElementById('journalDate').value = new Date().toISOString().split('T')[0]; }
-            saveApiKey() { const apiKey = document.getElementById('apiKeyInput').value.trim(); if (apiKey) { StorageUtil.save('geminiApiKey', apiKey); UIUtil.showModal('API Key သိမ်းပြီး။', 'success'); this.showJournalSection(); } else UIUtil.showModal('API Key ထည့်ပါ။', 'error'); }
-            clearApiKey() { StorageUtil.remove('geminiApiKey'); document.getElementById('apiKeyInput').value = ''; UIUtil.showModal('API Key ဖယ်ပြီး။', 'success'); UIUtil.showSection('apiKeySection'); }
-            submitFeedback() { const text = document.getElementById('feedbackTextarea').value.trim(); if (text) { StorageUtil.save('feedback', { text, timestamp: new Date().toISOString() }); document.getElementById('feedbackTextarea').value = ''; UIUtil.showModal('ပေးပို့ပြီး။', 'success'); } else UIUtil.showModal('အကြံပြုချက် ထည့်ပါ။', 'error'); }
-            promptForApiKeyOrStartJournaling() { !StorageUtil.load('geminiApiKey') ? UIUtil.showSection('apiKeySection') : this.showJournalSection(); }
-            async startPrompts() { if (this.isLoading) return; const btn = document.getElementById('startPromptsBtn'); UIUtil.setLoading(btn, true); this.isLoading = true; try { const mood = document.getElementById('journalMood').value; if (!mood) { UIUtil.showModal('စိတ်ခံစားမှု ရွေးပါ။', 'error'); return; } const apiKey = StorageUtil.load('geminiApiKey'); if (!apiKey) { UIUtil.showModal('API Key ထည့်ပါ။', 'error'); UIUtil.showSection('apiKeySection'); return; } this.activePrompts = await GeminiAPI.fetchPrompts(mood, apiKey); this.currentPromptIndex = 0; this.promptAnswers = Array(this.activePrompts.length).fill(''); this.displayCurrentPrompt(); UIUtil.showSection('promptsSection'); } catch (e) { console.error(e); this.activePrompts = this.defaultPrompts; this.currentPromptIndex = 0; this.promptAnswers = Array(this.activePrompts.length).fill(''); this.displayCurrentPrompt(); UIUtil.showSection('promptsSection'); } finally { this.isLoading = false; UIUtil.setLoading(btn, false); } }
-            displayCurrentPrompt() { const promptText = document.getElementById('currentPromptText'); const answer = document.getElementById('promptAnswerTextarea'); const counter = document.getElementById('promptCounter'); const prevBtn = document.getElementById('prevPromptBtn'); const nextBtn = document.getElementById('nextPromptBtn'); const combineBtn = document.getElementById('combineAnswersBtn'); promptText.textContent = `${this.currentPromptIndex + 1}. ${this.activePrompts[this.currentPromptIndex]}`; answer.value = this.promptAnswers[this.currentPromptIndex]; answer.focus(); counter.textContent = `${this.currentPromptIndex + 1}/${this.activePrompts.length}`; prevBtn.disabled = this.currentPromptIndex === 0; if (this.currentPromptIndex === this.activePrompts.length - 1) { nextBtn.classList.add('hidden'); combineBtn.classList.remove('hidden'); } else { nextBtn.classList.remove('hidden'); combineBtn.classList.add('hidden'); } UIUtil.updateProgressBar(this.currentPromptIndex + 1, this.activePrompts.length); }
-            previousPrompt() { this.promptAnswers[this.currentPromptIndex] = document.getElementById('promptAnswerTextarea').value.trim(); this.currentPromptIndex--; this.displayCurrentPrompt(); }
-            nextPrompt() { this.promptAnswers[this.currentPromptIndex] = document.getElementById('promptAnswerTextarea').value.trim(); this.currentPromptIndex++; this.displayCurrentPrompt(); }
-            async combineAnswers() { if (this.isLoading) return; this.isLoading = true; UIUtil.showModal('စုစည်းနေပါသည်။', 'success'); this.promptAnswers[this.currentPromptIndex] = document.getElementById('promptAnswerTextarea').value.trim(); const text = this.promptAnswers.map((a, i) => `${i + 1}. ${this.activePrompts[i]}\n${a}`).join('\n\n---\n\n'); document.getElementById('combinedJournalText').value = text; const mood = document.getElementById('journalMood').value; const apiKey = StorageUtil.load('geminiApiKey'); const result = await SuggestionModule.generateAffirmation(text, mood, apiKey); document.getElementById('affirmationText').textContent = result.affirmation; StorageUtil.save('journalEntry', { date: document.getElementById('journalDate').value, mood, text }); UIUtil.showSection('suggestionsSection'); this.isLoading = false; }
-            copyJournalText() { const text = document.getElementById('combinedJournalText').value; navigator.clipboard.writeText(text).then(() => UIUtil.showModal('ကူးယူပြီး။', 'success')).catch(() => UIUtil.showModal('ကူးယူမအောင်မြင်။', 'error')); }
-            exportToNotion() { const text = document.getElementById('combinedJournalText').value; const blob = new Blob([`# ${new Date().toLocaleDateString('my-MM')}\n${text}`], { type: 'text/markdown' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `journal_${new Date().toISOString().split('T')[0]}.md`; a.click(); URL.revokeObjectURL(url); UIUtil.showModal('ထုတ်ယူပြီး။', 'success'); }
-            displayRandomPhilosophy() { const { text, credit } = this.philosophyTexts[Math.floor(Math.random() * this.philosophyTexts.length)]; document.getElementById('philosophyText').textContent = text; document.getElementById('sourceCredit').textContent = credit; }
+            checkInitialState() { if (!StorageUtil.load('agreedPrivacy')) UIUtil.showSection('privacySection'); else if (!StorageUtil.load('agreedTerms')) UIUtil.showSection('termsSection'); else if (!this.apiKey || !this.userName) { this.loadSettingsIntoUI(); UIUtil.showSection('settingsSection'); } else this.showJournalSection(); }
+            showJournalSection() { UIUtil.showSection('journalSection'); document.getElementById('journalDate').valueAsDate = new Date(); document.getElementById('journalMood').value = ""; }
+            loadSettingsIntoUI() { document.getElementById('userNameInput').value = this.userName; document.getElementById('apiKeyInput').value = this.apiKey; }
+            saveSettings() { this.userName = document.getElementById('userNameInput').value.trim(); this.apiKey = document.getElementById('apiKeyInput').value.trim(); if (!this.userName || !this.apiKey) { UIUtil.showToast('အမည်နှင့် API Key ဖြည့်စွက်ရန် လိုအပ်ပါသည်။'); return; } StorageUtil.save('userName', this.userName); StorageUtil.save('geminiApiKey', this.apiKey); UIUtil.showToast('သိမ်းဆည်းပြီးပါပြီ။'); this.showJournalSection(); }
+            exportSettings() { const settings = { userName: this.userName, apiKey: this.apiKey }; const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'journal_settings.json'; a.click(); URL.revokeObjectURL(a.href); UIUtil.showToast('Settings file ကို download လုပ်ပြီးပါပြီ။'); }
+            importSettings(event) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { try { const settings = JSON.parse(e.target.result); if (settings.apiKey && settings.userName) { this.apiKey = settings.apiKey; this.userName = settings.userName; this.saveSettings(); } else { UIUtil.showToast('File format မမှန်ပါ။'); } } catch (err) { UIUtil.showToast('File ကို မဖတ်နိုင်ပါ။'); } }; reader.readAsText(file); }
+            async startJournalingSession(mode) { if (this.isLoading) return; this.journalMode = mode; const mood = document.getElementById('journalMood').value; if (!mood) { UIUtil.showToast('လက်ရှိစိတ်ခံစားမှုကို ရွေးချယ်ပေးပါ။'); return; } this.isLoading = true; const btn = document.getElementById(`start${mode.charAt(0).toUpperCase() + mode.slice(1)}Btn`); const originalText = btn.innerHTML; UIUtil.setLoading(btn, true, 'ပြင်ဆင်နေသည်...'); try { this.activePrompts = await GeminiAPI.fetchPrompts(this.journalMode, mood, this.userName, this.apiKey); } catch (error) { console.error('Error fetching prompts:', error); UIUtil.showToast(`AI မှမေးခွန်းများရယူ၍မရပါ`); this.activePrompts = this.defaultPrompts[this.journalMode]; } finally { this.isLoading = false; UIUtil.setLoading(btn, false, originalText); if (this.activePrompts?.length) { this.currentPromptIndex = 0; this.promptAnswers = Array(this.activePrompts.length).fill(''); document.getElementById('prompt-title').textContent = btn.innerText; this.displayCurrentPrompt(); UIUtil.showSection('promptsSection'); } } }
+            displayCurrentPrompt() { document.getElementById('currentPromptText').textContent = this.activePrompts[this.currentPromptIndex]; document.getElementById('promptAnswerTextarea').value = this.promptAnswers[this.currentPromptIndex] || ''; document.getElementById('promptAnswerTextarea').focus(); document.getElementById('promptCounter').textContent = `${this.currentPromptIndex + 1}/${this.activePrompts.length}`; document.getElementById('prevPromptBtn').disabled = (this.currentPromptIndex === 0); const isLast = this.currentPromptIndex === this.activePrompts.length - 1; document.getElementById('nextPromptBtn').classList.toggle('hidden', isLast); document.getElementById('combineAnswersBtn').classList.toggle('hidden', !isLast); UIUtil.updateProgressBar(this.currentPromptIndex + 1, this.activePrompts.length); }
+            saveCurrentAnswer() { this.promptAnswers[this.currentPromptIndex] = document.getElementById('promptAnswerTextarea').value.trim(); }
+            previousPrompt() { this.saveCurrentAnswer(); if (this.currentPromptIndex > 0) { this.currentPromptIndex--; this.displayCurrentPrompt(); } }
+            nextPrompt() { this.saveCurrentAnswer(); if (this.currentPromptIndex < this.activePrompts.length - 1) { this.currentPromptIndex++; this.displayCurrentPrompt(); } }
+            async combineAnswers() { if (this.isLoading) return; this.saveCurrentAnswer(); this.isLoading = true; UIUtil.showToast('AI အကြံပြုချက် ရယူနေပါသည်။'); const date = document.getElementById('journalDate').value; const mood = document.getElementById('journalMood').value; const time = new Date().toLocaleTimeString('en-GB'); const header = `ရက်စွဲ: ${date}\nအချိန်: ${time}\nစိတ်ခံစားမှု: ${mood}\n\n---\n\n`; const combinedAnswers = this.promptAnswers.map((a, i) => a ? `${i + 1}. ${this.activePrompts[i]}\nအဖြေ: ${a}` : '').filter(Boolean).join('\n\n---\n\n'); const fullJournalText = header + combinedAnswers; document.getElementById('combinedJournalText').value = fullJournalText; try { const advice = await GeminiAPI.fetchCounselorAdvice(combinedAnswers, mood, this.journalMode, this.apiKey); document.getElementById('aiSuggestionDisplay').textContent = advice; const newEntry = { date, time, mood, mode: this.journalMode, text: fullJournalText, aiSuggestion: advice }; this.journalEntries.push(newEntry); StorageUtil.save('journalEntries', this.journalEntries); } catch (error) { console.error('Error getting advice:', error); UIUtil.showToast(`အကြံပြုချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။`); document.getElementById('aiSuggestionDisplay').textContent = "တောင်းပန်ပါတယ်၊ အခုချိန်မှာ AI နဲ့ ချိတ်ဆက်လို့မရသေးပါ။"; } finally { this.isLoading = false; UIUtil.showSection('analysisSection'); } }
+            copyJournalText() { navigator.clipboard.writeText(document.getElementById('combinedJournalText').value).then(() => UIUtil.showToast('မှတ်တမ်း ကူးယူပြီးပါပြီ။')); }
+            exportToNotion() { const fullText = document.getElementById('combinedJournalText').value; const advice = document.getElementById('aiSuggestionDisplay').textContent; const date = document.getElementById('journalDate').value; let markdown = `# Journal - ${date} (${this.journalMode})\n\n${fullText.replace(/\n/g, '\n\n')}\n\n---\n\n## AI အကြံပြုချက်\n\n> ${advice.replace(/\n/g, '\n> ')}`; const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `Journal_${date}_${this.journalMode}.md`; a.click(); URL.revokeObjectURL(a.href); UIUtil.showToast('Notion ဖိုင် ထုတ်ယူပြီးပါပြီ။'); }
+            renderJournalHistory() {
+                UIUtil.showSection('journalHistorySection');
+                const historyList = document.getElementById('historyList');
+                const noHistoryMessage = document.getElementById('noHistoryMessage');
+                const filterMode = document.getElementById('filterMode').value;
+                const filterMood = document.getElementById('filterMood').value;
+                
+                historyList.innerHTML = '';
+                const filteredEntries = this.journalEntries
+                    .filter(entry => (filterMode === 'all' || entry.mode === filterMode))
+                    .filter(entry => (filterMood === 'all' || entry.mood === filterMood));
+
+                if (filteredEntries.length === 0) {
+                    noHistoryMessage.classList.remove('hidden');
+                } else {
+                    noHistoryMessage.classList.add('hidden');
+                    filteredEntries.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach((entry, index) => {
+                        const item = document.createElement('a');
+                        item.href = '#';
+                        item.className = 'list-group-item list-group-item-action history-item';
+                        item.innerHTML = `<div class="d-flex w-100 justify-content-between"><h5 class="mb-1">${entry.date} - ${entry.mode}</h5><small>${entry.time}</small></div><p class="mb-1">စိတ်ခံစားမှု: ${entry.mood}</p><small class="text-muted">${entry.text.substring(0, 100)}...</small>`;
+                        item.onclick = (e) => { e.preventDefault(); this.showJournalEntryDetail(entry); };
+                        historyList.appendChild(item);
+                    });
+                }
+            }
+            showJournalEntryDetail(entry) {
+                const detailModal = new bootstrap.Modal(document.getElementById('entryDetailModal'));
+                document.getElementById('entryDetailTitle').textContent = `${entry.date} - ${entry.mode} မှတ်တမ်း`;
+                document.getElementById('entryDetailBody').innerHTML = `
+                    <h5 class="fw-bold">AI အကြံပြုချက်</h5>
+                    <p class="whitespace-pre-wrap p-2 rounded" style="background-color: #f0fff4;">${entry.aiSuggestion}</p>
+                    <hr>
+                    <h5 class="fw-bold mt-3">သင်၏ မှတ်တမ်းအပြည့်အစုံ</h5>
+                    <textarea class="form-control" rows="15" readonly>${entry.text}</textarea>
+                `;
+                detailModal.show();
+            }
         }
         document.addEventListener('DOMContentLoaded', () => new JournalApp());
     </script>
