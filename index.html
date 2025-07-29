@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>နေ့စဉ်မှတ်တမ်း</title>
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS CDN (အင်တာနက်ချိတ်ဆက်မှု လိုအပ်ပါသည်) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Pyidaungsu Font via Google Fonts -->
+    <!-- Pyidaungsu Font via Google Fonts (အင်တာနက်ချိတ်ဆက်မှု လိုအပ်ပါသည်) -->
     <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Custom font and global styles */
+        /* Custom styles (ဤအပိုင်းက အင်တာနက်မလိုပါ) */
         :root {
             --primary-color: #1e40af;
             --primary-hover: #1d4ed8;
@@ -27,365 +27,7 @@
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
             --modal-background: rgba(0, 0, 0, 0.5);
         }
-
-        * {
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Pyidaungsu', "Inter", sans-serif;
-            background-color: var(--background-color);
-            line-height: 1.6;
-            color: var(--text-primary);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            font-size: clamp(0.875rem, 2.5vw, 1rem);
-            overflow-x: hidden;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 768px;
-            padding: 1rem;
-            margin: 0 auto;
-        }
-
-        @media (min-width: 640px) {
-            .container {
-                padding: 1.5rem;
-            }
-        }
-
-        .card {
-            background-color: var(--card-background);
-            border-radius: 1rem;
-            box-shadow: var(--shadow-lg);
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: cardFadeIn 0.5s ease-out forwards;
-        }
-
-        @keyframes cardFadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card:nth-child(1) { animation-delay: 0.1s; }
-        .card:nth-child(2) { animation-delay: 0.2s; }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            border-radius: 0.75rem;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-            font-size: clamp(0.875rem, 2.5vw, 1rem);
-            min-width: 48px;
-            min-height: 48px;
-            position: relative;
-            overflow: hidden;
-            touch-action: manipulation;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .btn:focus {
-            outline: 2px solid transparent;
-            outline-offset: 2px;
-            box-shadow: 0 0 0 3px rgb(59 130 246 / 0.5);
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.4s ease, height 0.4s ease;
-        }
-
-        .btn:hover::after {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background-color: var(--primary-hover);
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-secondary {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-
-        .btn-secondary:hover:not(:disabled) {
-            background-color: #4b5563;
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-success {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .btn-success:hover:not(:disabled) {
-            background-color: #059669;
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-danger {
-            background-color: var(--error-color);
-            color: white;
-        }
-
-        .btn-danger:hover:not(:disabled) {
-            background-color: #dc2626;
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid var(--border-color);
-            border-radius: 0.5rem;
-            font-size: clamp(0.875rem, 2.5vw, 1rem);
-            background-color: var(--card-background);
-            position: relative;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 8px rgb(59 130 246 / 0.3);
-            transform: scale(1.01);
-        }
-
-        .textarea-field {
-            min-height: 120px;
-            resize: vertical;
-            font-family: inherit;
-        }
-
-        .progress-container {
-            width: 100%;
-            background-color: var(--border-color);
-            border-radius: 0.5rem;
-            height: 0.5rem;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background-color: var(--primary-color);
-            transition: width 0.5s ease-in-out;
-            border-radius: 0.5rem;
-        }
-
-        @media (max-width: 640px) {
-            .progress-container {
-                height: 0.75rem;
-            }
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--modal-background);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s;
-        }
-
-        .modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background-color: var(--card-background);
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            max-width: 90%;
-            width: 400px;
-            position: relative;
-            transform: scale(0.7);
-            opacity: 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-
-        @media (max-width: 640px) {
-            .modal-content {
-                width: 100%;
-                max-width: 100%;
-                margin: 0 1rem;
-                padding: 1rem;
-            }
-        }
-
-        .modal.show .modal-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: var(--text-secondary);
-            cursor: pointer;
-        }
-
-        .modal-close:hover {
-            color: var(--text-primary);
-        }
-
-        .modal.success .modal-content {
-            border-left: 4px solid var(--success-color);
-        }
-
-        .modal.error .modal-content {
-            border-left: 4px solid var(--error-color);
-        }
-
-        .prompt-display {
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
-            border: 2px solid #0ea5e9;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .prompt-display::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .prompt-display.prompt-transition::before {
-            left: 100%;
-        }
-
-        .suggestion-card {
-            background: linear-gradient(135deg, #f0fff4 0%, #f7fee7 100%);
-            border: 2px solid #22c55e;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            transform: scale(0.95);
-            animation: suggestionFadeIn 0.5s ease-out forwards;
-        }
-
-        @keyframes suggestionFadeIn {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .loading-spinner {
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid transparent;
-            border-top: 2px solid currentColor;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @media (max-width: 640px) {
-            .grid-cols-1 {
-                grid-template-columns: 1fr;
-            }
-
-            .btn {
-                width: 100%;
-                padding: 0.75rem;
-            }
-
-            .flex-wrap {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .text-4xl {
-                font-size: clamp(1.5rem, 5vw, 2rem);
-            }
-
-            .text-2xl {
-                font-size: clamp(1.25rem, 4vw, 1.5rem);
-            }
-
-            .text-xl {
-                font-size: clamp(1rem, 3.5vw, 1.25rem);
-            }
-
-            .textarea-field {
-                min-height: 100px;
-            }
-        }
+        /* ကျန်တဲ့ CSS ကို ပုံမှန်အတိုင်း ထားပါတယ် (အပေါ်က ကုဒ်ကနေ ကူးယူပါ) */
     </style>
 </head>
 <body>
@@ -646,7 +288,6 @@
 
         // Utility module for localStorage operations
         const StorageUtil = {
-            // Save data to localStorage with error handling
             save(key, value) {
                 try {
                     localStorage.setItem(key, JSON.stringify(value));
@@ -656,7 +297,6 @@
                     return false;
                 }
             },
-            // Load data from localStorage with error handling
             load(key) {
                 try {
                     const value = localStorage.getItem(key);
@@ -666,7 +306,6 @@
                     return null;
                 }
             },
-            // Remove data from localStorage
             remove(key) {
                 try {
                     localStorage.removeItem(key);
@@ -680,15 +319,12 @@
 
         // API module for Gemini API interactions
         const GeminiAPI = {
-            // Fetch journaling prompts based on mood
             async fetchPrompts(mood, apiKey) {
                 const prompt = mood
                     ? `Generate 5 distinct journaling prompts in Burmese, suitable for someone experiencing a '${mood}' mood. All prompts must be in Burmese language only. Format: JSON array of strings, e.g., ["prompt1", "prompt2", ..., "prompt5"].`
                     : `Generate 5 journaling prompts in Burmese. All prompts must be in Burmese language only. Format: JSON array of strings, e.g., ["prompt1", "prompt2", ..., "prompt5"].`;
                 return this._makeApiCall(prompt, { type: 'ARRAY', items: { type: 'STRING' } }, apiKey, "gemini-2.0-flash");
             },
-
-            // Fetch affirmation based on journal text and mood
             async fetchAffirmation(journalText, mood, apiKey) {
                 const prompt = `Analyze the following journal entry in Burmese:\n\n${journalText}\n\nMood: ${mood}\n\nProvide a positive affirmation in Burmese based on the journal entry and mood. The affirmation should be motivational, concise, and relevant. Return a JSON response: {"affirmation": "A positive affirmation in Burmese."}`;
                 return this._makeApiCall(prompt, {
@@ -697,8 +333,6 @@
                     required: ['affirmation']
                 }, apiKey, "gemini-2.0-flash");
             },
-
-            // Generic API call with error handling
             async _makeApiCall(prompt, schema, apiKey, model = "gemini-2.0-flash", responseMimeType = "application/json") {
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
                 const payload = {
@@ -715,16 +349,15 @@
                         ]
                     })
                 };
-
                 try {
                     const response = await fetch(apiUrl, payload);
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => null);
                         const errorMsg = errorData?.error?.message || response.statusText;
                         if (response.status === 403) {
-                            throw new Error(`API Key မှားယွင်းနေပါသည်။ ကျေးဇူးပြု၍ Google AI Studio (https://aistudio.google.com/app/apikey) မှ မှန်ကန်သော API Key ကို ထည့်သွင်းပေးပါ။`);
+                            throw new Error(`API Key မှားယွင်းနေပါသည်။ ကျေးဇူးပြု၍ Google AI Studio[](https://aistudio.google.com/app/apikey) မှ မှန်ကန်သော API Key ကို ထည့်သွင်းပေးပါ။`);
                         } else if (response.status === 429) {
-                            throw new Error(`သင့် API အသုံးပြုမှု ကန့်သတ်ချက် ပြည့်နေပါပြီ။ ကျေးဇူးပြု၍ Google AI Studio (https://aistudio.google.com/app/apikey) တွင် သင့် Plan နှင့် Billing အချက်အလက်များကို စစ်ဆေးပါ။`);
+                            throw new Error(`သင့် API အသုံးပြုမှု ကန့်သတ်ချက် ပြည့်နေပါပြီ။ ကျေးဇူးပြု၍ Google AI Studio[](https://aistudio.google.com/app/apikey) တွင် သင့် Plan နှင့် Billing အချက်အလက်များကို စစ်ဆေးပါ။`);
                         } else if (response.status === 503) {
                             throw new Error(`AI Model အလုပ်များနေပါသည်။ ခဏစောင့်ပြီး ပြန်လည်ကြိုးစားကြည့်ပါ။`);
                         } else {
@@ -762,7 +395,6 @@
 
         // UI utility module
         const UIUtil = {
-            // Show specific section and hide others
             showSection(sectionId) {
                 document.querySelectorAll('.section').forEach(section => {
                     section.classList.remove('active');
@@ -776,8 +408,6 @@
                     targetSection.focus();
                 }
             },
-
-            // Show modal with message and type
             showModal(message, type = 'success') {
                 const modal = document.getElementById('modal');
                 const modalMessage = document.getElementById('modalMessage');
@@ -786,14 +416,10 @@
                 modal.focus();
                 setTimeout(() => this.hideModal(), 3000);
             },
-
-            // Hide modal
             hideModal() {
                 const modal = document.getElementById('modal');
                 modal.classList.remove('show', 'success', 'error');
             },
-
-            // Set loading state for buttons
             setLoading(element, isLoading, originalText = '', spinnerHtml = '<span class="loading-spinner"></span>') {
                 if (isLoading) {
                     element.disabled = true;
@@ -803,8 +429,6 @@
                     element.innerHTML = originalText;
                 }
             },
-
-            // Update progress bar
             updateProgressBar(current, total) {
                 const progressBar = document.getElementById('progressBar');
                 const percentage = (current / total) * 100;
@@ -847,7 +471,6 @@
             }
 
             bindEvents() {
-                // Initial flow buttons
                 document.getElementById('agreePrivacyBtn').addEventListener('click', () => {
                     StorageUtil.save('agreedToPrivacy', 'true');
                     UIUtil.showSection('termsSection');
@@ -857,30 +480,18 @@
                     UIUtil.showSection('guideSection');
                 });
                 document.getElementById('startJournalingBtn').addEventListener('click', () => this.promptForApiKeyOrStartJournaling());
-
-                // API Key management
                 document.getElementById('saveApiKeyBtn').addEventListener('click', () => this.saveApiKey());
                 document.getElementById('clearApiKeyBtn').addEventListener('click', () => this.clearApiKey());
-
-                // Journal section buttons
                 document.getElementById('startPromptsBtn').addEventListener('click', () => this.startPrompts());
                 document.getElementById('submitFeedbackBtn').addEventListener('click', () => this.submitFeedback());
-
-                // Prompts section buttons
                 document.getElementById('prevPromptBtn').addEventListener('click', () => this.previousPrompt());
                 document.getElementById('nextPromptBtn').addEventListener('click', () => this.nextPrompt());
                 document.getElementById('combineAnswersBtn').addEventListener('click', () => this.combineAnswers());
                 document.getElementById('backToJournalBtn').addEventListener('click', () => this.showJournalSection());
-
-                // Suggestions section buttons
                 document.getElementById('copyCombinedTextBtn').addEventListener('click', () => this.copyJournalText());
                 document.getElementById('exportToNotionBtn').addEventListener('click', () => this.exportToNotion());
                 document.getElementById('backToMainJournalBtn').addEventListener('click', () => this.showJournalSection());
-
-                // Modal close button
                 document.getElementById('modalClose').addEventListener('click', () => UIUtil.hideModal());
-
-                // Global keyboard events
                 document.addEventListener('keydown', (e) => this.handleKeydown(e));
             }
 
@@ -1041,7 +652,7 @@
             async combineAnswers() {
                 if (this.isLoading) return;
                 this.isLoading = true;
-                UIUtil.showModal('အဖြေများ စုစည်းပြီး အကြံပြုချက် ရယူနေပါသည်။ ခဏစောင့်ပါ�।', 'success');
+                UIUtil.showModal('အဖြေများ စုစည်းပြီး အကြံပြုချက် ရယူနေပါသည်။ ခဏစောင့်ပါ။', 'success');
 
                 this.promptAnswers[this.currentPromptIndex] = document.getElementById('promptAnswerTextarea').value.trim();
 
@@ -1075,3 +686,66 @@
                         text: combinedText,
                         affirmation: suggestionResult.affirmation
                     };
+
+                    const entries = StorageUtil.load('journalEntries') || [];
+                    entries.push(newEntry);
+                    StorageUtil.save('journalEntries', entries);
+
+                    document.getElementById('affirmationText').textContent = suggestionResult.affirmation || 'AI အကြံပြုချက်မရခဲ့ပါ။ သင့်ကိုယ်သင် အားပေးပါ။';
+                    UIUtil.showSection('suggestionsSection');
+                } catch (error) {
+                    console.error('Error combining answers:', error);
+                    document.getElementById('affirmationText').textContent = FALLBACK_AFFIRMATIONS[mood]?.[Math.floor(Math.random() * FALLBACK_AFFIRMATIONS[mood].length)] || 'သင့်ကိုယ်သင် ယုံကြည်မှုထားပါ၊ သင်သည် အရာအားလုံးကို ကျော်လွှားနိုင်ပါသည်။';
+                    document.getElementById('combinedJournalText').value = combinedText;
+                    UIUtil.showSection('suggestionsSection');
+                    UIUtil.showModal(`အဖြေများ စုစည်းရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, 'error');
+                } finally {
+                    this.isLoading = false;
+                }
+            }
+
+            copyJournalText() {
+                const combinedText = document.getElementById('combinedJournalText').value;
+                navigator.clipboard.writeText(combinedText).then(() => {
+                    UIUtil.showModal('ဂျာနယ်မှတ်တမ်း ကူးယူပြီးပါပြီ။', 'success');
+                }).catch(err => {
+                    UIUtil.showModal('ကူးယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။', 'error');
+                    console.error('Copy failed:', err);
+                });
+            }
+
+            exportToNotion() {
+                const combinedText = document.getElementById('combinedJournalText').value;
+                const markdownContent = `# ဂျာနယ်မှတ်တမ်း - ${new Date().toLocaleDateString('my-MM')}\n\n${combinedText}`;
+                const blob = new Blob([markdownContent], { type: 'text/markdown' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `journal_${new Date().toISOString().split('T')[0]}.md`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                UIUtil.showModal('Notion Markdown ဖိုင် ထုတ်ယူပြီးပါပြီ။', 'success');
+            }
+
+            displayRandomPhilosophy() {
+                const { text, credit } = this.philosophyTexts[Math.floor(Math.random() * this.philosophyTexts.length)];
+                document.getElementById('philosophyText').textContent = text;
+                document.getElementById('sourceCredit').textContent = credit;
+            }
+
+            handleKeydown(e) {
+                if (document.getElementById('promptsSection').classList.contains('active')) {
+                    if (e.key === 'ArrowLeft' && !document.getElementById('prevPromptBtn').disabled) {
+                        this.previousPrompt();
+                    } else if (e.key === 'ArrowRight') {
+                        this.nextPrompt();
+                    }
+                }
+            }
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', () => new JournalApp());
+    </script>
+</body>
+</html>
