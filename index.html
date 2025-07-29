@@ -44,8 +44,8 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            font-size: clamp(0.875rem, 2.5vw, 1rem); /* Responsive font size */
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            font-size: clamp(0.875rem, 2.5vw, 1rem);
+            overflow-x: hidden;
         }
 
         .container {
@@ -93,12 +93,12 @@
             cursor: pointer;
             text-decoration: none;
             font-size: clamp(0.875rem, 2.5vw, 1rem);
-            min-width: 48px; /* Ensure minimum touch target size */
-            min-height: 48px; /* Ensure minimum touch target size */
+            min-width: 48px;
+            min-height: 48px;
             position: relative;
             overflow: hidden;
-            touch-action: manipulation; /* Improves responsiveness on touch devices */
-            transition: all 0.2s ease-in-out; /* Smooth transitions for all button states */
+            touch-action: manipulation;
+            transition: all 0.2s ease-in-out;
         }
 
         .btn:focus {
@@ -113,7 +113,6 @@
             transform: none !important;
         }
 
-        /* Hover and active effects for buttons */
         .btn::after {
             content: '';
             position: absolute;
@@ -176,17 +175,6 @@
             box-shadow: var(--shadow-lg);
         }
 
-        .btn-warning { /* Added for the insight button */
-            background-color: var(--warning-color);
-            color: white;
-        }
-
-        .btn-warning:hover:not(:disabled) {
-            background-color: #d97706; /* Darker orange on hover */
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
         .input-field {
             width: 100%;
             padding: 0.75rem 1rem;
@@ -211,7 +199,6 @@
             font-family: inherit;
         }
 
-        /* Progress Bar */
         .progress-container {
             width: 100%;
             background-color: var(--border-color);
@@ -234,7 +221,6 @@
             }
         }
 
-        /* Modal Styles */
         .modal {
             position: fixed;
             top: 0;
@@ -305,7 +291,6 @@
             border-left: 4px solid var(--error-color);
         }
 
-        /* Prompt Display */
         .prompt-display {
             background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
             border: 2px solid #0ea5e9;
@@ -331,8 +316,7 @@
             left: 100%;
         }
 
-        /* Analysis Section */
-        .analysis-section {
+        .suggestion-card {
             background: linear-gradient(135deg, #f0fff4 0%, #f7fee7 100%);
             border: 2px solid #22c55e;
             border-radius: 1rem;
@@ -340,83 +324,20 @@
             margin-bottom: 1.5rem;
             opacity: 0;
             transform: scale(0.95);
-            animation: analysisFadeIn 0.5s ease-out forwards;
+            animation: suggestionFadeIn 0.5s ease-out forwards;
         }
 
-        @keyframes analysisFadeIn {
+        @keyframes suggestionFadeIn {
             to {
                 opacity: 1;
                 transform: scale(1);
             }
         }
 
-        .analysis-section:nth-child(1) { animation-delay: 0.1s; }
-        .analysis-section:nth-child(2) { animation-delay: 0.2s; }
-        .analysis-section:nth-child(3) { animation-delay: 0.3s; }
-        .analysis-section:nth-child(4) { animation-delay: 0.4s; }
-
         .hidden {
             display: none !important;
         }
 
-        /* Mood Selector styles (Reverted to dropdown, so these are not actively used for mood buttons) */
-        .mood-selector {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens (mobile-first) */
-            gap: 0.75rem; /* Increased gap for better spacing */
-            margin-top: 1rem;
-        }
-
-        @media (min-width: 640px) { /* Medium screens (sm) - e.g., larger phones, small tablets */
-            .mood-selector {
-                grid-template-columns: repeat(3, 1fr); /* 3 columns on medium screens */
-            }
-        }
-
-        @media (min-width: 768px) { /* Large screens (md) - e.g., tablets, desktops */
-            .mood-selector {
-                grid-template-columns: repeat(4, 1fr); /* 4 columns on large screens */
-            }
-        }
-
-        .mood-btn {
-            padding: 1rem 0.75rem; /* Adjusted padding for better button size */
-            font-size: 1rem; /* Slightly larger font */
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem; /* Increased space between emoji and text */
-            background-color: #f8fafc; /* Lighter background for default */
-            color: var(--text-primary);
-            border: 1px solid var(--border-color); /* Subtle border */
-            border-radius: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: var(--shadow-sm); /* Lighter default shadow */
-        }
-
-        .mood-btn:hover:not(.selected) {
-            background-color: #e2e8f0; /* Light gray on hover for unselected */
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md); /* More pronounced shadow on hover */
-        }
-
-        .mood-btn.selected {
-            background-color: var(--primary-color); /* Primary color for selected mood */
-            color: white;
-            border-color: var(--primary-hover);
-            box-shadow: var(--shadow-lg); /* Stronger shadow for selected */
-            transform: translateY(-2px);
-        }
-
-        .mood-btn span.emoji {
-            font-size: 2rem; /* Larger emoji for better visibility */
-            line-height: 1;
-        }
-
-        /* Loading Spinner */
         .loading-spinner {
             display: inline-block;
             width: 1rem;
@@ -434,7 +355,6 @@
             }
         }
 
-        /* Mobile-Specific Adjustments */
         @media (max-width: 640px) {
             .grid-cols-1 {
                 grid-template-columns: 1fr;
@@ -557,7 +477,7 @@
                             <h3 class="text-xl font-semibold text-gray-800 mb-2">၂။ မှတ်တမ်းသိမ်းဆည်းခြင်း</h3>
                             <ul class="list-disc list-inside space-y-1 ml-4">
                                 <li>"အဖြေများ စုစည်းမည်" ကို နှိပ်လျှင် အလိုအလျောက် သိမ်းဆည်းပါသည်။</li>
-                                <li>AI သုံးသပ်ချက်အချို့အရ အဓိကအကြောင်းအရာများနှင့် လုပ်ဆောင်ရမည့်အချက်များကို ထုတ်ပေးပါသည်။</li>
+                                <li>AI သုံးသပ်ချက်အချို့အရ အားပေးစကားများကို ထုတ်ပေးပါသည်။</li>
                             </ul>
                         </div>
                         <div>
@@ -624,6 +544,15 @@
                         </button>
                         <button id="clearApiKeyBtn" class="btn btn-danger">API Key ဖယ်ရှားမည်</button>
                     </div>
+
+                    <!-- Feedback Form -->
+                    <div class="mt-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">အကြံပြုချက်</h3>
+                        <textarea id="feedbackTextarea" class="input-field textarea-field" placeholder="သင်၏ အကြံပြုချက်များကို ဤနေရာတွင် ရေးပါ" aria-label="အကြံပြုချက်"></textarea>
+                        <div class="text-center mt-4">
+                            <button id="submitFeedbackBtn" class="btn btn-success" aria-label="အကြံပြုချက် ပေးပို့မည်">အကြံပြုချက် ပေးပို့မည်</button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Prompts Section -->
@@ -647,33 +576,13 @@
                     </div>
                 </div>
 
-                <!-- Analysis Results Section -->
-                <div id="analysisSection" class="section hidden">
-                    <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">သုံးသပ်ချက်နှင့် ရလဒ်များ</h2>
-                    <!-- Summary -->
-                    <div class="analysis-section">
-                        <h3 class="text-lg font-semibold text-blue-900 mb-2">အနှစ်ချုပ်</h3>
-                        <p id="analysisSummary" class="text-gray-700"></p>
-                    </div>
-                    <!-- Key Themes -->
-                    <div class="analysis-section">
-                        <h3 class="text-lg font-semibold text-blue-900 mb-2">အဓိကအကြောင်းအရာများ</h3>
-                        <ul id="keyThemesList" class="list-disc list-inside text-gray-700"></ul>
-                    </div>
-                    <!-- Action Items -->
-                    <div class="analysis-section">
-                        <h3 class="text-lg font-semibold text-blue-900 mb-2">လုပ်ဆောင်ရမည့်အချက်များ</h3>
-                        <ul id="actionItemsList" class="list-disc list-inside text-gray-700"></ul>
-                    </div>
-                    <!-- Affirmation -->
-                    <div class="analysis-section">
+                <!-- Suggestions Section -->
+                <div id="suggestionsSection" class="section hidden">
+                    <h2 class="text-2xl font-bold text-center text-gray-900 mb-6">အကြံပြုချက်များ</h2>
+                    <div id="affirmationDisplay" class="suggestion-card">
                         <h3 class="text-lg font-semibold text-blue-900 mb-2">အားပေးစကား</h3>
-                        <p id="affirmationDisplay" class="text-gray-700"></p>
+                        <p id="affirmationText" class="text-gray-700"></p>
                     </div>
-
-                    <!-- Removed Future Self Letter Section and its button -->
-
-                    <!-- Journal Text -->
                     <div class="card">
                         <h3 class="text-lg font-semibold text-gray-700 mb-2">ဂျာနယ်မှတ်တမ်း</h3>
                         <textarea id="combinedJournalText" class="input-field textarea-field" style="min-height: 300px;" readonly aria-label="ဂျာနယ်မှတ်တမ်း"></textarea>
@@ -699,8 +608,45 @@
     </div>
 
     <script>
+        // Fallback affirmations for different moods
+        const FALLBACK_AFFIRMATIONS = {
+            "ပျော်ရွှင်": [
+                "သင့်ရဲ့ ပျော်ရွှင်မှုကို ဆက်လက်မျှဝေပြီး အခြားသူတွေကိုလည်း အားပေးပါ။",
+                "ဒီပျော်ရွှင်မှုကို အမှတ်တရအဖြစ် သိမ်းထားပြီး နောက်ထပ်ထပ်ဖန်တီးပါ။"
+            ],
+            "ဝမ်းနည်း": [
+                "သင်တစ်ယောက်တည်း မဟုတ်ပါဘူး။ စိတ်ခံစားမှုတွေကို လွတ်လပ်စွာ ဖော်ပြပြီး အားယူပါ။",
+                "ဒီနေ့ သင့်ကိုယ်သင် ဂရုစိုက်ဖို့ အချိန်ပေးပါ။ အနည်းငယ်အနားယူခြင်းက အထောက်အကူပြုနိုင်ပါတယ်။"
+            ],
+            "စိတ်တို": [
+                "စိတ်အေးအေးထားပြီး အသက်ရှူလေ့ကျင့်ခန်း လုပ်ကြည့်ပါ။ သင်ရဲ့စိတ်ကို ပြန်လည်ထိန်းချုပ်နိုင်ပါတယ်။",
+                "သင့်ရဲ့စိတ်တိုမှုကို ရေးထုတ်ပြီး ဘာကြောင့်ဖြစ်ပေါ်လာလဲ ဆန်းစစ်ကြည့်ပါ။"
+            ],
+            "စိတ်လှုပ်ရှား": [
+                "ဒီစိတ်လှုပ်ရှားမှုကို အသုံးချပြီး သင့်ရဲ့ရည်မှန်းချက်တွေကို အကောင်အထည်ဖော်ပါ။",
+                "ဒီစိတ်လှုပ်ရှားမှုကို အခြားသူတွေနဲ့ မျှဝေပြီး အကောင်းမြင်စိတ်ကို ဖြန့်ဝေပါ။"
+            ],
+            "ငြိမ်သက်": [
+                "ဒီငြိမ်သက်မှုကို ဆက်လက်ထိန်းသိမ်းပြီး သင့်ရဲ့စိတ်ကို အာရုံစူးစိုက်မှု ပေးပါ။",
+                "ဒီအခိုက်အတန့်ကို အပြည့်အဝခံစားပြီး ကိုယ့်ကိုယ်ကို အားဖြည့်ပါ။"
+            ],
+            "ပင်ပန်း": [
+                "သင့်ကိုယ်သင် အနားပေးဖို့ အချိန်ယူပါ။ အနည်းငယ်အနားယူခြင်းက အံ့သြဖွယ်ဖြစ်စေနိုင်ပါတယ်။",
+                "ဒီနေ့ သင်လုပ်ဆောင်ခဲ့တာတွေကို ဂုဏ်ယူပြီး အနားယူဖို့ အချိန်ပေးပါ။"
+            ],
+            "စိတ်ရှုပ်": [
+                "အသက်ရှူလေ့ကျင့်ခန်း လုပ်ပြီး သင့်ရဲ့အတွေးတွေကို စီစဉ်ကြည့်ပါ။",
+                "သင့်ရဲ့စိတ်ရှုပ်မှုကို တစ်ခုချင်း ဖြေရှင်းဖို့ အသေးစိတ်စီစဉ်ပါ။"
+            ],
+            "ကျေနပ်": [
+                "ဒီကျေနပ်မှုကို ဆက်လက်ထိန်းသိမ်းပြီး နောက်ထပ်အောင်မြင်မှုတွေကို ဖန်တီးပါ။",
+                "သင့်ရဲ့အောင်မြင်မှုတွေကို ဂုဏ်ယူပြီး နောက်ထပ်ပန်းတိုင်တွေ ချမှတ်ပါ။"
+            ]
+        };
+
         // Utility module for localStorage operations
         const StorageUtil = {
+            // Save data to localStorage with error handling
             save(key, value) {
                 try {
                     localStorage.setItem(key, JSON.stringify(value));
@@ -710,6 +656,7 @@
                     return false;
                 }
             },
+            // Load data from localStorage with error handling
             load(key) {
                 try {
                     const value = localStorage.getItem(key);
@@ -719,6 +666,7 @@
                     return null;
                 }
             },
+            // Remove data from localStorage
             remove(key) {
                 try {
                     localStorage.removeItem(key);
@@ -732,35 +680,25 @@
 
         // API module for Gemini API interactions
         const GeminiAPI = {
+            // Fetch journaling prompts based on mood
             async fetchPrompts(mood, apiKey) {
                 const prompt = mood
                     ? `Generate 5 distinct journaling prompts in Burmese, suitable for someone experiencing a '${mood}' mood. All prompts must be in Burmese language only. Format: JSON array of strings, e.g., ["prompt1", "prompt2", ..., "prompt5"].`
                     : `Generate 5 journaling prompts in Burmese. All prompts must be in Burmese language only. Format: JSON array of strings, e.g., ["prompt1", "prompt2", ..., "prompt5"].`;
-
                 return this._makeApiCall(prompt, { type: 'ARRAY', items: { type: 'STRING' } }, apiKey, "gemini-2.0-flash");
             },
 
-            async fetchAnalysis(journalText, mood, apiKey) {
-                const prompt = `Analyze the following journal entry in Burmese:\n\n${journalText}\n\nMood: ${mood}\n\nAll responses must be in Burmese language only. Provide a JSON response with the following structure:\n{\n  "summary": "A brief summary of the journal entry in Burmese.",\n  "themes": ["theme1 in Burmese", "theme2 in Burmese", "theme3 in Burmese"],\n  "actions": ["action1 in Burmese", "action2 in Burmese"],\n  "affirmation": "A positive affirmation based on the entry in Burmese."\n}`;
-
+            // Fetch affirmation based on journal text and mood
+            async fetchAffirmation(journalText, mood, apiKey) {
+                const prompt = `Analyze the following journal entry in Burmese:\n\n${journalText}\n\nMood: ${mood}\n\nProvide a positive affirmation in Burmese based on the journal entry and mood. The affirmation should be motivational, concise, and relevant. Return a JSON response: {"affirmation": "A positive affirmation in Burmese."}`;
                 return this._makeApiCall(prompt, {
                     type: 'OBJECT',
-                    properties: {
-                        summary: { type: 'STRING' },
-                        themes: { type: 'ARRAY', items: { type: 'STRING' } },
-                        actions: { type: 'ARRAY', items: { type: 'STRING' } },
-                        affirmation: { type: 'STRING' }
-                    },
-                    required: ['summary', 'themes', 'actions', 'affirmation']
+                    properties: { affirmation: { type: 'STRING' } },
+                    required: ['affirmation']
                 }, apiKey, "gemini-2.0-flash");
             },
 
-            // Removed fetchFutureSelfLetter as per user request to revert UI
-            // async fetchFutureSelfLetter(journalText, apiKey) {
-            //     const prompt = `အောက်ပါ ဂျာနယ်မှတ်တမ်းကို အခြေခံ၍ အနာဂတ်တွင်ရှိမည့် သင့်ကိုယ်သင် ပေးပို့မည့် စာတစ်စောင်ကို မြန်မာဘာသာဖြင့် ရေးသားပေးပါ။ ဤစာသည် လက်ရှိအခြေအနေကို ပြန်လည်သုံးသပ်ခြင်း၊ သင်ယူခဲ့ရသော သင်ခန်းစာများကို သတိပေးခြင်း၊ အားပေးစကားများ ပေးခြင်းနှင့် မျှော်မှန်းချက်များ ဖော်ပြခြင်းတို့ ပါဝင်သင့်သည်။ စာကို တိုတိုနှင့် ထိရောက်မှုရှိအောင် ရေးသားပါ။\n\nဂျာနယ်မှတ်တမ်း:\n${journalText}`;
-            //     return this._makeApiCall(prompt, null, apiKey, "gemini-2.0-flash", "text/plain"); // No specific schema, expect plain text
-            // },
-
+            // Generic API call with error handling
             async _makeApiCall(prompt, schema, apiKey, model = "gemini-2.0-flash", responseMimeType = "application/json") {
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
                 const payload = {
@@ -795,11 +733,7 @@
                     }
                     const result = await response.json();
                     if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
-                        if (responseMimeType === "application/json") {
-                            return JSON.parse(result.candidates[0].content.parts[0].text);
-                        } else {
-                            return result.candidates[0].content.parts[0].text;
-                        }
+                        return JSON.parse(result.candidates[0].content.parts[0].text);
                     }
                     throw new Error('Unexpected API response structure.');
                 } catch (error) {
@@ -809,8 +743,26 @@
             }
         };
 
+        // Suggestion module for generating affirmations
+        const SuggestionModule = {
+            async generateAffirmation(journalText, mood, apiKey) {
+                if (!journalText || journalText.trim() === "") {
+                    return { affirmation: null, error: "ဂျာနယ်မှတ်တမ်း ဗလာဖြစ်နေပါသည်။" };
+                }
+                try {
+                    const result = await GeminiAPI.fetchAffirmation(journalText, mood, apiKey);
+                    return { affirmation: result.affirmation, error: null };
+                } catch (error) {
+                    console.error("Error generating affirmation:", error);
+                    const fallback = FALLBACK_AFFIRMATIONS[mood]?.[Math.floor(Math.random() * FALLBACK_AFFIRMATIONS[mood].length)] || "သင့်ကိုယ်သင် ယုံကြည်မှုထားပါ၊ သင်သည် အရာအားလုံးကို ကျော်လွှားနိုင်ပါသည်။";
+                    return { affirmation: fallback, error: error.message };
+                }
+            }
+        };
+
         // UI utility module
         const UIUtil = {
+            // Show specific section and hide others
             showSection(sectionId) {
                 document.querySelectorAll('.section').forEach(section => {
                     section.classList.remove('active');
@@ -821,24 +773,27 @@
                     targetSection.classList.remove('hidden');
                     setTimeout(() => targetSection.classList.add('active'), 50);
                     targetSection.scrollIntoView({ behavior: 'smooth' });
-                    targetSection.focus(); // For accessibility
+                    targetSection.focus();
                 }
             },
 
+            // Show modal with message and type
             showModal(message, type = 'success') {
                 const modal = document.getElementById('modal');
                 const modalMessage = document.getElementById('modalMessage');
                 modalMessage.textContent = message;
-                modal.className = `modal show ${type}`; // Reset classes and add new ones
-                modal.focus(); // For accessibility
+                modal.className = `modal show ${type}`;
+                modal.focus();
                 setTimeout(() => this.hideModal(), 3000);
             },
 
+            // Hide modal
             hideModal() {
                 const modal = document.getElementById('modal');
-                modal.classList.remove('show', 'success', 'error'); // Remove all type classes
+                modal.classList.remove('show', 'success', 'error');
             },
 
+            // Set loading state for buttons
             setLoading(element, isLoading, originalText = '', spinnerHtml = '<span class="loading-spinner"></span>') {
                 if (isLoading) {
                     element.disabled = true;
@@ -849,6 +804,7 @@
                 }
             },
 
+            // Update progress bar
             updateProgressBar(current, total) {
                 const progressBar = document.getElementById('progressBar');
                 const percentage = (current / total) * 100;
@@ -868,27 +824,17 @@
                     "ဒီနေ့ ဘယ်အရာက သင့်ကို ပျော်ရွှင်စေခဲ့လဲ။",
                     "ဒီနေ့ သင်ယူခဲ့ရတဲ့ အရာတစ်ခုခု ရှိလား။",
                     "ဒီနေ့ ဘယ်လို စိတ်ခံစားမှုမျိုး ခံစားခဲ့ရလဲ။ ဘာကြောင့်လဲ။",
-                    "ကိုယ့်ကိုယ်ကို ပိုကောင်းအောင် ဘာတွေ လုပ်နိုင်ခဲ့လဲ။",
-                    "ဒီနေ့ ဘယ်သူ့ကို ကူညီပေးခဲ့လဲ၊ ဒါမှမဟုတ် ဘယ်သူက သင့်ကို ကူညီခဲ့လဲ။",
-                    "မနက်ဖြန်အတွက် ဘာတွေ မျှော်လင့်ထားလဲ။",
-                    "ဒီနေ့ ကြုံတွေ့ခဲ့ရတဲ့ စိန်ခေါ်မှုတစ်ခုခုရှိလား။ ဘယ်လို ကျော်လွှားခဲ့လဲ။",
-                    "သင့်ရဲ့ ရည်မှန်းချက်တွေဆီကို တစ်လှမ်းနီးအောင် ဒီနေ့ ဘာတွေ လုပ်ဆောင်နိုင်ခဲ့လဲ။",
-                    "ဒီနေ့အတွက် သင်ကိုယ်တိုင် ဘာမက်ဆေ့ချ် ပေးချင်လဲ။"
+                    "ကိုယ့်ကိုယ်ကို ပိုကောင်းအောင် ဘာတွေ လုပ်နိုင်ခဲ့လဲ။"
                 ];
                 this.isLoading = false;
-                // this.selectedMood = ''; // Removed as per user request to revert to dropdown
                 this.philosophyTexts = [
                     {
-                        text: "တစ်နေ့တာ ၁၀ မိနစ်လောက် ကိုယ့်ကိုယ်ကို ပြန်သုံးသပ်တဲ့အချိန်ပေးတာက ဘဝတိုးတက်ဖို့အတွက် အရေးကြီးဆုံးအရာတွေထဲက တစ်ခုပါပဲ။ တစ်ရက်တာလုံးမှာ ဘာတွေလုပ်ခဲ့လဲ၊ ကောင်းတဲ့အရာတွေနှင့် သင်ခန်းစာယူစရာများကို ပြန်ကြည့်ပြီး နောင်အတွက်ပြင်ဆင်တာက တိုးတက်ဖို့ အကောင်းဆုံးနည်းလမ်းပါ။",
+                        text: "တစ်နေ့တာ ၁၀ မိနစ်လောက် ကိုယ့်ကိုယ်ကို ပြန်သုံးသပ်တဲ့အချိန်ပေးတာက ဘဝတိုးတက်ဖို့အတွက် အရေးကြီးဆုံးအရာတွေထဲက တစ်ခုပါပဲ။",
                         credit: "Credit: KO LAPYAE"
                     },
                     {
-                        text: "နေ့စဉ် ဂျာနယ်ရေးသားခြင်းသည် မိမိကိုယ်ကို ပိုမိုနားလည်စေပြီး စိတ်ဖိစီးမှုများကို လျှော့ချကာ စိတ်ပိုင်းဆိုင်ရာ ကျန်းမာရေးကို မြှင့်တင်ပေးသည်။ ၎င်းသည် အတွေးများကို စနစ်တကျ မှတ်တမ်းတင်နိုင်ပြီး ပြဿနာများကို ဖြေရှင်းရန် အထောက်အကူပြုသည်။",
+                        text: "နေ့စဉ် ဂျာနယ်ရေးသားခြင်းသည် မိမိကိုယ်ကို ပိုမိုနားလည်စေပြီး စိတ်ဖိစီးမှုများကို လျှော့ချကာ စိတ်ပိုင်းဆိုင်ရာ ကျန်းမာရေးကို မြှင့်တင်ပေးသည်။",
                         credit: "Source: Journaling for Mental Health"
-                    },
-                    {
-                        text: "သင်၏အတွေးများနှင့် ခံစားချက်များကို ချရေးခြင်းဖြင့် ရှင်းလင်းပြတ်သားသော အမြင်များကို ရရှိစေပြီး ပန်းတိုင်များ ချမှတ်ရာတွင် ပိုမိုလွယ်ကူစေသည်။ ၎င်းသည် မိမိကိုယ်ကို တိုးတက်အောင် လုပ်ဆောင်နိုင်သည့် အစွမ်းထက်သော ကိရိယာတစ်ခုဖြစ်သည်။",
-                        credit: "Source: The Power of Journaling"
                     }
                 ];
                 this.init();
@@ -918,10 +864,7 @@
 
                 // Journal section buttons
                 document.getElementById('startPromptsBtn').addEventListener('click', () => this.startPrompts());
-                // Removed mood button event listeners as per user request to revert to dropdown
-                // document.querySelectorAll('.mood-btn').forEach(button => {
-                //     button.addEventListener('click', (event) => this.selectMood(event.currentTarget.dataset.mood));
-                // });
+                document.getElementById('submitFeedbackBtn').addEventListener('click', () => this.submitFeedback());
 
                 // Prompts section buttons
                 document.getElementById('prevPromptBtn').addEventListener('click', () => this.previousPrompt());
@@ -929,12 +872,9 @@
                 document.getElementById('combineAnswersBtn').addEventListener('click', () => this.combineAnswers());
                 document.getElementById('backToJournalBtn').addEventListener('click', () => this.showJournalSection());
 
-                // Analysis section buttons
+                // Suggestions section buttons
                 document.getElementById('copyCombinedTextBtn').addEventListener('click', () => this.copyJournalText());
                 document.getElementById('exportToNotionBtn').addEventListener('click', () => this.exportToNotion());
-                // Removed generateFutureLetterBtn and copyFutureLetterBtn event listeners
-                // document.getElementById('generateFutureLetterBtn').addEventListener('click', () => this.generateFutureSelfLetter());
-                // document.getElementById('copyFutureLetterBtn').addEventListener('click', () => this.copyFutureLetter());
                 document.getElementById('backToMainJournalBtn').addEventListener('click', () => this.showJournalSection());
 
                 // Modal close button
@@ -963,10 +903,8 @@
             showJournalSection() {
                 UIUtil.showSection('journalSection');
                 this.setTodayDate();
-                // this.selectedMood = ''; // Removed as per user request
-                // this.updateMoodSelectionUI(); // Removed as per user request
-                document.getElementById('journalMood').value = ""; // Reset dropdown
-                this.displayRandomPhilosophy(); // Show a new philosophy text
+                document.getElementById('journalMood').value = "";
+                this.displayRandomPhilosophy();
             }
 
             setTodayDate() {
@@ -974,22 +912,6 @@
                 const dateString = today.toISOString().split('T')[0];
                 document.getElementById('journalDate').value = dateString;
             }
-
-            // Removed selectMood and updateMoodSelectionUI as per user request to revert to dropdown
-            // selectMood(mood) {
-            //     this.selectedMood = mood;
-            //     this.updateMoodSelectionUI();
-            // }
-
-            // updateMoodSelectionUI() {
-            //     document.querySelectorAll('.mood-btn').forEach(button => {
-            //         if (button.dataset.mood === this.selectedMood) {
-            //             button.classList.add('selected');
-            //         } else {
-            //             button.classList.remove('selected');
-            //         }
-            //     });
-            // }
 
             saveApiKey() {
                 const apiKey = document.getElementById('apiKeyInput').value.trim();
@@ -1007,6 +929,23 @@
                 document.getElementById('apiKeyInput').value = '';
                 UIUtil.showModal('API Key ဖျက်လိုက်ပါပြီ။', 'success');
                 UIUtil.showSection('apiKeySection');
+            }
+
+            submitFeedback() {
+                const feedbackText = document.getElementById('feedbackTextarea').value.trim();
+                if (!feedbackText) {
+                    UIUtil.showModal('အကြံပြုချက် ထည့်သွင်းပါ။', 'error');
+                    return;
+                }
+                const feedbackEntry = {
+                    text: feedbackText,
+                    timestamp: new Date().toISOString()
+                };
+                const feedbacks = StorageUtil.load('feedbacks') || [];
+                feedbacks.push(feedbackEntry);
+                StorageUtil.save('feedbacks', feedbacks);
+                document.getElementById('feedbackTextarea').value = '';
+                UIUtil.showModal('အကြံပြုချက် ပေးပို့ပြီးပါပြီ။', 'success');
             }
 
             promptForApiKeyOrStartJournaling() {
@@ -1027,8 +966,8 @@
                 this.isLoading = true;
 
                 try {
-                    const selectedMood = document.getElementById('journalMood').value; // Get mood from dropdown
-                    if (!selectedMood) { // Check if mood is selected
+                    const selectedMood = document.getElementById('journalMood').value;
+                    if (!selectedMood) {
                         UIUtil.showModal('စိတ်ခံစားမှုကို ရွေးချယ်ပေးပါ။', 'error');
                         return;
                     }
@@ -1039,7 +978,7 @@
                         return;
                     }
 
-                    this.activePrompts = await GeminiAPI.fetchPrompts(selectedMood, apiKey); // Pass selectedMood
+                    this.activePrompts = await GeminiAPI.fetchPrompts(selectedMood, apiKey);
                     this.currentPromptIndex = 0;
                     this.promptAnswers = Array(this.activePrompts.length).fill('');
                     this.displayCurrentPrompt();
@@ -1047,7 +986,6 @@
                 } catch (error) {
                     console.error('Error starting prompts:', error);
                     UIUtil.showModal(`မေးခွန်းများ ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, 'error');
-                    // Fallback to default prompts if API fails
                     this.activePrompts = [...this.defaultPrompts];
                     this.currentPromptIndex = 0;
                     this.promptAnswers = Array(this.activePrompts.length).fill('');
@@ -1068,7 +1006,6 @@
                 const combineBtn = document.getElementById('combineAnswersBtn');
                 const promptDisplay = document.getElementById('promptDisplay');
 
-                // Add transition class for visual effect
                 promptDisplay.classList.add('prompt-transition');
                 setTimeout(() => {
                     promptTextElem.textContent = `${this.currentPromptIndex + 1}. ${this.activePrompts[this.currentPromptIndex]}`;
@@ -1085,8 +1022,8 @@
                         combineBtn.classList.add('hidden');
                     }
                     UIUtil.updateProgressBar(this.currentPromptIndex + 1, this.activePrompts.length);
-                    promptDisplay.classList.remove('prompt-transition'); // Remove after content update
-                }, 200); // Small delay for transition effect
+                    promptDisplay.classList.remove('prompt-transition');
+                }, 200);
             }
 
             previousPrompt() {
@@ -1104,7 +1041,7 @@
             async combineAnswers() {
                 if (this.isLoading) return;
                 this.isLoading = true;
-                UIUtil.showModal('အဖြေများ စုစည်းပြီး သုံးသပ်ချက် ရယူနေပါသည်။ ခဏစောင့်ပါ။', 'success');
+                UIUtil.showModal('အဖြေများ စုစည်းပြီး အကြံပြုချက် ရယူနေပါသည်။ ခဏစောင့်ပါ�।', 'success');
 
                 this.promptAnswers[this.currentPromptIndex] = document.getElementById('promptAnswerTextarea').value.trim();
 
@@ -1121,7 +1058,7 @@
                 document.getElementById('combinedJournalText').value = combinedText;
 
                 const date = document.getElementById('journalDate').value;
-                const mood = document.getElementById('journalMood').value; // Get mood from dropdown
+                const mood = document.getElementById('journalMood').value;
 
                 try {
                     const apiKey = StorageUtil.load('geminiApiKey');
@@ -1130,250 +1067,11 @@
                         UIUtil.showSection('apiKeySection');
                         return;
                     }
-                    const analysis = await GeminiAPI.fetchAnalysis(combinedText, mood, apiKey);
+                    const suggestionResult = await SuggestionModule.generateAffirmation(combinedText, mood, apiKey);
 
                     const newEntry = {
                         date,
                         mood,
                         text: combinedText,
-                        summary: analysis.summary,
-                        action_items: analysis.actions,
-                        key_themes: analysis.themes,
-                        affirmation: analysis.affirmation,
-                        // future_letter: '' // Removed as per user request
+                        affirmation: suggestionResult.affirmation
                     };
-
-                    const entries = StorageUtil.load('journalEntries') || [];
-                    const existingEntryIndex = entries.findIndex(entry => entry.date === date);
-                    if (existingEntryIndex > -1) {
-                        entries[existingEntryIndex] = newEntry;
-                        UIUtil.showModal("မှတ်တမ်း အပ်ဒိတ်လုပ်ပြီးပါပြီ။", "success");
-                    } else {
-                        entries.push(newEntry);
-                        UIUtil.showModal("မှတ်တမ်း သိမ်းဆည်းပြီးပါပြီ။", "success");
-                    }
-                    StorageUtil.save('journalEntries', entries);
-
-                    this.displayAnalysisResults(analysis);
-                    UIUtil.showSection('analysisSection');
-
-                } catch (error) {
-                    console.error('Error combining answers and getting analysis:', error);
-                    UIUtil.showModal(`သုံးသပ်ချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, 'error');
-                } finally {
-                    this.isLoading = false;
-                }
-            }
-
-            displayAnalysisResults(analysis) {
-                document.getElementById('analysisSummary').textContent = analysis.summary || "သုံးသပ်ချက် မရရှိပါ။";
-
-                const actionItemsList = document.getElementById('actionItemsList');
-                actionItemsList.innerHTML = '';
-                if (analysis.actions && analysis.actions.length > 0) {
-                    analysis.actions.forEach(item => {
-                        const li = document.createElement('li');
-                        li.textContent = item;
-                        actionItemsList.appendChild(li);
-                    });
-                } else {
-                    actionItemsList.innerHTML = '<li>လုပ်ဆောင်ရမည့်အချက်များ မရှိပါ။</li>';
-                }
-
-                const keyThemesList = document.getElementById('keyThemesList');
-                keyThemesList.innerHTML = '';
-                if (analysis.themes && analysis.themes.length > 0) {
-                    analysis.themes.forEach(theme => {
-                        const li = document.createElement('li');
-                        li.textContent = theme;
-                        keyThemesList.appendChild(li);
-                    });
-                } else {
-                    keyThemesList.innerHTML = '<li>အဓိကအကြောင်းအရာများ မရှိပါ။</li>';
-                }
-
-                document.getElementById('affirmationDisplay').textContent = analysis.affirmation || "အားပေးစကား မရရှိပါ။";
-
-                // Removed future letter section display logic
-                // document.getElementById('futureLetterSection').classList.add('hidden');
-                // document.getElementById('futureLetterDisplay').value = ''; // Clear previous letter
-            }
-
-            // Removed generateFutureSelfLetter as per user request
-            // async generateFutureSelfLetter() {
-            //     if (this.isLoading) return;
-            //     this.isLoading = true;
-            //     const generateLetterBtn = document.getElementById('generateFutureLetterBtn');
-            //     const originalText = generateLetterBtn.innerHTML;
-
-            //     UIUtil.setLoading(generateLetterBtn, true, 'ရေးသားနေပါသည်...');
-
-            //     const combinedJournalText = document.getElementById('combinedJournalText').value;
-            //     if (!combinedJournalText.trim()) {
-            //         UIUtil.showModal('အနာဂတ်အတွက် စာရေးရန် ဂျာနယ်မှတ်တမ်း မရှိသေးပါ။', 'error');
-            //         this.isLoading = false;
-            //         UIUtil.setLoading(generateLetterBtn, false, originalText);
-            //         return;
-            //     }
-
-            //     const futureLetterSection = document.getElementById('futureLetterSection');
-            //     const futureLetterDisplay = document.getElementById('futureLetterDisplay');
-
-            //     try {
-            //         const apiKey = StorageUtil.load('geminiApiKey');
-            //         if (!apiKey) {
-            //             UIUtil.showModal('API Key မရှိသေးပါ။ ကျေးဇူးပြု၍ API Key ထည့်သွင်းပေးပါ။', 'error');
-            //             UIUtil.showSection('apiKeySection');
-            //             return;
-            //         }
-            //         const letter = await GeminiAPI.fetchFutureSelfLetter(combinedJournalText, apiKey);
-            //         futureLetterDisplay.value = letter;
-            //         futureLetterSection.classList.remove('hidden');
-            //         UIUtil.showModal("အနာဂတ်အတွက် စာ ရေးသားပြီးပါပြီ။", "success");
-
-            //         // Save the generated letter to the current journal entry
-            //         const date = document.getElementById('journalDate').value;
-            //         const entries = StorageUtil.load('journalEntries') || [];
-            //         const existingEntryIndex = entries.findIndex(entry => entry.date === date);
-            //         if (existingEntryIndex > -1) {
-            //             entries[existingEntryIndex].future_letter = letter;
-            //             StorageUtil.save('journalEntries', entries);
-            //         }
-
-            //     } catch (error) {
-            //         console.error('Error generating future self letter:', error);
-            //         UIUtil.showModal(`အနာဂတ်အတွက် စာ ရေးသားရာတွင် ပြဿနာရှိခဲ့ပါသည်။: ${error.message}`, 'error');
-            //     } finally {
-            //         this.isLoading = false;
-            //         UIUtil.setLoading(generateLetterBtn, false, originalText);
-            //     }
-            // }
-
-            // Removed copyFutureLetter as per user request
-            // copyFutureLetter() {
-            //     const futureLetterDisplay = document.getElementById('futureLetterDisplay');
-            //     if (futureLetterDisplay) {
-            //         futureLetterDisplay.select();
-            //         document.execCommand('copy');
-            //         UIUtil.showModal("အနာဂတ်အတွက် စာသား ကူးယူပြီးပါပြီ။", "success");
-            //     }
-            // }
-
-            copyJournalText() {
-                const combinedJournalText = document.getElementById('combinedJournalText');
-                combinedJournalText.select();
-                document.execCommand('copy');
-                UIUtil.showModal("စာသားအားလုံး ကူးယူပြီးပါပြီ။", "success");
-            }
-
-            exportToNotion() {
-                const entries = StorageUtil.load('journalEntries');
-                if (!entries || entries.length === 0) {
-                    UIUtil.showModal("ထုတ်ယူရန် မှတ်တမ်းများ မရှိပါ။", "error");
-                    return;
-                }
-
-                const currentDate = document.getElementById('journalDate').value;
-                const currentDayEntry = entries.find(entry => entry.date === currentDate);
-
-                let filename = `Journal_${currentDate}.md`;
-                if (currentDayEntry && currentDayEntry.summary && currentDayEntry.summary.trim() !== '') {
-                    let sanitizedSummary = currentDayEntry.summary.replace(/[/\\?%*:|"<>]/g, '').trim();
-                    sanitizedSummary = sanitizedSummary.replace(/\s+/g, '_');
-                    if (sanitizedSummary.length > 50) {
-                        sanitizedSummary = sanitizedSummary.substring(0, 50);
-                    }
-                    if (sanitizedSummary) {
-                        filename = `${sanitizedSummary}.md`;
-                    }
-                }
-                
-                let exportContent = `# နေ့စဉ်မှတ်တမ်းများ\n\n`;
-                entries.sort((a, b) => new Date(a.date) - new Date(b.date)); 
-                
-                entries.forEach(entry => {
-                    exportContent += `## ${entry.summary ? entry.summary : entry.date}\n\n`; 
-                    exportContent += `**ရက်စွဲ:** ${entry.date}\n\n`;
-                    
-                    if (entry.mood && entry.mood.trim() !== '') {
-                        exportContent += `**စိတ်ခံစားမှု:** ${entry.mood}\n\n`;
-                    }
-
-                    exportContent += `${entry.text}\n\n`;
-
-                    if (entry.key_themes && entry.key_themes.length > 0) {
-                        exportContent += `### အဓိက အကြောင်းအရာများ\n`;
-                        entry.key_themes.forEach(theme => {
-                            exportContent += `- ${theme}\n`;
-                        });
-                        exportContent += `\n`;
-                    }
-
-                    if (entry.action_items && entry.action_items.length > 0) {
-                        exportContent += `### လုပ်ဆောင်ရမည့်အချက်များ\n`;
-                        entry.action_items.forEach(item => {
-                            exportContent += `- ${item}\n`;
-                        });
-                        exportContent += `\n`;
-                    }
-
-                    if (entry.affirmation && entry.affirmation.trim() !== '') {
-                        exportContent += `### အားပေးစကား\n`;
-                        exportContent += `> ${entry.affirmation}\n\n`;
-                    }
-
-                    // Removed future_letter from export content
-                    // if (entry.future_letter && entry.future_letter.trim() !== '') {
-                    //     exportContent += `### အနာဂတ်အတွက် စာ\n`;
-                    //     exportContent += `> ${entry.future_letter}\n\n`;
-                    // }
-
-                    exportContent += `---\n\n`;
-                });
-
-                const blob = new Blob([exportContent], { type: 'text/markdown;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-
-                UIUtil.showModal("Notion အတွက် မှတ်တမ်းများ ထုတ်ယူပြီးပါပြီ။", "success");
-                setTimeout(() => {
-                    UIUtil.showModal("Notion ထဲသို့ ဖိုင်ကို ဆွဲထည့်ခြင်း (သို့) Import option မှတစ်ဆင့် ထည့်သွင်းနိုင်ပါသည်။", "success");
-                }, 2500);
-            }
-
-            handleKeydown(event) {
-                const promptsSection = document.getElementById('promptsSection');
-                if (event.key === 'Tab' && !event.repeat && !promptsSection.classList.contains('hidden')) {
-                    event.preventDefault();
-                    const nextBtn = document.getElementById('nextPromptBtn');
-                    const combineBtn = document.getElementById('combineAnswersBtn');
-                    if (!nextBtn.classList.contains('hidden') && !nextBtn.disabled) {
-                        nextBtn.click();
-                    } else if (!combineBtn.classList.contains('hidden') && !combineBtn.disabled) {
-                        combineBtn.click();
-                    }
-                }
-            }
-
-            displayRandomPhilosophy() {
-                const philosophyTextElem = document.getElementById('philosophyText');
-                const sourceCreditElem = document.getElementById('sourceCredit');
-                const randomIndex = Math.floor(Math.random() * this.philosophyTexts.length);
-                const selectedPhilosophy = this.philosophyTexts[randomIndex];
-                philosophyTextElem.textContent = selectedPhilosophy.text;
-                sourceCreditElem.textContent = selectedPhilosophy.credit;
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            new JournalApp();
-        });
-    </script>
-</body>
-</html>
