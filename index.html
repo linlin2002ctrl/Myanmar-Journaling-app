@@ -3,198 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>စိတ်ကုထုံးမှတ်တမ်း (Pro)</title>
+    <title>ဖွင့်ဟ (Pwin Ha)</title>
     
-    <!-- ======== App Icon Links (ဤနေရာတွင် ထပ်ထည့်ပြီး) ======== -->
+    <!-- ======== App Icon Links ======== -->
     <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/gemini-pro-chat/gemini-pro-chat.github.io/main/assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/gemini-pro-chat/gemini-pro-chat.github.io/main/assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/gemini-pro-chat/gemini-pro-chat.github.io/main/assets/favicon-16x16.png">
     <link rel="manifest" href="https://raw.githubusercontent.com/gemini-pro-chat/gemini-pro-chat.github.io/main/assets/site.webmanifest">
-    <!-- ======================================================= -->
-
+    
+    <!-- ======== Stylesheets ======== -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
-    <!-- Settings icon အတွက် Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
         :root {
-            --primary-color: #1e40af; /* Indigo 700 */
-            --primary-hover: #1d4ed8; /* Indigo 600 */
-            --secondary-color: #6b7280; /* Gray 500 */
-            --success-color: #10b981; /* Emerald 500 */
-            --error-color: #ef4444; /* Red 500 */
-            --background-color: #f8f9fa; /* Light Gray */
-            --card-background: #ffffff; /* White */
-            --text-primary: #1f2937; /* Gray 900 */
-            --border-color: #dee2e6; /* Bootstrap default border */
+            --primary-color: #1e40af; --primary-hover: #1d4ed8; --secondary-color: #6b7280;
+            --success-color: #10b981; --error-color: #ef4444; --background-color: #f8f9fa;
+            --card-background: #ffffff; --text-primary: #1f2937; --border-color: #dee2e6;
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
-        body {
-            font-family: 'Pyidaungsu', sans-serif;
-            background-color: var(--background-color);
-            color: var(--text-primary);
-        }
-        .card {
-            box-shadow: var(--shadow-lg);
-            border: none;
-            animation: cardFadeIn 0.6s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        @keyframes cardFadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .btn {
-            font-weight: 600;
-            border-radius: 0.5rem;
-            transition: all 0.25s ease-in-out;
-            box-shadow: var(--shadow-md);
-        }
-        .btn:hover:not(:disabled) {
-            transform: translateY(-3px) scale(1.03);
-            box-shadow: var(--shadow-lg);
-        }
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-            border-color: var(--primary-hover);
-        }
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgb(30 64 175 / 25%);
-        }
-        .loading-spinner {
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid transparent;
-            border-top-color: currentColor;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 0.5rem;
-        }
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-        .analysis-section {
-            background-color: #f0fff4; /* အစိမ်းဖျော့ */
-            border: 1px solid #a7e0b4; /* ပိုနက်သောအစိမ်းဖျော့ */
-            color: var(--text-primary);
-        }
-        .hidden {
-            display: none !important;
-        }
-        .history-item:hover {
-            background-color: #f1f5f9; /* အပြာ-မီးခိုးဖျော့ */
-            cursor: pointer;
-        }
-        .whitespace-pre-wrap {
-            white-space: pre-wrap;
-        }
-        /* Chat UI Styles */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 60vh; /* Adjust as needed */
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            background-color: var(--card-background);
-            overflow: hidden;
-        }
-        .chat-history {
-            flex-grow: 1;
-            padding: 1rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        .chat-message {
-            max-width: 80%;
-            padding: 0.6rem 1rem;
-            border-radius: 1rem;
-        }
-        .chat-message.user {
-            align-self: flex-end;
-            background-color: var(--primary-color);
-            color: white;
-            border-bottom-right-radius: 0.2rem;
-        }
-        .chat-message.ai {
-            align-self: flex-start;
-            background-color: #e2e8f0; /* Light gray for AI */
-            color: var(--text-primary);
-            border-bottom-left-radius: 0.2rem;
-        }
-        .chat-input-area {
-            display: flex;
-            padding: 1rem;
-            border-top: 1px solid var(--border-color);
-            gap: 0.5rem;
-        }
-        .chat-input {
-            flex-grow: 1;
-            border-radius: 0.5rem;
-        }
+        body { font-family: 'Pyidaungsu', sans-serif; background-color: var(--background-color); color: var(--text-primary); }
+        .card { box-shadow: var(--shadow-lg); border: none; animation: cardFadeIn 0.6s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes cardFadeIn { to { opacity: 1; transform: translateY(0); } }
+        .btn { font-weight: 600; border-radius: 0.5rem; transition: all 0.25s ease-in-out; box-shadow: var(--shadow-md); }
+        .btn:hover:not(:disabled) { transform: translateY(-3px) scale(1.03); box-shadow: var(--shadow-lg); }
+        .btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); }
+        .btn-primary:hover { background-color: var(--primary-hover); border-color: var(--primary-hover); }
+        .form-control:focus, .form-select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 0.25rem rgb(30 64 175 / 25%); }
+        .loading-spinner { display: inline-block; width: 1rem; height: 1rem; border: 2px solid transparent; border-top-color: currentColor; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 0.5rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .analysis-section { background-color: #f0fff4; border: 1px solid #a7e0b4; color: var(--text-primary); }
+        .hidden { display: none !important; }
+        .history-item:hover { background-color: #f1f5f9; cursor: pointer; }
+        .whitespace-pre-wrap { white-space: pre-wrap; }
+        .chat-container { display: flex; flex-direction: column; height: 60vh; border: 1px solid var(--border-color); border-radius: 0.5rem; background-color: var(--card-background); overflow: hidden; }
+        .chat-history { flex-grow: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.75rem; }
+        .chat-message { max-width: 80%; padding: 0.6rem 1rem; border-radius: 1rem; word-wrap: break-word; }
+        .chat-message.user { align-self: flex-end; background-color: var(--primary-color); color: white; border-bottom-right-radius: 0.2rem; }
+        .chat-message.ai { align-self: flex-start; background-color: #e2e8f0; color: var(--text-primary); border-bottom-left-radius: 0.2rem; }
+        .chat-input-area { display: flex; padding: 1rem; border-top: 1px solid var(--border-color); gap: 0.5rem; }
+        .chat-input { flex-grow: 1; border-radius: 0.5rem; }
     </style>
 </head>
 <body class="d-flex align-items-start justify-content-center py-4">
     <div class="container" style="max-width: 768px;">
         <div class="card p-3 p-md-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="display-5 fw-bold text-center flex-grow-1" style="color: var(--primary-color);">စိတ်ကုထုံးမှတ်တမ်း</h1>
-                <button id="settingsBtn" class="btn btn-outline-secondary border-0 fs-4" title="ချိန်ညှိမှုများ"><i class="bi bi-gear-fill"></i></button>
-            </div>
+            <header class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="display-5 fw-bold text-center flex-grow-1" style="color: var(--primary-color);">ဖွင့်ဟ</h1>
+                <button id="settingsBtn" class="btn btn-outline-secondary border-0 fs-4" title="ဆက်တင်များ"><i class="bi bi-gear-fill"></i></button>
+            </header>
             
-            <div id="app-content" role="main">
-                <!-- ကိုယ်ရေးအချက်အလက်ကာကွယ်မှု၊ စည်းမျဉ်းနှင့် သတ်မှတ်ချက်များ ကဏ္ဍများ -->
-                <div id="privacySection" class="section hidden text-center">
+            <main id="app-content" role="main">
+                <!-- Onboarding Sections -->
+                <section id="privacySection" class="section hidden text-center">
                     <h2 class="h3">ကိုယ်ရေးအချက်အလက်ကာကွယ်မှု</h2>
-                    <p class="mt-3">သင့်မှတ်တမ်းများကို သင့် Browser တွင်သာ သိမ်းဆည်းပါသည်။</p>
-                    <button id="agreePrivacyBtn" class="btn btn-primary mt-3">သဘောတူသည်</button>
-                </div>
-                <div id="termsSection" class="section hidden text-center">
+                    <p class="mt-3">သင့်မှတ်တမ်းများနှင့် အချက်အလက်အားလုံးကို သင့်ကိုယ်ပိုင် Browser တွင်သာ လုံခြုံစွာ သိမ်းဆည်းပါသည်။</p>
+                    <button id="agreePrivacyBtn" class="btn btn-primary mt-3">သဘောတူပါသည်</button>
+                </section>
+                <section id="termsSection" class="section hidden text-center">
                     <h2 class="h3">စည်းမျဉ်းနှင့် သတ်မှတ်ချက်များ</h2>
-                    <p class="mt-3">မှတ်တမ်းများ ပျောက်ဆုံးခြင်းအတွက် တာဝန်မယူပါ။</p>
-                    <button id="agreeTermsBtn" class="btn btn-primary mt-3">သဘောတူသည်</button>
-                </div>
+                    <p class="mt-3">ဤသည် ဆေးဘက်ဆိုင်ရာ အကြံဉာဏ်မဟုတ်ပါ။ မှတ်တမ်းများ ပျောက်ဆုံးခြင်းအတွက် တာဝန်မယူပါ။</p>
+                    <button id="agreeTermsBtn" class="btn btn-primary mt-3">နားလည်ပါသည်</button>
+                </section>
 
-                <!-- ချိန်ညှိမှုများ ကဏ္ဍ -->
-                <div id="settingsSection" class="section hidden">
-                    <h2 class="h3 fw-bold text-center mb-4">ချိန်ညှိမှုများ</h2>
+                <!-- Settings Section -->
+                <section id="settingsSection" class="section hidden">
+                    <h2 class="h3 fw-bold text-center mb-4">ဆက်တင်များ</h2>
                     <div class="mb-3">
-                        <label for="userNameInput" class="form-label">သင်၏အမည်:</label>
-                        <input type="text" id="userNameInput" class="form-control" placeholder="သင့်အမည်ကိုထည့်ပါ">
+                        <label for="userNameInput" class="form-label">သင့်အမည် (သို့မဟုတ်) နာမည်ပြောင်:</label>
+                        <input type="text" id="userNameInput" class="form-control" placeholder="ဥပမာ - အောင်အောင်">
                     </div>
                     <div class="mb-4">
-                        <label for="apiKeyInput" class="form-label">Gemini API Key:</label>
-                        <input type="password" id="apiKeyInput" class="form-control" placeholder="သင်၏ API Key ကိုထည့်ပါ">
+                        <label for="apiKeyInput" class="form-label">Gemini API Key: <a href="https://aistudio.google.com/app/apikey" target="_blank" class="small text-decoration-none">(API Key အခမဲ့ရယူရန်)</a></label>
+                        <input type="password" id="apiKeyInput" class="form-control" placeholder="သင်၏ API Key ကိုထည့်ပါ" aria-describedby="apiKeyHelp">
+                        <div id="apiKeyHelp" class="form-text">သင်၏ API Key ကို မည်သူနှင့်မျှ မျှဝေမည်မဟုတ်ပါ။</div>
                     </div>
                     <div class="d-grid gap-2 mb-4">
                         <button id="saveSettingsBtn" class="btn btn-primary">သိမ်းမည်</button>
                     </div>
                     <hr>
-                    <h4 class="h5 mt-4">အရန်သိမ်းခြင်းနှင့် ပြန်လည်ရယူခြင်း</h4>
-                    <p class="text-muted small">သင်၏ API Key နှင့် အမည်ကို file တစ်ခုအနေဖြင့် သိမ်းဆည်းနိုင်၊ ပြန်လည်ထည့်သွင်းနိုင်သည်။</p>
+                    <h4 class="h5 mt-4">Backup & Restore</h4>
+                    <p class="text-muted small">သင်၏ အမည်နှင့် API Key ကို JSON ဖိုင်အနေဖြင့် သိမ်းဆည်းနိုင်၊ ပြန်လည်ထည့်သွင်းနိုင်သည်။</p>
                     <div class="d-flex gap-2">
-                        <button id="exportSettingsBtn" class="btn btn-outline-success w-100">ချိန်ညှိမှုများ ထုတ်ယူမည်</button>
-                        <button id="importSettingsBtn" class="btn btn-outline-info w-100">ချိန်ညှိမှုများ ထည့်သွင်းမည်</button>
+                        <button id="exportSettingsBtn" class="btn btn-outline-success w-100">ဆက်တင်များ ထုတ်ယူမည်</button>
+                        <button id="importSettingsBtn" class="btn btn-outline-info w-100">ဆက်တင်များ ထည့်သွင်းမည်</button>
                         <input type="file" id="importFileInput" class="hidden" accept=".json">
                     </div>
-                </div>
+                </section>
 
-                <!-- ပင်မမှတ်တမ်း ကဏ္ဍ -->
-                <div id="journalSection" class="section hidden">
+                <!-- Main Journaling Section -->
+                <section id="journalSection" class="section hidden">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="journalDate" class="form-label fw-bold">ရက်စွဲ:</label>
@@ -203,144 +103,125 @@
                         <div class="col-md-6">
                             <label for="journalMood" class="form-label fw-bold">လက်ရှိစိတ်ခံစားမှု:</label>
                             <select id="journalMood" class="form-select" required>
-                                <option value="" selected disabled>စိတ်ခံစားမှု ရွေးပါ</option>
-                                <option value="ပျော်ရွှင်">ပျော်ရွှင် 😊</option>
-                                <option value="ဝမ်းနည်း">ဝမ်းနည်း 😢</option>
-                                <option value="စိတ်တို">စိတ်တို 😠</option>
-                                <option value="စိတ်လှုပ်ရှား">စိတ်လှုပ်ရှား 🤩</option>
-                                <option value="ငြိမ်သက်">ငြိမ်သက် 😌</option>
-                                <option value="ပင်ပန်း">ပင်ပန်း 😴</option>
-                                <option value="စိတ်ရှုပ်">စိတ်ရှုပ် 😕</option>
-                                <option value="ကျေနပ်">ကျေနပ် 👍</option>
+                                <option value="" selected disabled>-- စိတ်ခံစားမှု ရွေးပါ --</option>
+                                <option value="ပျော်ရွှင်">ပျော်ရွှင် 😊</option> <option value="ဝမ်းနည်း">ဝမ်းနည်း 😢</option>
+                                <option value="စိတ်တို">စိတ်တို 😠</option> <option value="စိတ်လှုပ်ရှား">စိတ်လှုပ်ရှား 🤩</option>
+                                <option value="ငြိမ်သက်">ငြိမ်သက် 😌</option> <option value="ပင်ပန်း">ပင်ပန်း 😴</option>
+                                <option value="စိတ်ရှုပ်">စိတ်ရှုပ် 😕</option> <option value="ကျေနပ်">ကျေနပ် 👍</option>
                             </select>
                         </div>
                     </div>
                     <div class="mt-4 text-center">
-                        <h3 class="h4 mb-3 fw-bold">ဘယ်လိုဆွေးနွေးမှုမျိုး စတင်မလဲ။</h3>
+                        <h3 class="h4 mb-3 fw-bold">ဘယ်လို မှတ်တမ်းမျိုးရေးမလဲ။</h3>
                         <div class="d-grid gap-3">
                             <div class="row g-3">
-                                <div class="col-md-6"><button id="startMorningBtn" class="btn btn-primary w-100 p-3">🌅 မနက်ခင်း</button></div>
-                                <div class="col-md-6"><button id="startNightBtn" class="btn btn-primary w-100 p-3">🌃 ညပိုင်း</button></div>
+                                <div class="col-md-6"><button id="startMorningBtn" class="btn btn-primary w-100 p-3">🌅 မနက်ခင်း မှတ်တမ်း</button></div>
+                                <div class="col-md-6"><button id="startNightBtn" class="btn btn-primary w-100 p-3">🌃 ညပိုင်း မှတ်တမ်း</button></div>
                             </div>
                             <button id="startGratitudeBtn" class="btn btn-primary p-3" style="background-color: #059669; border-color: #059669;">🙏 ကျေးဇူးတင်ခြင်း</button>
-                            <button id="startGeneralBtn" class="btn btn-secondary p-3">💬 အထွေထွေ</button>
+                            <button id="startGeneralBtn" class="btn btn-secondary p-3">💬 အထွေထွေ ရင်ဖွင့်ခြင်း</button>
                             <hr>
                             <button id="myJournalBtn" class="btn btn-outline-primary p-3">📖 ကျွန်ုပ်၏ မှတ်တမ်းများ</button>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <!-- မေးခွန်းများ ကဏ္ဍ -->
-                <div id="promptsSection" class="section hidden">
+                <!-- Prompts Section -->
+                <section id="promptsSection" class="section hidden">
                     <h2 id="prompt-title" class="h3 fw-bold text-center mb-4"></h2>
                     <div class="progress mb-3" role="progressbar" aria-label="မေးခွန်းတိုးတက်မှု" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 8px;">
                         <div id="progressBar" class="progress-bar" style="transition: width 0.5s ease-in-out;"></div>
                     </div>
                     <div class="p-4 rounded mb-3" style="background-color: #eef2f7;">
                         <p id="currentPromptText" class="h5 mb-3"></p>
-                        <textarea id="promptAnswerTextarea" class="form-control" rows="5" placeholder="သင့်အဖြေကို ဤနေရာတွင် ရေးပါ"></textarea>
+                        <textarea id="promptAnswerTextarea" class="form-control" rows="5" placeholder="သင့်အဖြေကို ဤနေရာတွင် ရေးသားနိုင်ပါသည်..."></textarea>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
-                        <button id="prevPromptBtn" class="btn btn-secondary" disabled>ယခင်</button>
+                        <button id="prevPromptBtn" class="btn btn-secondary" disabled>ယခင်မေးခွန်း</button>
                         <span id="promptCounter" class="text-muted fw-bold"></span>
-                        <button id="nextPromptBtn" class="btn btn-primary">နောက်တစ်ခု</button>
-                        <button id="combineAnswersBtn" class="btn btn-success hidden">အကြံဉာဏ်ရယူမည်</button>
+                        <button id="nextPromptBtn" class="btn btn-primary">နောက်မေးခွန်း</button>
+                        <button id="combineAnswersBtn" class="btn btn-success hidden">AI အကြံဉာဏ်ရယူမည်</button>
                     </div>
                     <div class="text-center mt-3">
-                        <button id="backToMainFromPromptsBtn" class="btn btn-sm btn-outline-secondary">ပင်မ Screen သို့ ပြန်သွားရန်</button>
+                        <button id="backToMainFromPromptsBtn" class="btn btn-sm btn-outline-secondary">ပင်မစာမျက်နှာသို့</button>
                     </div>
-                </div>
+                </section>
                 
-                <!-- မှတ်တမ်းမှတ်ရာများ ကဏ္ဍ -->
-                <div id="journalHistorySection" class="section hidden">
+                <!-- History Section -->
+                <section id="journalHistorySection" class="section hidden">
                     <h2 class="h3 fw-bold text-center mb-4">ကျွန်ုပ်၏ မှတ်တမ်းများ</h2>
                     <div class="row g-2 mb-3">
                         <div class="col">
-                            <select id="filterMode" class="form-select form-select-sm">
-                                <option value="all">အမျိုးအစားအားလုံး</option>
-                                <option value="morning">မနက်ခင်း</option>
-                                <option value="night">ညပိုင်း</option>
-                                <option value="gratitude">ကျေးဇူးတင်ခြင်း</option>
+                            <select id="filterMode" class="form-select form-select-sm" aria-label="Filter by mode">
+                                <option value="all">အမျိုးအစားအားလုံး</option> <option value="morning">မနက်ခင်း</option>
+                                <option value="night">ညပိုင်း</option> <option value="gratitude">ကျေးဇူးတင်ခြင်း</option>
                                 <option value="general">အထွေထွေ</option>
                             </select>
                         </div>
                         <div class="col">
-                            <select id="filterMood" class="form-select form-select-sm">
-                                <option value="all">စိတ်ခံစားမှုအားလုံး</option>
-                                <option value="ပျော်ရွှင်">ပျော်ရွှင်</option>
-                                <option value="ဝမ်းနည်း">ဝမ်းနည်း</option>
-                                <option value="စိတ်တို">စိတ်တို</option>
-                                <option value="စိတ်လှုပ်ရှား">စိတ်လှုပ်ရှား</option>
-                                <option value="ငြိမ်သက်">ငြိမ်သက်</option>
-                                <option value="ပင်ပန်း">ပင်ပန်း</option>
-                                <option value="စိတ်ရှုပ်">စိတ်ရှုပ်</option>
+                             <select id="filterMood" class="form-select form-select-sm" aria-label="Filter by mood">
+                                <option value="all">စိတ်ခံစားမှုအားလုံး</option> <option value="ပျော်ရွှင်">ပျော်ရွှင်</option>
+                                <option value="ဝမ်းနည်း">ဝမ်းနည်း</option> <option value="စိတ်တို">စိတ်တို</option>
+                                <option value="စိတ်လှုပ်ရှား">စိတ်လှုပ်ရှား</option> <option value="ငြိမ်သက်">ငြိမ်သက်</option>
+                                <option value="ပင်ပန်း">ပင်ပန်း</option> <option value="စိတ်ရှုပ်">စိတ်ရှုပ်</option>
                                 <option value="ကျေနပ်">ကျေနပ်</option>
                             </select>
                         </div>
                     </div>
                     <div id="historyList" class="list-group"></div>
-                    <p id="noHistoryMessage" class="text-center text-muted hidden">မှတ်တမ်းများ မရှိသေးပါ။</p>
+                    <p id="noHistoryMessage" class="text-center text-muted hidden mt-4">မှတ်တမ်းများ မရှိသေးပါ။</p>
                     <div class="text-center mt-3">
-                        <button id="backToMainFromHistoryBtn" class="btn btn-outline-secondary">ပင်မ Screen သို့ ပြန်သွားရန်</button>
+                        <button id="backToMainFromHistoryBtn" class="btn btn-outline-secondary">ပင်မစာမျက်နှာသို့</button>
                     </div>
-                </div>
+                </section>
 
-                <!-- သုံးသပ်ချက်ရလဒ်များ ကဏ္ဍ -->
-                <div id="analysisSection" class="section hidden">
-                    <h2 class="h3 fw-bold text-center mb-4">သုံးသပ်ချက်နှင့် အကြံပြုချက်</h2>
+                <!-- Analysis/Result Section -->
+                <section id="analysisSection" class="section hidden">
+                    <h2 class="h3 fw-bold text-center mb-4">AI ၏ သုံးသပ်အကြံပြုချက်</h2>
                     <div class="analysis-section p-3 rounded mb-4">
                         <h3 class="h5 mb-2 fw-bold" style="color: #059669;">AI အကြံပြုချက်</h3>
                         <p id="aiSuggestionDisplay" class="text-dark whitespace-pre-wrap"></p>
                     </div>
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h3 class="h5 mb-2 fw-bold">သင်၏ မှတ်တမ်း</h3>
+                            <h3 class="h5 mb-2 fw-bold">သင်၏ မှတ်တမ်းအပြည့်အစုံ</h3>
                             <textarea id="combinedJournalText" class="form-control" rows="10" readonly></textarea>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-3">
-                                <button id="copyCombinedTextBtn" class="btn btn-success">ကူးယူမည်</button>
-                                <button id="exportToNotionBtn" class="btn btn-dark">Notion သို့ ထုတ်မည်</button>
+                                <button id="copyCombinedTextBtn" class="btn btn-success">မှတ်တမ်းကူးယူမည်</button>
+                                <button id="exportToNotionBtn" class="btn btn-dark">MD ဖိုင် ထုတ်ယူမည်</button>
                             </div>
                         </div>
                     </div>
                     <div class="text-center mt-3">
-                        <button id="continueChatWithAIBtn" class="btn btn-primary me-2">AI နှင့် ဆက်လက်ပြောဆိုမည်</button>
-                        <button id="backToMainJournalBtn" class="btn btn-outline-secondary">ပင်မ Screen သို့ ပြန်သွားရန်</button>
+                        <button id="continueChatWithAIBtn" class="btn btn-primary me-2">AI နှင့် ဆက်လက်ရင်ဖွင့်မည်</button>
+                        <button id="backToMainJournalBtn" class="btn btn-outline-secondary">ပင်မစာမျက်နှာသို့</button>
                     </div>
-                </div>
+                </section>
 
-                <!-- AI နှင့် စကားပြောခန်း ကဏ္ဍ -->
-                <div id="conversationalAISession" class="section hidden">
-                    <h2 class="h3 fw-bold text-center mb-4">AI နှင့် စကားပြောခန်း</h2>
+                <!-- Conversational AI Section -->
+                <section id="conversationalAISession" class="section hidden">
+                    <h2 class="h3 fw-bold text-center mb-4">AI နှင့် ရင်ဖွင့်ခန်း</h2>
                     <div class="chat-container">
-                        <div id="chatHistoryDisplay" class="chat-history">
-                            <!-- Chat messages will be appended here -->
-                        </div>
+                        <div id="chatHistoryDisplay" class="chat-history"></div>
                         <div class="chat-input-area">
-                            <textarea id="chatInput" class="form-control chat-input" rows="1" placeholder="သင့်မေးခွန်းကို ရေးပါ..." oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
+                            <textarea id="chatInput" class="form-control chat-input" rows="1" placeholder="စာတိုပေးပို့ပါ..." oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';"></textarea>
                             <button id="sendChatBtn" class="btn btn-primary">ပို့မည်</button>
                         </div>
                     </div>
                     <div class="text-center mt-3">
-                        <button id="backToMainFromChatBtn" class="btn btn-outline-secondary">ပင်မ Screen သို့ ပြန်သွားရန်</button>
+                        <button id="backToMainFromChatBtn" class="btn btn-outline-secondary">ပင်မစာမျက်နှာသို့</button>
                     </div>
-                </div>
-            </div>
+                </section>
+            </main>
         </div>
         
-        <!-- Toast Container -->
-        <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
-
-        <!-- မှတ်တမ်းအသေးစိတ်အတွက် ပြန်သုံးနိုင်သော Modal -->
+        <!-- Toast & Modal Placeholders -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100"></div>
         <div class="modal fade" id="entryDetailModal" tabindex="-1" aria-labelledby="entryDetailTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="entryDetailTitle"></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="ပိတ်ရန်"></button>
-                    </div>
-                    <div class="modal-body" id="entryDetailBody">
-                        <!-- အကြောင်းအရာများကို ဤနေရာတွင် ထည့်သွင်းမည် -->
-                    </div>
+                    <div class="modal-header"><h5 class="modal-title" id="entryDetailTitle"></h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div>
+                    <div class="modal-body" id="entryDetailBody"></div>
                 </div>
             </div>
         </div>
@@ -348,580 +229,353 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Local Storage လုပ်ဆောင်ချက်များအတွက် Utility
+        // Utility for Local Storage
         const StorageUtil = {
-            save: (key, value) => {
-                try {
-                    localStorage.setItem(key, JSON.stringify(value));
-                } catch (e) {
-                    console.error("Local Storage သို့ သိမ်းဆည်းရာတွင် အမှားအယွင်းရှိသည်:", e);
-                }
-            },
-            load: (key) => {
-                try {
-                    const value = localStorage.getItem(key);
-                    return value ? JSON.parse(value) : null;
-                } catch (e) {
-                    console.error("Local Storage မှ load ရာတွင် အမှားအယွင်းရှိသည်:", e);
-                    return null;
-                }
-            },
-            remove: (key) => {
-                try {
-                    localStorage.removeItem(key);
-                } catch (e) {
-                    console.error("Local Storage မှ remove ရာတွင် အမှားအယွင်းရှိသည်:", e);
-                }
-            }
+            save: (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { console.error("Error saving to Local Storage:", e); } },
+            load: (key) => { try { const value = localStorage.getItem(key); return value ? JSON.parse(value) : null; } catch (e) { console.error("Error loading from Local Storage:", e); return null; } },
+            remove: (key) => { try { localStorage.removeItem(key); } catch (e) { console.error("Error removing from Local Storage:", e); } }
+        };
+        
+        // Utility for validating Burmese text
+        const LanguageUtil = {
+            containsBurmese: (text) => /[က-အ]/.test(text)
         };
 
-        // Gemini API ခေါ်ဆိုမှုများ
+        // Gemini API Service
         const GeminiAPI = {
             async fetchPrompts(mode, mood, name, apiKey) {
                 let instruction = '';
-                // အမည်ဖြင့် နှုတ်ဆက်ရန် ညွှန်ကြားချက်
-                const userName = name ? `Their name is ${name}. Greet them by name.` : ''; 
+                const userName = name ? `Their name is ${name}. Greet them warmly and politely by their name, using appropriate Burmese honorifics like 'မောင်...ခင်ဗျာ' or 'မ...ရှင်'.` : ''; 
                 switch (mode) {
-                    case 'morning':
-                        instruction = `As a mind therapist for a Burmese user, generate 5 unique and practical questions for a morning reflection in Burmese. Focus on setting a positive intention for today. ${userName}`;
-                        break;
-                    case 'night':
-                        instruction = `As a mind therapist for a Burmese user, generate 5 unique and practical questions for a night reflection in Burmese. Focus on closure and letting go of today. ${userName}`;
-                        break;
-                    case 'gratitude':
-                        instruction = `As a guide for a Burmese user doing gratitude journaling, generate 3 unique and simple questions to list things they are grateful for in Burmese. ${userName}`;
-                        break;
-                    default: // general
-                        instruction = `As a mind therapist for a Burmese user feeling '${mood}', generate 5 unique and conversational questions to explore their feelings in Burmese. ${userName}`;
+                    case 'morning': instruction = `You are an exceptionally empathetic and friendly Burmese mind therapist who speaks like a close, trusted friend. Create 5 unique, practical, and deeply natural-sounding questions for a morning reflection. Your tone must be gentle, warm, and encouraging, using grammatically perfect, everyday Burmese. The questions must sound like the start of a genuine, caring conversation. ${userName}`; break;
+                    case 'night': instruction = `You are an exceptionally empathetic and friendly Burmese mind therapist who speaks like a close, trusted friend. Create 5 unique, practical, and deeply natural-sounding questions for a night reflection to help the user find closure. Your tone must be gentle, warm, and encouraging, using grammatically perfect, everyday Burmese. The questions must sound like a genuine, caring conversation. ${userName}`; break;
+                    case 'gratitude': instruction = `You are an exceptionally empathetic and friendly Burmese mind therapist who speaks like a close, trusted friend. Create 3 unique, simple, and deeply natural-sounding questions for a gratitude journal. Your tone must be very warm and gentle, using grammatically perfect, everyday Burmese to help them appreciate small things. ${userName}`; break;
+                    default: instruction = `You are an exceptionally empathetic and friendly Burmese mind therapist who speaks like a close, trusted friend. The user is currently feeling '${mood}'. Create 5 unique, conversational, and deeply natural-sounding questions to gently explore their feelings. Your tone must be very supportive, non-judgmental, and human-like, using grammatically perfect, everyday Burmese. ${userName}`;
                 }
-                const prompt = `${instruction} Tone must be gentle. Format as a JSON array of strings.`;
+                const prompt = `${instruction} IMPORTANT: Ensure all questions are entirely in Burmese. Format as a JSON array of strings.`;
                 return this._makeApiCall(prompt, { type: 'ARRAY', items: { type: 'STRING' } }, apiKey);
             },
-
             async fetchCounselorAdvice(journalText, mood, mode, apiKey) {
-                const prompt = `As a compassionate mind therapist for a Burmese user, they just completed a ${mode} reflection. Their mood is '${mood}'. Their journal entry is below.\n\n---\n${journalText}\n---\n\nRespond in Burmese with empathy and practical guidance relevant to their reflection type (${mode}). 1. Acknowledge feelings. 2. Offer a new perspective. 3. Provide one or two actionable suggestions. 4. End with a warm closing. Your response must be a single, coherent text.`;
+                const prompt = `You are a warm, wise, and deeply compassionate Burmese mind therapist. A user has just completed a '${mode}' reflection. Their stated mood is '${mood}'. Their journal entry is below.\n\n---\n${journalText}\n---\n\nYour task is to respond in flawless, natural, and flowing Burmese that feels like a heartfelt message from a caring, wise friend, not an AI. Strictly avoid robotic phrasing and clinical jargon. Follow these steps precisely:\n1. Acknowledge their feelings with genuine, deep empathy.\n2. Offer a fresh, gentle perspective on their thoughts.\n3. Provide one or two simple, truly actionable suggestions.\n4. End with a sincerely warm and encouraging closing statement.\nYour entire response must be a single, coherent block of text in perfect Burmese.`;
                 return this._makeApiCall(prompt, null, apiKey, "text/plain");
             },
-
-            async fetchChatResponse(contextJournalText, contextAiSuggestion, chatHistory, userMessage, apiKey) {
-                // Gemini API အတွက် chat history ကို ပြင်ဆင်ခြင်း
+            async fetchChatResponse(contextJournalText, contextAiSuggestion, chatHistory, apiKey) {
+                const system_instruction = `You are a friendly and deeply compassionate Burmese mind therapist continuing a conversation. Your primary goal is to be a supportive, non-judgmental, and caring friend.
+                RULES:
+                - Language: Respond ONLY in natural, fluent, and grammatically flawless Burmese. Use everyday language.
+                - Tone: Maintain a warm, gentle, and encouraging tone.
+                - Persona: Act as a wise and caring friend. Be empathetic and understanding.
+                - Context: Your conversation is a follow-up to the user's journal entry and your initial advice.
+                  - Original Journal: """${contextJournalText}"""
+                  - Your Initial Advice: """${contextAiSuggestion}"""
+                - Task: Directly address the user's latest message. Keep the conversation flowing smoothly and naturally. Your response should be helpful, supportive, and human-like. DO NOT sound like a robot.`;
                 const contents = [
-                    {
-                        role: "user",
-                        parts: [{ text: `ဤသည်မှာ အသုံးပြုသူ၏ မှတ်တမ်းနှင့် AI အကြံဉာဏ်အပေါ် အခြေခံ၍ ဆက်လက်ပြောဆိုခြင်းဖြစ်သည်။
-
-မူရင်းမှတ်တမ်း:
----
-${contextJournalText}
----
-
-AI ၏ ကနဦးအကြံဉာဏ်:
----
-${contextAiSuggestion}
----
-
-ဆက်လက်ပြောဆိုမှုမှတ်တမ်း:` }]
-                    }
+                    { role: "user", parts: [{ text: system_instruction }]},
+                    { role: "model", parts: [{ text: "ဟုတ်ကဲ့၊ ကျွန်မ နားလည်ပါပြီ။ အသုံးပြုသူရဲ့ မေးခွန်းကို နွေးထွေးပြီး လူသားဆန်တဲ့ သူငယ်ချင်းကောင်းတစ်ယောက်လို မြန်မာစကားနဲ့ ပြန်လည်ဖြေကြားပေးပါ့မယ်။" }]},
+                    ...chatHistory.map(msg => ({ role: msg.role === 'user' ? 'user' : 'model', parts: [{ text: msg.text }] }))
                 ];
-
-                // ယခင် chat history များကို ထည့်သွင်းခြင်း
-                chatHistory.forEach(msg => {
-                    contents.push({
-                        role: msg.role === 'user' ? 'user' : 'model',
-                        parts: [{ text: msg.text }]
-                    });
-                });
-
-                // လက်ရှိ user ၏ မေးခွန်းကို ထည့်သွင်းခြင်း
-                contents.push({
-                    role: "user",
-                    parts: [{ text: `အသုံးပြုသူ၏ မေးခွန်း: ${userMessage}` }]
-                });
-
-                const prompt = `As a compassionate mind therapist for a Burmese user, continue the conversation. Respond in Burmese with empathy and practical guidance. Keep responses concise and directly address the user's question while maintaining context from the journal and previous advice.`;
-                contents[0].parts[0].text += `\n\n${prompt}`; // ညွှန်ကြားချက်ကို အစတွင် ထည့်သွင်းခြင်း
-
                 return this._makeApiCall(null, null, apiKey, "text/plain", contents);
             },
-
             async _makeApiCall(prompt, schema, apiKey, responseMimeType = "application/json", contents = null) {
                 const model = "gemini-1.5-flash";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-                
                 const requestBody = {
                     contents: contents || [{ parts: [{ text: prompt }] }],
                     generationConfig: schema ? { responseMimeType, responseSchema: schema } : { responseMimeType },
                     safetySettings: [
-                        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' },
-                        { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-                        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' },
-                        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+                        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' }, { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
+                        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' }, { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
                     ]
                 };
-
-                const payload = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestBody)
-                };
-
                 try {
-                    const response = await fetch(apiUrl, payload);
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody) });
                     if (!response.ok) {
                         const err = await response.json().catch(() => ({}));
-                        // Check for specific "model overloaded" error
-                        if (err?.error?.message && err.error.message.includes("The model is overloaded")) {
-                            throw new Error("AI စနစ် ခဏတာ အလုပ်များနေပါသည်။ ခဏကြာပြီးနောက် ထပ်ကြိုးစားကြည့်ပါ။");
-                        }
+                        if (err?.error?.message?.includes("API key not valid")) { throw new Error("သင်၏ API Key မမှန်ကန်ပါ။ ဆက်တင်များတွင် ပြန်လည်စစ်ဆေးပါ။"); }
+                        if (err?.error?.message?.includes("overloaded")) { throw new Error("AI စနစ် ခဏတာ အလုပ်များနေပါသည်။ နောက်တစ်ကြိမ် ထပ်ကြိုးစားပါ။"); }
                         throw new Error(err?.error?.message || `API Error: ${response.status}`);
                     }
                     const result = await response.json();
                     const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-
-                    if (!text) {
-                        throw new Error('မျှော်လင့်မထားသော API တုံ့ပြန်မှု ဖွဲ့စည်းပုံ။');
-                    }
-                    
+                    if (!text) { throw new Error('API မှ တုံ့ပြန်မှုပုံစံ မမှန်ကန်ပါ။'); }
                     return responseMimeType === "application/json" ? JSON.parse(text) : text;
-                } catch (error) {
-                    console.error("API ခေါ်ဆိုမှု မအောင်မြင်ပါ:", error);
-                    throw error;
-                }
+                } catch (error) { console.error("API Call Failed:", error); throw error; }
             }
         };
 
-        // UI နှင့်သက်ဆိုင်သော Utility များ
+        // UI Utilities
         const UIUtil = {
-            showSection: (id) => {
-                document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
-                document.getElementById(id)?.classList.remove('hidden');
-            },
-            showToast: (msg) => {
+            showSection: (id) => { document.querySelectorAll('.section').forEach(s => s.classList.add('hidden')); document.getElementById(id)?.classList.remove('hidden'); },
+            showToast: (msg, type = 'dark') => {
                 const toastContainer = document.querySelector('.toast-container');
                 const toastEl = document.createElement('div');
-                toastEl.className = 'toast align-items-center text-bg-dark border-0';
-                toastEl.innerHTML = `<div class="d-flex"><div class="toast-body">${msg}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="ပိတ်ရန်"></button></div>`;
+                toastEl.className = `toast align-items-center text-bg-${type} border-0`;
+                toastEl.innerHTML = `<div class="d-flex"><div class="toast-body">${msg}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>`;
                 toastContainer.appendChild(toastEl);
-                const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+                const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
                 toast.show();
-                toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove()); // toast ကို DOM မှ ဖယ်ရှားရန်
+                toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
             },
-            setLoading: (el, loading, text) => {
-                const spinner = '<span class="loading-spinner"></span>';
-                el.disabled = loading;
-                el.innerHTML = loading ? spinner + text : text;
-            },
-            updateProgressBar: (current, total) => {
-                const progressBar = document.getElementById('progressBar');
-                if (progressBar) {
-                    progressBar.style.width = `${(current / total) * 100}%`;
-                    progressBar.setAttribute('aria-valuenow', (current / total) * 100);
-                }
-            },
+            setLoading: (el, loading, text) => { el.disabled = loading; el.innerHTML = loading ? `<span class="loading-spinner"></span>${text}` : text; },
+            updateProgressBar: (current, total) => { const pb = document.getElementById('progressBar'); if(pb){ pb.style.width = `${(current / total) * 100}%`; pb.setAttribute('aria-valuenow', (current / total) * 100); }},
             addChatMessage: (message, sender) => {
-                const chatHistoryDisplay = document.getElementById('chatHistoryDisplay');
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `chat-message ${sender}`;
-                messageDiv.textContent = message;
-                chatHistoryDisplay.appendChild(messageDiv);
-                chatHistoryDisplay.scrollTop = chatHistoryDisplay.scrollHeight; // Scroll to bottom
+                const display = document.getElementById('chatHistoryDisplay');
+                const msgDiv = document.createElement('div');
+                msgDiv.className = `chat-message ${sender}`;
+                msgDiv.textContent = message;
+                display.appendChild(msgDiv);
+                display.scrollTop = display.scrollHeight;
             }
         };
 
-        // ပင်မ Application Logic
+        // Main Application Logic
         class JournalApp {
             constructor() {
-                this.currentPromptIndex = 0;
-                this.promptAnswers = [];
-                this.activePrompts = [];
                 this.isLoading = false;
                 this.journalMode = null;
                 this.journalEntries = StorageUtil.load('journalEntries') || [];
                 this.userName = StorageUtil.load('userName') || '';
                 this.apiKey = StorageUtil.load('geminiApiKey') || '';
                 this.defaultPrompts = {
-                    morning: ["ဒီမနက်ခင်းမှာ ဘယ်အရာအတွက် ကျေးဇူးအတင်ဆုံးဖြစ်မလဲ။", "ဒီနေ့ကို အကောင်းဆုံးနေ့ဖြစ်အောင် ဘယ်လိုရည်ရွယ်ချက်ထားမလဲ။", "သင့်ကိုယ်သင် အားပေးစကားတစ်ခွန်း ပြောပေးပါ။"],
-                    night: ["ဒီနေ့ သင်ယူလိုက်ရတဲ့ အရေးကြီးဆုံးအရာက ဘာလဲ။", "ဘယ်အဖြစ်အပျက်က သင့်ကို အပျော်ရွှင်ဆုံးဖြစ်စေခဲ့လဲ။", "ဒီနေ့အတွက် လွှတ်ချချင်တဲ့ စိတ်အနှောင့်အယှက် တစ်ခုခုရှိလား။"],
-                    gratitude: ["ဒီနေ့အတွက် ကျေးဇူးတင်မိတဲ့ ပထမဆုံးအရာက ဘာလဲ။", "နောက်ထပ် ကျေးဇူးတင်စရာတစ်ခုက ဘာဖြစ်မလဲ။", "နောက်ဆုံးအနေနဲ့ တတိယမြောက် ကျေးဇူးတင်စရာကရော ဘာဖြစ်မလဲ။"],
-                    general: ["ဒီနေ့ သင့်စိတ်ထဲမှာ ဘာတွေဖြစ်နေလဲ။", "အဲ့ဒီခံစားချက်ကို ဖြစ်စေတဲ့ အကြောင်းရင်းက ဘာဖြစ်မလဲ။", "သင့်အတွက် ဘာလုပ်ပေးရင် စိတ်သက်သာရာရမလဲ။"]
+                    morning: ["ဒီမနက်ခင်းမှာ ဘယ်အရာက သင့်ကို အားအရှိဆုံးဖြစ်စေလဲ။", "ဒီနေ့ကို အကောင်းဆုံးနေ့ဖြစ်အောင် ဘယ်လိုရည်ရွယ်ချက်ထားမလဲ။", "သင့်ကိုယ်သင် ပျော်ရွှင်အောင် ဘာလုပ်ပေးမလဲ။"],
+                    night: ["ဒီနေ့ သင်ယူလိုက်ရတဲ့ အရေးကြီးဆုံးအရာက ဘာလဲ။", "ဘယ်အဖြစ်အပျက်က သင့်ကို အပြုံးဖြစ်စေခဲ့လဲ။", "ဒီနေ့အတွက် လွှတ်ချချင်တဲ့ စိတ်အနှောင့်အယှက် တစ်ခုခုရှိလား။"],
+                    gratitude: ["ဒီနေ့အတွက် ကျေးဇူးတင်မိတဲ့အရာ ၃ ခုက ဘာတွေဖြစ်မလဲ။", "သင့်ဘဝထဲမှာ ရှိနေくれて ကျေးဇူးတင်ရတဲ့ လူတစ်ယောက်အကြောင်း ပြောပြပါ။", "သင့်ခန္ဓာကိုယ်က သင့်အတွက် လုပ်ပေးတဲ့အရာတစ်ခုအတွက် ကျေးဇူးတင်စကားဆိုပါ။"],
+                    general: ["အခုအချိန်မှာ သင့်စိတ်ထဲမှာ ဘာတွေဖြစ်နေလဲ။", "အဲ့ဒီခံစားချက်ကို ဖြစ်စေတဲ့ အကြောင်းရင်းက ဘာဖြစ်နိုင်မလဲ။", "သင့်အတွက် ဘာလုပ်ပေးရင် စိတ်သက်သာရာရမလဲ။"]
                 };
-                this.currentJournalTextForChat = '';
-                this.currentAiSuggestionForChat = '';
-                this.chatHistory = []; // Current session chat history
+                this.resetPromptState();
                 this.init();
             }
 
-            init() {
-                this.bindEvents();
-                this.checkInitialState();
-            }
-
+            init() { this.bindEvents(); this.checkInitialState(); }
+            resetPromptState() { this.currentPromptIndex = 0; this.promptAnswers = []; this.activePrompts = []; }
+            resetChatState() { this.currentJournalTextForChat = ''; this.currentAiSuggestionForChat = ''; this.chatHistory = []; }
+            
             bindEvents() {
-                // ကနဦး onboarding နှင့် ချိန်ညှိမှုများ
-                document.getElementById('agreePrivacyBtn').onclick = () => {
-                    StorageUtil.save('agreedPrivacy', true);
-                    UIUtil.showSection('termsSection');
-                };
-                document.getElementById('agreeTermsBtn').onclick = () => {
-                    StorageUtil.save('agreedTerms', true);
-                    this.loadSettingsIntoUI(); // ရှိပြီးသား ချိန်ညှိမှုများ ရှိပါက load လုပ်ရန်
-                    UIUtil.showSection('settingsSection');
-                };
-                document.getElementById('settingsBtn').onclick = () => {
-                    this.loadSettingsIntoUI();
-                    UIUtil.showSection('settingsSection');
-                };
+                document.getElementById('agreePrivacyBtn').onclick = () => { StorageUtil.save('agreedPrivacy', true); UIUtil.showSection('termsSection'); };
+                document.getElementById('agreeTermsBtn').onclick = () => { StorageUtil.save('agreedTerms', true); this.loadSettingsIntoUI(); UIUtil.showSection('settingsSection'); };
+                document.getElementById('settingsBtn').onclick = () => { this.loadSettingsIntoUI(); UIUtil.showSection('settingsSection'); };
                 document.getElementById('saveSettingsBtn').onclick = () => this.saveSettings();
                 document.getElementById('exportSettingsBtn').onclick = () => this.exportSettings();
                 document.getElementById('importSettingsBtn').onclick = () => document.getElementById('importFileInput').click();
                 document.getElementById('importFileInput').onchange = (e) => this.importSettings(e);
-
-                // ပင်မမှတ်တမ်း session ခလုတ်များ
                 document.getElementById('startMorningBtn').onclick = () => this.startJournalingSession('morning');
                 document.getElementById('startNightBtn').onclick = () => this.startJournalingSession('night');
                 document.getElementById('startGratitudeBtn').onclick = () => this.startJournalingSession('gratitude');
                 document.getElementById('startGeneralBtn').onclick = () => this.startJournalingSession('general');
                 document.getElementById('myJournalBtn').onclick = () => this.renderJournalHistory();
-
-                // မေးခွန်းများ လမ်းညွှန်ခြင်းနှင့် ပြီးစီးခြင်း
-                document.getElementById('prevPromptBtn').onclick = () => this.previousPrompt();
-                document.getElementById('nextPromptBtn').onclick = () => this.nextPrompt();
+                document.getElementById('prevPromptBtn').onclick = () => this.navigatePrompt(-1);
+                document.getElementById('nextPromptBtn').onclick = () => this.navigatePrompt(1);
                 document.getElementById('combineAnswersBtn').onclick = () => this.combineAnswers();
-
-                // ခွဲခြမ်းစိတ်ဖြာမှု ကဏ္ဍ လုပ်ဆောင်ချက်များ
                 document.getElementById('copyCombinedTextBtn').onclick = () => this.copyJournalText();
-                document.getElementById('exportToNotionBtn').onclick = () => this.exportToNotion();
-                document.getElementById('backToMainJournalBtn').onclick = () => this.showJournalSection();
+                document.getElementById('exportToNotionBtn').onclick = () => this.exportToMarkdown();
                 document.getElementById('continueChatWithAIBtn').onclick = () => this.startConversationalAI();
-
-
-                // နောက်ပြန်ခလုတ်များ
-                document.getElementById('backToMainFromPromptsBtn').onclick = () => this.showJournalSection();
-                document.getElementById('backToMainFromHistoryBtn').onclick = () => this.showJournalSection();
-                document.getElementById('backToMainFromChatBtn').onclick = () => this.showJournalSection();
-
-                // မှတ်တမ်းမှတ်ရာ စစ်ထုတ်မှုများ
+                document.querySelectorAll('[id^="backToMain"]').forEach(btn => btn.onclick = () => this.showJournalSection());
                 document.getElementById('filterMode').onchange = () => this.renderJournalHistory();
                 document.getElementById('filterMood').onchange = () => this.renderJournalHistory();
-
-                // Chat UI events
                 document.getElementById('sendChatBtn').onclick = () => this.sendChatMessage();
-                document.getElementById('chatInput').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                        e.preventDefault(); // Prevent new line
-                        this.sendChatMessage();
-                    }
-                });
+                document.getElementById('chatInput').addEventListener('keypress', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.sendChatMessage(); } });
             }
 
             checkInitialState() {
-                if (!StorageUtil.load('agreedPrivacy')) {
-                    UIUtil.showSection('privacySection');
-                } else if (!StorageUtil.load('agreedTerms')) {
-                    UIUtil.showSection('termsSection');
-                } else if (!this.apiKey || !this.userName) {
-                    this.loadSettingsIntoUI(); // အချက်အလက်များ တစ်စိတ်တစ်ပိုင်းရှိပါက inputs များတွင် ဖြည့်သွင်းရန်
-                    UIUtil.showSection('settingsSection');
-                } else {
-                    this.showJournalSection();
-                }
+                if (!StorageUtil.load('agreedPrivacy')) { UIUtil.showSection('privacySection'); }
+                else if (!StorageUtil.load('agreedTerms')) { UIUtil.showSection('termsSection'); }
+                else if (!this.apiKey || !this.userName) { this.loadSettingsIntoUI(); UIUtil.showSection('settingsSection'); }
+                else { this.showJournalSection(); }
             }
 
             showJournalSection() {
                 UIUtil.showSection('journalSection');
-                document.getElementById('journalDate').valueAsDate = new Date(); // ယနေ့ရက်စွဲ သတ်မှတ်ရန်
-                document.getElementById('journalMood').value = ""; // စိတ်ခံစားမှု ရွေးချယ်မှုကို ပြန်လည်သတ်မှတ်ရန်
+                document.getElementById('journalDate').valueAsDate = new Date();
+                document.getElementById('journalMood').value = "";
+                this.resetPromptState();
+                this.resetChatState();
             }
 
-            loadSettingsIntoUI() {
-                document.getElementById('userNameInput').value = this.userName;
-                document.getElementById('apiKeyInput').value = this.apiKey;
-            }
+            loadSettingsIntoUI() { document.getElementById('userNameInput').value = this.userName; document.getElementById('apiKeyInput').value = this.apiKey; }
 
             saveSettings() {
                 this.userName = document.getElementById('userNameInput').value.trim();
                 this.apiKey = document.getElementById('apiKeyInput').value.trim();
-
-                if (!this.userName || !this.apiKey) {
-                    UIUtil.showToast('အမည်နှင့် API Key ဖြည့်စွက်ရန် လိုအပ်ပါသည်။');
-                    return;
-                }
-
-                StorageUtil.save('userName', this.userName);
-                StorageUtil.save('geminiApiKey', this.apiKey);
-                UIUtil.showToast('သိမ်းဆည်းပြီးပါပြီ။');
+                if (!this.userName || !this.apiKey) { UIUtil.showToast('အမည်နှင့် API Key ဖြည့်စွက်ရန် လိုအပ်ပါသည်။', 'danger'); return; }
+                StorageUtil.save('userName', this.userName); StorageUtil.save('geminiApiKey', this.apiKey);
+                UIUtil.showToast('ဆက်တင်များကို သိမ်းဆည်းပြီးပါပြီ။', 'success');
                 this.showJournalSection();
             }
 
             exportSettings() {
-                const settings = {
-                    userName: this.userName,
-                    apiKey: this.apiKey
-                };
+                const settings = { userName: this.userName, apiKey: this.apiKey };
                 const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = 'journal_settings.json';
-                a.click();
-                URL.revokeObjectURL(a.href);
-                UIUtil.showToast('Settings file ကို download လုပ်ပြီးပါပြီ။');
+                a.download = 'pwinha_settings.json'; a.click(); URL.revokeObjectURL(a.href);
+                UIUtil.showToast('Settings ဖိုင်ကို download လုပ်ပြီးပါပြီ။');
             }
 
             importSettings(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-
+                const file = event.target.files[0]; if (!file) return;
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     try {
                         const settings = JSON.parse(e.target.result);
                         if (settings.apiKey && settings.userName) {
-                            this.apiKey = settings.apiKey;
-                            this.userName = settings.userName;
-                            this.saveSettings(); // သိမ်းဆည်းပြီး UI ကို update လုပ်ရန်
-                        } else {
-                            UIUtil.showToast('File format မမှန်ပါ။');
-                        }
-                    } catch (err) {
-                        UIUtil.showToast('File ကို မဖတ်နိုင်ပါ။');
-                        console.error("ချိန်ညှိမှုများ ထည့်သွင်းရာတွင် အမှားအယွင်းရှိသည်:", err);
-                    }
+                            this.apiKey = settings.apiKey; this.userName = settings.userName;
+                            this.saveSettings();
+                        } else { UIUtil.showToast('File format မမှန်ကန်ပါ။', 'danger'); }
+                    } catch (err) { UIUtil.showToast('File ကို မဖတ်နိုင်ပါ။', 'danger'); console.error("Error importing settings:", err); }
                 };
-                reader.readAsText(file);
-                // file input ကို ရှင်းလင်းရန်
-                event.target.value = '';
+                reader.readAsText(file); event.target.value = '';
             }
 
             async startJournalingSession(mode) {
-                if (this.isLoading) return; // ခလုတ်များ ထပ်နှိပ်ခြင်းကို ကာကွယ်ရန်
-
+                if (this.isLoading) return;
                 this.journalMode = mode;
                 const mood = document.getElementById('journalMood').value;
-                
-                // 'general' mode အတွက်သာ စိတ်ခံစားမှု ရွေးချယ်ရန် လိုအပ်ပါသည်။
-                if (this.journalMode === 'general' && !mood) {
-                    UIUtil.showToast('လက်ရှိစိတ်ခံစားမှု ကို ရွေးချယ်ပေးပါ။'); // "လက်ရှိစိတ်ခံစားမှုကို ရွေးချယ်ပေးပါ။"
-                    return;
-                }
-                if (!this.apiKey) {
-                    UIUtil.showToast('ကျေးဇူးပြု၍ Settings တွင် API Key ထည့်ပါ။');
-                    return;
-                }
+                if (this.journalMode === 'general' && !mood) { UIUtil.showToast('ရင်ဖွင့်ခြင်းအတွက် လက်ရှိစိတ်ခံစားမှုကို ရွေးပေးပါ။', 'warning'); return; }
+                if (!this.apiKey) { UIUtil.showToast('ကျေးဇူးပြု၍ ဆက်တင်များတွင် API Key ထည့်သွင်းပါ။', 'danger'); return; }
 
-                this.isLoading = true;
+                this.isLoading = true; this.resetPromptState();
                 const btn = document.getElementById(`start${mode.charAt(0).toUpperCase() + mode.slice(1)}Btn`);
                 const originalText = btn.innerHTML;
-                UIUtil.setLoading(btn, true, 'ပြင်ဆင်နေသည်...');
+                UIUtil.setLoading(btn, true, 'မေးခွန်းများပြင်ဆင်နေသည်');
 
                 try {
-                    // mood ကို 'general' mode အတွက်သာ ပေးပို့ပါမည်။
-                    const actualMood = this.journalMode === 'general' ? mood : ''; 
-                    this.activePrompts = await GeminiAPI.fetchPrompts(this.journalMode, actualMood, this.userName, this.apiKey);
-                } catch (error) {
-                    console.error('မေးခွန်းများ ရယူရာတွင် အမှားအယွင်းရှိသည်:', error);
-                    // Check if the error is due to model overload
-                    if (error.message.includes("AI စနစ် ခဏတာ အလုပ်များနေပါသည်။")) {
-                        UIUtil.showToast(error.message); // Show the specific overloaded message
+                    let fetchedPrompts = await GeminiAPI.fetchPrompts(this.journalMode, mood, this.userName, this.apiKey);
+                    const arePromptsValid = Array.isArray(fetchedPrompts) && fetchedPrompts.length > 0 && fetchedPrompts.every(LanguageUtil.containsBurmese);
+                    if (arePromptsValid) {
+                        this.activePrompts = fetchedPrompts;
                     } else {
-                        UIUtil.showToast(`AI မှမေးခွန်းများရယူ၍မရပါ၊ Default မေးခွန်းများဖြင့် ဆက်ပါမည်။`);
+                        throw new Error("Invalid prompts format or language.");
                     }
+                } catch (error) {
+                    console.error('Failed to fetch valid prompts from API:', error.message);
+                    UIUtil.showToast(`AI ထံမှ မေးခွန်းများရယူရာတွင် အဆင်မပြေသောကြောင့် ပုံသေမေးခွန်းများဖြင့် ပြသပေးထားပါသည်`, 'warning');
                     this.activePrompts = this.defaultPrompts[this.journalMode];
                 } finally {
                     this.isLoading = false;
-                    UIUtil.setLoading(btn, false, originalText); // ခလုတ်စာသားကို ပြန်လည်သတ်မှတ်ရန်
-
+                    UIUtil.setLoading(btn, false, originalText);
                     if (this.activePrompts?.length) {
-                        this.currentPromptIndex = 0;
                         this.promptAnswers = Array(this.activePrompts.length).fill('');
-                        document.getElementById('prompt-title').textContent = btn.innerText; // ခလုတ်စာသားပေါ်မူတည်၍ ခေါင်းစဉ် သတ်မှတ်ရန်
+                        document.getElementById('prompt-title').textContent = btn.textContent;
                         this.displayCurrentPrompt();
                         UIUtil.showSection('promptsSection');
                     }
                 }
             }
-
+            
             displayCurrentPrompt() {
                 document.getElementById('currentPromptText').textContent = this.activePrompts[this.currentPromptIndex];
                 document.getElementById('promptAnswerTextarea').value = this.promptAnswers[this.currentPromptIndex] || '';
-                document.getElementById('promptAnswerTextarea').focus(); // အလိုအလျောက် focus လုပ်ရန်
-
-                document.getElementById('promptCounter').textContent = `${this.currentPromptIndex + 1}/${this.activePrompts.length}`;
+                document.getElementById('promptAnswerTextarea').focus();
+                document.getElementById('promptCounter').textContent = `${this.currentPromptIndex + 1} / ${this.activePrompts.length}`;
                 document.getElementById('prevPromptBtn').disabled = (this.currentPromptIndex === 0);
-
                 const isLast = this.currentPromptIndex === this.activePrompts.length - 1;
                 document.getElementById('nextPromptBtn').classList.toggle('hidden', isLast);
                 document.getElementById('combineAnswersBtn').classList.toggle('hidden', !isLast);
-                
                 UIUtil.updateProgressBar(this.currentPromptIndex + 1, this.activePrompts.length);
             }
 
-            saveCurrentAnswer() {
+            navigatePrompt(direction) {
                 this.promptAnswers[this.currentPromptIndex] = document.getElementById('promptAnswerTextarea').value.trim();
-            }
-
-            previousPrompt() {
-                this.saveCurrentAnswer();
-                if (this.currentPromptIndex > 0) {
-                    this.currentPromptIndex--;
+                const newIndex = this.currentPromptIndex + direction;
+                if (newIndex >= 0 && newIndex < this.activePrompts.length) {
+                    this.currentPromptIndex = newIndex;
                     this.displayCurrentPrompt();
                 }
             }
-
-            nextPrompt() {
-                this.saveCurrentAnswer();
-                if (this.currentPromptIndex < this.activePrompts.length - 1) {
-                    this.currentPromptIndex++;
-                    this.displayCurrentPrompt();
-                }
-            }
-
+            
             async combineAnswers() {
                 if (this.isLoading) return;
-                this.saveCurrentAnswer(); // နောက်ဆုံးမေးခွန်းအတွက် အဖြေကို သိမ်းရန်
+                this.promptAnswers[this.currentPromptIndex] = document.getElementById('promptAnswerTextarea').value.trim();
+
+                if (this.promptAnswers.every(answer => answer === '')) {
+                    UIUtil.showToast('အကြံဉာဏ်ရယူရန် အနည်းဆုံး မေးခွန်းတစ်ခုကို ဖြေဆိုပေးပါ။', 'warning');
+                    return;
+                }
 
                 this.isLoading = true;
                 const combineBtn = document.getElementById('combineAnswersBtn');
-                const originalText = combineBtn.innerHTML;
-                UIUtil.setLoading(combineBtn, true, 'ဆောင်ရွက်နေသည်...');
-                UIUtil.showToast('AI အကြံပြုချက် ရယူနေပါသည်။');
+                const originalText = combineBtn.textContent;
+                UIUtil.setLoading(combineBtn, true, 'သုံးသပ်နေသည်');
+                UIUtil.showToast('AI အကြံပြုချက် ရယူနေပါသည်။ ခေတ္တစောင့်ဆိုင်းပေးပါ။');
 
                 const date = document.getElementById('journalDate').value;
-                const mood = document.getElementById('journalMood').value;
-                const time = new Date().toLocaleTimeString('en-GB'); // အချိန်ပုံစံ
-
+                const mood = document.getElementById('journalMood').value || 'မระบุ';
+                const time = new Date().toLocaleTimeString('en-GB');
                 const header = `ရက်စွဲ: ${date}\nအချိန်: ${time}\nစိတ်ခံစားမှု: ${mood}\n\n---\n\n`;
+                const combinedAnswers = this.promptAnswers.map((answer, i) => answer ? `${i + 1}. ${this.activePrompts[i]}\nအဖြေ: ${answer}` : '').filter(Boolean).join('\n\n---\n\n');
                 
-                // မေးခွန်းနှင့် အဖြေများကို ပေါင်းစပ်ပြီး ပုံစံချရန်
-                const combinedAnswers = this.promptAnswers.map((answer, i) => {
-                    return answer ? `${i + 1}. ${this.activePrompts[i]}\nအဖြေ: ${answer}` : '';
-                }).filter(Boolean).join('\n\n---\n\n'); // ပိုင်းခြားမှုဖြင့် ပေါင်းစပ်ရန်
-
-                const fullJournalText = header + combinedAnswers;
-                document.getElementById('combinedJournalText').value = fullJournalText; // textarea တွင် ပြသရန်
+                this.currentJournalTextForChat = header + combinedAnswers;
+                document.getElementById('combinedJournalText').value = this.currentJournalTextForChat;
 
                 try {
                     const advice = await GeminiAPI.fetchCounselorAdvice(combinedAnswers, mood, this.journalMode, this.apiKey);
-                    document.getElementById('aiSuggestionDisplay').textContent = advice;
-
-                    // စကားပြောခန်းအတွက် context ကို သိမ်းဆည်းရန်
-                    this.currentJournalTextForChat = fullJournalText;
                     this.currentAiSuggestionForChat = advice;
-                    this.chatHistory = []; // စကားပြောခန်းအသစ်စတင်တိုင်း chat history ကို ရှင်းလင်းရန်
-
-                    // မှတ်တမ်းအသစ်ကို history တွင် သိမ်းရန်
-                    const newEntry = {
-                        date,
-                        time,
-                        mood,
-                        mode: this.journalMode,
-                        text: fullJournalText,
-                        aiSuggestion: advice
-                    };
+                    document.getElementById('aiSuggestionDisplay').textContent = this.currentAiSuggestionForChat;
+                    const newEntry = { date, time, mood, mode: this.journalMode, text: this.currentJournalTextForChat, aiSuggestion: this.currentAiSuggestionForChat };
                     this.journalEntries.push(newEntry);
                     StorageUtil.save('journalEntries', this.journalEntries);
                 } catch (error) {
-                    console.error('အကြံဉာဏ်ရယူရာတွင် အမှားအယွင်းရှိသည်:', error);
-                    // Check if the error is due to model overload
-                    if (error.message.includes("AI စနစ် ခဏတာ အလုပ်များနေပါသည်။")) {
-                        UIUtil.showToast(error.message); // Show the specific overloaded message
-                    } else {
-                        UIUtil.showToast(`အကြံပြုချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။`);
-                        document.getElementById('aiSuggestionDisplay').textContent = "တောင်းပန်ပါတယ်၊ အခုချိန်မှာ AI နဲ့ ချိတ်ဆက်လို့မရသေးပါ။";
-                    }
+                    UIUtil.showToast(`အကြံပြုချက်ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်: ${error.message}`, 'danger');
+                    document.getElementById('aiSuggestionDisplay').textContent = "တောင်းပန်ပါတယ်၊ အခုချိန်မှာ AI နဲ့ ချိတ်ဆက်လို့မရသေးပါ။";
                 } finally {
                     this.isLoading = false;
-                    UIUtil.setLoading(combineBtn, false, originalText); // ခလုတ်စာသားကို ပြန်လည်သတ်မှတ်ရန်
+                    UIUtil.setLoading(combineBtn, false, originalText);
                     UIUtil.showSection('analysisSection');
                 }
             }
 
-            copyJournalText() {
-                navigator.clipboard.writeText(document.getElementById('combinedJournalText').value)
-                    .then(() => UIUtil.showToast('မှတ်တမ်း ကူးယူပြီးပါပြီ။'))
-                    .catch(err => console.error('စာသားကူးယူရန် မအောင်မြင်ပါ: ', err));
-            }
+            copyJournalText() { navigator.clipboard.writeText(document.getElementById('combinedJournalText').value).then(() => UIUtil.showToast('မှတ်တမ်းကို ကူးယူပြီးပါပြီ။', 'success')).catch(err => console.error('Failed to copy: ', err)); }
 
-            exportToNotion() {
+            exportToMarkdown() {
                 const fullText = document.getElementById('combinedJournalText').value;
                 const advice = document.getElementById('aiSuggestionDisplay').textContent;
                 const date = document.getElementById('journalDate').value;
-                
-                // အခြေခံ Markdown ပုံစံ
-                let markdown = `# မှတ်တမ်း - ${date} (${this.journalMode === 'morning' ? 'မနက်ခင်း' : this.journalMode === 'night' ? 'ညပိုင်း' : this.journalMode === 'gratitude' ? 'ကျေးဇူးတင်ခြင်း' : 'အထွေထွေ'})\n\n`;
-                markdown += fullText.replace(/\n/g, '\n\n'); // Markdown ရှိ စာပိုဒ်ခွဲများအတွက် double newline သေချာစေရန်
-                markdown += `\n\n---\n\n## AI အကြံပြုချက်\n\n`;
-                markdown += `> ${advice.replace(/\n/g, '\n> ')}`; // AI အကြံဉာဏ်အတွက် Blockquote
-
+                let markdown = `# ဖွင့်ဟ မှတ်တမ်း - ${date}\n\n${fullText.replace(/\n/g, '\n\n')}\n\n---\n\n## AI အကြံပြုချက်\n\n> ${advice.replace(/\n/g, '\n> ')}`;
                 const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = `Journal_${date}_${this.journalMode}.md`;
-                a.click();
-                URL.revokeObjectURL(a.href);
-                UIUtil.showToast('Notion ဖိုင် ထုတ်ယူပြီးပါပြီ။');
+                a.download = `PwinHa_Journal_${date}_${this.journalMode}.md`;
+                a.click(); URL.revokeObjectURL(a.href);
+                UIUtil.showToast('Markdown ဖိုင်ကို ထုတ်ယူပြီးပါပြီ။');
             }
 
             renderJournalHistory() {
                 UIUtil.showSection('journalHistorySection');
                 const historyList = document.getElementById('historyList');
-                const noHistoryMessage = document.getElementById('noHistoryMessage');
+                const noHistoryMsg = document.getElementById('noHistoryMessage');
                 const filterMode = document.getElementById('filterMode').value;
                 const filterMood = document.getElementById('filterMood').value;
-                
-                historyList.innerHTML = ''; // ယခင် entries များကို ရှင်းလင်းရန်
+                historyList.innerHTML = '';
 
-                const filteredEntries = this.journalEntries
-                    .filter(entry => (filterMode === 'all' || entry.mode === filterMode))
-                    .filter(entry => (filterMood === 'all' || entry.mood === filterMood));
+                const filtered = this.journalEntries
+                    .filter(e => (filterMode === 'all' || e.mode === filterMode))
+                    .filter(e => (filterMood === 'all' || e.mood === filterMood));
 
-                if (filteredEntries.length === 0) {
-                    noHistoryMessage.classList.remove('hidden');
-                } else {
-                    noHistoryMessage.classList.add('hidden');
-                    // ရက်စွဲအလိုက် အစဉ်လိုက် (အသစ်ဆုံးကို အရင်) စီရန်
-                    filteredEntries.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach((entry, index) => {
-                        const item = document.createElement('a');
-                        item.href = '#'; // နှိပ်၍ရစေရန်၊ သို့သော် မူရင်း navigation ကို တားဆီးရန်
+                if (filtered.length === 0) { noHistoryMsg.classList.remove('hidden'); }
+                else {
+                    noHistoryMsg.classList.add('hidden');
+                    filtered.sort((a,b) => new Date(b.date + ' ' + b.time) - new Date(a.date + ' ' + a.time)).forEach(entry => {
+                        const item = document.createElement('a'); item.href = '#';
                         item.className = 'list-group-item list-group-item-action history-item';
-                        item.innerHTML = `
-                            <div class="d-flex w-100 justify-content-between">
-                                <h5 class="mb-1">${entry.date} - ${entry.mode === 'morning' ? 'မနက်ခင်း' : entry.mode === 'night' ? 'ညပိုင်း' : entry.mode === 'gratitude' ? 'ကျေးဇူးတင်ခြင်း' : 'အထွေထွေ'}</h5>
-                                <small>${entry.time}</small>
-                            </div>
-                            <p class="mb-1">စိတ်ခံစားမှု: ${entry.mood}</p>
-                            <small class="text-muted">${entry.text.substring(0, 100)}...</small>
-                        `;
-                        item.onclick = (e) => {
-                            e.preventDefault(); // စာမျက်နှာ reload ကို တားဆီးရန်
-                            this.showJournalEntryDetail(entry);
-                        };
+                        item.innerHTML = `<div class="d-flex w-100 justify-content-between"><h5 class="mb-1">${entry.date} - ${document.querySelector(`#start${entry.mode.charAt(0).toUpperCase() + entry.mode.slice(1)}Btn`).textContent.trim()}</h5><small>${entry.time}</small></div><p class="mb-1">စိတ်ခံစားမှု: ${entry.mood}</p><small class="text-muted">${entry.text.substring(0, 100)}...</small>`;
+                        item.onclick = (e) => { e.preventDefault(); this.showJournalEntryDetail(entry); };
                         historyList.appendChild(item);
                     });
                 }
             }
 
             showJournalEntryDetail(entry) {
-                const detailModal = new bootstrap.Modal(document.getElementById('entryDetailModal'));
-                document.getElementById('entryDetailTitle').textContent = `${entry.date} - ${entry.mode === 'morning' ? 'မနက်ခင်း' : entry.mode === 'night' ? 'ညပိုင်း' : entry.mode === 'gratitude' ? 'ကျေးဇူးတင်ခြင်း' : 'အထွေထွေ'} မှတ်တမ်း`;
-                document.getElementById('entryDetailBody').innerHTML = `
-                    <h5 class="fw-bold">AI အကြံပြုချက်</h5>
-                    <p class="whitespace-pre-wrap p-2 rounded" style="background-color: #f0fff4;">${entry.aiSuggestion}</p>
-                    <hr>
-                    <h5 class="fw-bold mt-3">သင်၏ မှတ်တမ်းအပြည့်အစုံ</h5>
-                    <textarea class="form-control" rows="15" readonly>${entry.text}</textarea>
-                `;
-                detailModal.show();
+                const modal = new bootstrap.Modal(document.getElementById('entryDetailModal'));
+                document.getElementById('entryDetailTitle').textContent = `${entry.date} မှတ်တမ်း`;
+                document.getElementById('entryDetailBody').innerHTML = `<h5 class="fw-bold">AI အကြံပြုချက်</h5><p class="whitespace-pre-wrap p-2 rounded" style="background-color: #f0fff4;">${entry.aiSuggestion}</p><hr><h5 class="fw-bold mt-3">သင်၏ မှတ်တမ်းအပြည့်အစုံ</h5><textarea class="form-control" rows="15" readonly>${entry.text}</textarea>`;
+                modal.show();
             }
 
-            // AI နှင့် စကားပြောခန်း စတင်ခြင်း
             startConversationalAI() {
                 UIUtil.showSection('conversationalAISession');
-                document.getElementById('chatHistoryDisplay').innerHTML = ''; // ယခင် chat history ကို ရှင်းလင်းရန်
-                this.chatHistory = []; // chat history array ကို ရှင်းလင်းရန်
-
-                // ကနဦး AI အကြံဉာဏ်ကို chat history တွင် ထည့်သွင်းရန်
+                const chatDisplay = document.getElementById('chatHistoryDisplay');
+                chatDisplay.innerHTML = '';
+                this.chatHistory = []; // Reset history for new chat session
                 if (this.currentAiSuggestionForChat) {
                     UIUtil.addChatMessage(this.currentAiSuggestionForChat, 'ai');
                     this.chatHistory.push({ role: 'model', text: this.currentAiSuggestionForChat });
@@ -929,52 +583,36 @@ ${contextAiSuggestion}
                 document.getElementById('chatInput').focus();
             }
 
-            // Chat message ပို့ခြင်း
             async sendChatMessage() {
                 const chatInput = document.getElementById('chatInput');
                 const userMessage = chatInput.value.trim();
-
-                if (!userMessage) return;
-
+                if (!userMessage || this.isLoading) return;
+                
+                this.isLoading = true;
                 UIUtil.addChatMessage(userMessage, 'user');
                 this.chatHistory.push({ role: 'user', text: userMessage });
-                chatInput.value = '';
-                chatInput.style.height = 'auto'; // Reset textarea height
-
-                // Loading spinner ပြသရန်
+                chatInput.value = ''; chatInput.style.height = 'auto';
                 const sendBtn = document.getElementById('sendChatBtn');
-                const originalBtnText = sendBtn.innerHTML;
-                UIUtil.setLoading(sendBtn, true, 'ပို့နေသည်...');
+                const originalBtnText = sendBtn.textContent;
+                UIUtil.setLoading(sendBtn, true, 'ပို့နေသည်');
 
                 try {
-                    const aiResponse = await GeminiAPI.fetchChatResponse(
-                        this.currentJournalTextForChat,
-                        this.currentAiSuggestionForChat,
-                        this.chatHistory, // လက်ရှိ chat history ကို ပေးပို့ရန်
-                        userMessage,
-                        this.apiKey
-                    );
+                    const aiResponse = await GeminiAPI.fetchChatResponse(this.currentJournalTextForChat, this.currentAiSuggestionForChat, this.chatHistory, this.apiKey);
                     UIUtil.addChatMessage(aiResponse, 'ai');
                     this.chatHistory.push({ role: 'model', text: aiResponse });
                 } catch (error) {
-                    console.error('AI တုံ့ပြန်မှု ရယူရာတွင် အမှားအယွင်းရှိသည်:', error);
-                    // Check if the error is due to model overload
-                    if (error.message.includes("AI စနစ် ခဏတာ အလုပ်များနေပါသည်။")) {
-                        UIUtil.showToast(error.message); // Show the specific overloaded message
-                    } else {
-                        UIUtil.showToast('AI တုံ့ပြန်မှု ရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်။');
-                        UIUtil.addChatMessage("တောင်းပန်ပါတယ်၊ အခုချိန်မှာ AI နဲ့ ချိတ်ဆက်လို့မရသေးပါ။", 'ai');
-                    }
+                    UIUtil.showToast(`တုံ့ပြန်မှုရယူရာတွင် ပြဿနာရှိခဲ့ပါသည်: ${error.message}`, 'danger');
+                    this.chatHistory.pop(); // Remove the user's message from history if API call failed, so they can try again.
+                    UIUtil.addChatMessage("တောင်းပန်ပါတယ်၊ အခုချိန်မှာ AI နဲ့ ချိတ်ဆက်လို့မရသေးပါ။ ပြန်လည်ကြိုးစားပေးပါ။", 'ai');
                 } finally {
-                    UIUtil.setLoading(sendBtn, false, originalBtnText); // ခလုတ်ကို ပြန်လည်သတ်မှတ်ရန်
+                    this.isLoading = false;
+                    UIUtil.setLoading(sendBtn, false, originalBtnText);
                 }
             }
         }
-
-        // DOM အားလုံး load ပြီးပါက app ကို စတင်ရန်
-        document.addEventListener('DOMContentLoaded', () => {
-            new JournalApp();
-        });
+        
+        // Initialize the app once the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', () => { new JournalApp(); });
     </script>
 </body>
 </html>
