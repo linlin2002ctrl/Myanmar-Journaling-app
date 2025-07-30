@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ဖွင့်ဟ (Pwin Ha)</title>
-    
+    <title>ဖွင့်ဟ (Pwin Ha) with Notion</title>
+
     <!-- ======== App Icon Links ======== -->
     <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/gemini-pro-chat/gemini-pro-chat.github.io/main/assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/gemini-pro-chat/gemini-pro-chat.github.io/main/assets/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/gemini-pro-chat/gemini-pro-chat.github.io/main/assets/favicon-16x16.png">
     <link rel="manifest" href="https://raw.githubusercontent.com/gemini-pro-chat/gemini-pro-chat.github.io/main/assets/site.webmanifest">
-    
+
     <!-- ======== Stylesheets ======== -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+
     <style>
         :root {
             --primary-color: #1e40af; --primary-hover: #1d4ed8; --secondary-color: #6b7280;
@@ -75,17 +75,31 @@
                         <label for="userNameInput" class="form-label">သင့်အမည် (သို့မဟုတ်) နာမည်ပြောင်:</label>
                         <input type="text" id="userNameInput" class="form-control" placeholder="ဥပမာ - အောင်အောင်">
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label for="apiKeyInput" class="form-label">Gemini API Key: <a href="https://aistudio.google.com/app/apikey" target="_blank" class="small text-decoration-none">(API Key အခမဲ့ရယူရန်)</a></label>
                         <input type="password" id="apiKeyInput" class="form-control" placeholder="သင်၏ API Key ကိုထည့်ပါ" aria-describedby="apiKeyHelp">
                         <div id="apiKeyHelp" class="form-text">သင်၏ API Key ကို မည်သူနှင့်မျှ မျှဝေမည်မဟုတ်ပါ။</div>
                     </div>
+                    
+                    <hr class="my-4">
+                    <h4 class="h5 mt-4">Notion Integration</h4>
+                    <p class="text-muted small">သင်၏ Journal မှတ်တမ်းများကို Notion Database သို့ တိုက်ရိုက်ပေးပို့ရန်။ <a href="https://www.notion.so/my-integrations" target="_blank" class="small text-decoration-none">(Notion Integration ပြုလုပ်ရန်)</a></p>
+                    <div class="mb-3">
+                        <label for="notionTokenInput" class="form-label">Notion Integration Token:</label>
+                        <input type="password" id="notionTokenInput" class="form-control" placeholder="သင်၏ Notion Token ကိုထည့်ပါ (ဥပမာ - secret_...)">
+                    </div>
+                    <div class="mb-4">
+                        <label for="notionDbIdInput" class="form-label">Notion Database ID:</label>
+                        <input type="text" id="notionDbIdInput" class="form-control" placeholder="သင်၏ Notion Database ID ကိုထည့်ပါ">
+                        <div class="form-text">Database ID သည် သင်၏ Notion Database link တွင်ပါရှိသော စာလုံးအရှည်တန်းတစ်ခုဖြစ်သည်။</div>
+                    </div>
+
                     <div class="d-grid gap-2 mb-4">
                         <button id="saveSettingsBtn" class="btn btn-primary">သိမ်းမည်</button>
                     </div>
                     <hr>
                     <h4 class="h5 mt-4">Backup & Restore</h4>
-                    <p class="text-muted small">သင်၏ အမည်နှင့် API Key ကို JSON ဖိုင်အနေဖြင့် သိမ်းဆည်းနိုင်၊ ပြန်လည်ထည့်သွင်းနိုင်သည်။</p>
+                    <p class="text-muted small">သင်၏ အမည်၊ API Key နှင့် Notion ဆက်တင်များကို JSON ဖိုင်အနေဖြင့် သိမ်းဆည်းနိုင်၊ ပြန်လည်ထည့်သွင်းနိုင်သည်။</p>
                     <div class="d-flex gap-2">
                         <button id="exportSettingsBtn" class="btn btn-outline-success w-100">ဆက်တင်များ ထုတ်ယူမည်</button>
                         <button id="importSettingsBtn" class="btn btn-outline-info w-100">ဆက်တင်များ ထည့်သွင်းမည်</button>
@@ -188,7 +202,7 @@
                             <textarea id="combinedJournalText" class="form-control" rows="10" readonly></textarea>
                             <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-3">
                                 <button id="copyCombinedTextBtn" class="btn btn-success">မှတ်တမ်းကူးယူမည်</button>
-                                <button id="exportToNotionBtn" class="btn btn-dark">MD ဖိုင် ထုတ်ယူမည်</button>
+                                <button id="exportToNotionBtn" class="btn btn-dark">Notion သို့ ပေးပို့မည်</button>
                             </div>
                         </div>
                     </div>
@@ -312,7 +326,7 @@
                 toastEl.className = `toast align-items-center text-bg-${type} border-0`;
                 toastEl.innerHTML = `<div class="d-flex"><div class="toast-body">${msg}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button></div>`;
                 toastContainer.appendChild(toastEl);
-                const toast = new bootstrap.Toast(toastEl, { delay: 4000 });
+                const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
                 toast.show();
                 toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
             },
@@ -336,6 +350,8 @@
                 this.journalEntries = StorageUtil.load('journalEntries') || [];
                 this.userName = StorageUtil.load('userName') || '';
                 this.apiKey = StorageUtil.load('geminiApiKey') || '';
+                this.notionToken = StorageUtil.load('notionToken') || '';
+                this.notionDbId = StorageUtil.load('notionDbId') || '';
                 this.defaultPrompts = {
                     morning: ["ဒီမနက်ခင်းမှာ ဘယ်အရာက သင့်ကို အားအရှိဆုံးဖြစ်စေလဲ။", "ဒီနေ့ကို အကောင်းဆုံးနေ့ဖြစ်အောင် ဘယ်လိုရည်ရွယ်ချက်ထားမလဲ။", "သင့်ကိုယ်သင် ပျော်ရွှင်အောင် ဘာလုပ်ပေးမလဲ။"],
                     night: ["ဒီနေ့ သင်ယူလိုက်ရတဲ့ အရေးကြီးဆုံးအရာက ဘာလဲ။", "ဘယ်အဖြစ်အပျက်က သင့်ကို အပြုံးဖြစ်စေခဲ့လဲ။", "ဒီနေ့အတွက် လွှတ်ချချင်တဲ့ စိတ်အနှောင့်အယှက် တစ်ခုခုရှိလား။"],
@@ -367,7 +383,7 @@
                 document.getElementById('nextPromptBtn').onclick = () => this.navigatePrompt(1);
                 document.getElementById('combineAnswersBtn').onclick = () => this.combineAnswers();
                 document.getElementById('copyCombinedTextBtn').onclick = () => this.copyJournalText();
-                document.getElementById('exportToNotionBtn').onclick = () => this.exportToMarkdown();
+                document.getElementById('exportToNotionBtn').onclick = () => this.sendToNotion();
                 document.getElementById('continueChatWithAIBtn').onclick = () => this.startConversationalAI();
                 document.querySelectorAll('[id^="backToMain"]').forEach(btn => btn.onclick = () => this.showJournalSection());
                 document.getElementById('filterMode').onchange = () => this.renderJournalHistory();
@@ -391,19 +407,37 @@
                 this.resetChatState();
             }
 
-            loadSettingsIntoUI() { document.getElementById('userNameInput').value = this.userName; document.getElementById('apiKeyInput').value = this.apiKey; }
+            loadSettingsIntoUI() { 
+                document.getElementById('userNameInput').value = this.userName; 
+                document.getElementById('apiKeyInput').value = this.apiKey;
+                document.getElementById('notionTokenInput').value = this.notionToken;
+                document.getElementById('notionDbIdInput').value = this.notionDbId;
+            }
 
             saveSettings() {
                 this.userName = document.getElementById('userNameInput').value.trim();
                 this.apiKey = document.getElementById('apiKeyInput').value.trim();
+                this.notionToken = document.getElementById('notionTokenInput').value.trim();
+                this.notionDbId = document.getElementById('notionDbIdInput').value.trim();
+
                 if (!this.userName || !this.apiKey) { UIUtil.showToast('အမည်နှင့် API Key ဖြည့်စွက်ရန် လိုအပ်ပါသည်။', 'danger'); return; }
-                StorageUtil.save('userName', this.userName); StorageUtil.save('geminiApiKey', this.apiKey);
+                
+                StorageUtil.save('userName', this.userName); 
+                StorageUtil.save('geminiApiKey', this.apiKey);
+                StorageUtil.save('notionToken', this.notionToken);
+                StorageUtil.save('notionDbId', this.notionDbId);
+
                 UIUtil.showToast('ဆက်တင်များကို သိမ်းဆည်းပြီးပါပြီ။', 'success');
                 this.showJournalSection();
             }
 
             exportSettings() {
-                const settings = { userName: this.userName, apiKey: this.apiKey };
+                const settings = { 
+                    userName: this.userName, 
+                    apiKey: this.apiKey,
+                    notionToken: this.notionToken,
+                    notionDbId: this.notionDbId
+                };
                 const blob = new Blob([JSON.stringify(settings, null, 2)], { type: 'application/json' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
@@ -417,9 +451,13 @@
                 reader.onload = (e) => {
                     try {
                         const settings = JSON.parse(e.target.result);
-                        if (settings.apiKey && settings.userName) {
-                            this.apiKey = settings.apiKey; this.userName = settings.userName;
+                        if (settings.userName && settings.apiKey) {
+                            this.userName = settings.userName;
+                            this.apiKey = settings.apiKey;
+                            this.notionToken = settings.notionToken || '';
+                            this.notionDbId = settings.notionDbId || '';
                             this.saveSettings();
+                            this.loadSettingsIntoUI();
                         } else { UIUtil.showToast('File format မမှန်ကန်ပါ။', 'danger'); }
                     } catch (err) { UIUtil.showToast('File ကို မဖတ်နိုင်ပါ။', 'danger'); console.error("Error importing settings:", err); }
                 };
@@ -526,17 +564,95 @@
 
             copyJournalText() { navigator.clipboard.writeText(document.getElementById('combinedJournalText').value).then(() => UIUtil.showToast('မှတ်တမ်းကို ကူးယူပြီးပါပြီ။', 'success')).catch(err => console.error('Failed to copy: ', err)); }
 
-            exportToMarkdown() {
+            async sendToNotion() {
+                if (!this.notionToken || !this.notionDbId) {
+                    UIUtil.showToast('ကျေးဇူးပြု၍ ဆက်တင်များတွင် Notion Token နှင့် Database ID ကို ဦးစွာဖြည့်သွင်းပါ။', 'warning');
+                    return;
+                }
+                if (this.isLoading) return;
+
+                this.isLoading = true;
+                const notionBtn = document.getElementById('exportToNotionBtn');
+                const originalText = notionBtn.textContent;
+                UIUtil.setLoading(notionBtn, true, 'Notion သို့ ပို့နေသည်');
+                UIUtil.showToast('Notion သို့ မှတ်တမ်းပေးပို့နေပါသည်။');
+
+                const date = document.getElementById('journalDate').value;
+                const mood = document.getElementById('journalMood').value || 'မระบุ';
+                const mode = this.journalMode;
                 const fullText = document.getElementById('combinedJournalText').value;
                 const advice = document.getElementById('aiSuggestionDisplay').textContent;
-                const date = document.getElementById('journalDate').value;
-                let markdown = `# ဖွင့်ဟ မှတ်တမ်း - ${date}\n\n${fullText.replace(/\n/g, '\n\n')}\n\n---\n\n## AI အကြံပြုချက်\n\n> ${advice.replace(/\n/g, '\n> ')}`;
-                const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
-                const a = document.createElement('a');
-                a.href = URL.createObjectURL(blob);
-                a.download = `PwinHa_Journal_${date}_${this.journalMode}.md`;
-                a.click(); URL.revokeObjectURL(a.href);
-                UIUtil.showToast('Markdown ဖိုင်ကို ထုတ်ယူပြီးပါပြီ။');
+                const title = `ဖွင့်ဟ မှတ်တမ်း - ${date}`;
+
+                const chunkText = (text, size = 2000) => {
+                    const numChunks = Math.ceil(text.length / size);
+                    const chunks = new Array(numChunks);
+                    for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+                        chunks[i] = text.substr(o, size);
+                    }
+                    return chunks;
+                };
+                
+                const contentBlocks = [];
+                contentBlocks.push({ object: 'block', type: 'heading_2', heading_2: { rich_text: [{ type: 'text', text: { content: 'သင်၏ မှတ်တမ်းအပြည့်အစုံ' } }] } });
+                chunkText(fullText).forEach(chunk => {
+                    contentBlocks.push({ object: 'block', type: 'paragraph', paragraph: { rich_text: [{ type: 'text', text: { content: chunk } }] } });
+                });
+                contentBlocks.push({ object: 'block', type: 'divider', divider: {} });
+                contentBlocks.push({ object: 'block', type: 'heading_2', heading_2: { rich_text: [{ type: 'text', text: { content: 'AI ၏ သုံးသပ်အကြံပြုချက်' } }] } });
+                chunkText(advice).forEach(chunk => {
+                    contentBlocks.push({ object: 'block', type: 'quote', quote: { rich_text: [{ type: 'text', text: { content: chunk } }] } });
+                });
+
+                // A simple, open-source proxy to bypass browser CORS restrictions for the Notion API.
+                // This proxy does not log or store any data.
+                const proxyApiUrl = 'https://pwin-ha-notion-proxy.glitch.me/api/pages';
+                const requestBody = {
+                    parent: { database_id: this.notionDbId },
+                    icon: { type: "emoji", emoji: "📓" },
+                    properties: {
+                        'Name': { title: [{ text: { content: title } }] },
+                        'Date': { date: { start: date } },
+                        'Mood': { rich_text: [{ text: { content: mood } }] },
+                        'Mode': { rich_text: [{ text: { content: mode } }] }
+                    },
+                    children: contentBlocks
+                };
+
+                try {
+                    const response = await fetch(proxyApiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${this.notionToken}`
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({}));
+                        console.error('Notion API Error:', errorData);
+                        let errorMessage = 'Notion သို့ ပေးပို့ရာတွင် အမှားအယွင်း ဖြစ်ပေါ်ခဲ့သည်။';
+                        if (errorData.details?.code === 'object_not_found') {
+                            errorMessage = 'Database ID မမှန်ကန်ပါ၊ သို့မဟုတ် Integration အတွက် ခွင့်ပြုချက် (Connection) မပေးရသေးပါ။';
+                        } else if (errorData.details?.code === 'validation_error') {
+                            errorMessage = 'သင်၏ Notion Database column အမည်များ (Name, Date, Mood, Mode) နှင့် အမျိုးအစားများ မှန်ကန်မှုရှိမရှိ စစ်ဆေးပါ။';
+                        } else if (response.status === 401) {
+                            errorMessage = 'Notion Token မမှန်ကန်ပါ။';
+                        }
+                        throw new Error(errorMessage);
+                    }
+
+                    await response.json();
+                    UIUtil.showToast('သင်၏မှတ်တမ်းကို Notion သို့ အောင်မြင်စွာ ပေးပို့ပြီးပါပြီ။', 'success');
+
+                } catch (error) {
+                    console.error("Failed to send to Notion:", error);
+                    UIUtil.showToast(error.message, 'danger');
+                } finally {
+                    this.isLoading = false;
+                    UIUtil.setLoading(notionBtn, false, originalText);
+                }
             }
 
             renderJournalHistory() {
