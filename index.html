@@ -61,6 +61,22 @@
         .history-item:hover { background-color: #f1f5f9; cursor: pointer; }
         .settings-btn { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; padding: 0; border-radius: 50%; }
         .history-category-title { font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+        
+        /* START: Responsive adjustments for mobile screens */
+        @media (max-width: 576px) {
+            .card {
+                padding: 1.25rem;
+            }
+            .prompt-box {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+            #promptAnswerTextarea {
+                min-height: 180px; /* Increase height on small screens */
+            }
+        }
+        /* END: Responsive adjustments */
+
     </style>
 </head>
 <body class="d-flex align-items-center justify-content-center">
@@ -113,7 +129,7 @@
             header: `
                 <header class="d-flex justify-content-between align-items-center mb-4">
                     <div class="header-title flex-grow-1">
-                        <img src="/favicon-32x32.png" alt="App Icon" style="width: 32px; height: 32px;">
+                        <i data-feather="book-open"></i>
                         <span>ဖွင့်ဟ</span>
                     </div>
                     <button id="settingsBtn" class="btn btn-light settings-btn" title="ဆက်တင်များ" aria-label="ဆက်တင်များ ဖွင့်မည်">
@@ -126,7 +142,7 @@
                     <input type="date" id="journalDate" class="form-control" required>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label fw-bold mb-3">လက်ရှိစိတ်ခံစားမှု:</label>
+                    <label class="form-label fw-bold mb-3">လက်ရှိစိတ်ခံစားမှု (အထွေထွေ ရင်ဖွင့်ခြင်းအတွက် ရွေးရန်):</label>
                     <div id="journalMood" class="mood-selector">
                        <div class="mood-option" data-value="ပျော်ရွှင်">😊 ပျော်ရွှင်</div> <div class="mood-option" data-value="ဝမ်းနည်း">😢 ဝမ်းနည်း</div>
                        <div class="mood-option" data-value="စိတ်တို">😠 စိတ်တို</div> <div class="mood-option" data-value="စိတ်လှုပ်ရှား">🤩 စိတ်လှုပ်ရှား</div>
@@ -215,7 +231,6 @@
             journalHistorySection: `
                 <h2 class="h3 fw-bold text-center mb-4">ကျွန်ုပ်၏ မှတ်တမ်းများ</h2>
                 
-                <!-- START: Filter UI Changes -->
                 <div class="row g-3 mb-4">
                     <div class="col-12 col-md-6">
                         <label for="typeFilter" class="form-label">အမျိုးအစားအလိုက် စစ်ထုတ်ရန်:</label>
@@ -239,16 +254,15 @@
                             <option value="ပင်ပန်း">😴 ပင်ပန်း</option>
                             <option value="စိတ်ရှုပ်">😕 စိတ်ရှုပ်</option>
                             <option value="ကျေနပ်">👍 ကျေနပ်</option>
+                            <option value="မသတ်မှတ်ထား">❌ မသတ်မှတ်ထား</option>
                         </select>
                     </div>
                 </div>
-                <!-- END: Filter UI Changes -->
 
                 <div id="history-container" class="list-group"></div>
                 <p id="noHistoryMessage" class="text-center text-muted hidden mt-4">မှတ်တမ်းများ မရှိသေးပါ။</p>
                 <p id="noFilterResultMessage" class="text-center text-muted hidden mt-4">ရွေးချယ်ထားသော စစ်ထုတ်မှုနှင့် ကိုက်ညီသည့် မှတ်တမ်းများ မရှိပါ။</p>
                 
-                <!-- START: Button UI Changes -->
                 <div class="mt-4 text-center">
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-3">
                         <button id="summarizeAllBtn" class="btn btn-primary btn-sm">✨ အနှစ်ချုပ်မည်</button>
@@ -258,7 +272,6 @@
                         <button id="backToMainFromHistoryBtn" class="btn btn-outline-primary">ပင်မစာမျက်နှာသို့</button>
                     </div>
                 </div>
-                <!-- END: Button UI Changes -->
             `,
             summarySection: `
                 <h2 class="h3 fw-bold text-center mb-4">AI ၏ မှတ်တမ်းများ အနှစ်ချုပ်</h2>
@@ -339,8 +352,12 @@
                 } else if (gender === 'female') {
                     genderInstruction = "အရေးကြီး: သင်၏တုံ့ပြန်မှုသည် အသုံးပြုသူကို 'ညီမလေး' သို့မဟုတ် 'သမီး' ဟု နွေးထွေးစွာခေါ်ပြီး 'ရှင့်' ဆိုသည့်နောက်ဆက်တွဲဖြင့် ယဉ်ကျေးစွာရေးသားရမည်။";
                 }
+                
+                const moodText = (mood === 'မသတ်မှတ်ထား') 
+                    ? "The user has not specified a mood." 
+                    : `Their stated mood is '${mood}'.`;
 
-                const prompt = `You are a warm, wise, and deeply compassionate Burmese mind therapist. ${genderInstruction} A user has just completed a '${mode}' reflection. Their stated mood is '${mood}'. Their journal entry is below.\n\n---\n${journalText}\n---\n\nYour task is to respond in flawless, natural, and flowing Burmese that feels like a heartfelt message from a caring, wise friend, not an AI. Strictly avoid robotic phrasing and clinical jargon. Follow these steps precisely:\n1. Acknowledge their feelings with genuine, deep empathy.\n2. Offer a fresh, gentle perspective on their thoughts.\n3. Provide one or two simple, truly actionable suggestions.\n4. End with a sincerely warm and encouraging closing statement.\nYour entire response must be a single, coherent block of text in perfect Burmese.`;
+                const prompt = `You are a warm, wise, and deeply compassionate Burmese mind therapist. ${genderInstruction} A user has just completed a '${mode}' reflection. ${moodText} Their journal entry is below.\n\n---\n${journalText}\n---\n\nYour task is to respond in flawless, natural, and flowing Burmese that feels like a heartfelt message from a caring, wise friend, not an AI. Strictly avoid robotic phrasing and clinical jargon. Follow these steps precisely:\n1. Acknowledge their feelings with genuine, deep empathy.\n2. Offer a fresh, gentle perspective on their thoughts.\n3. Provide one or two simple, truly actionable suggestions.\n4. End with a sincerely warm and encouraging closing statement.\nYour entire response must be a single, coherent block of text in perfect Burmese.`;
                 return this.generateText(prompt, apiKey);
             }
         };
@@ -353,23 +370,32 @@
                 this.userName = StorageUtil.load('userName') || '';
                 this.apiKey = StorageUtil.load('geminiApiKey') || '';
                 this.gender = StorageUtil.load('userGender') || 'unspecified';
+                // Properties to store current journaling session's date and mood
+                this.currentJournalDate = '';
+                this.currentJournalMood = '';
+
+                this.modeDisplayNames = {
+                    morning: '🌅 မနက်ခင်း မှတ်တမ်းများ', night: '🌃 ညပိုင်း မှတ်တမ်းများ',
+                    gratitude: '🙏 ကျေးဇူးတင်ခြင်း မှတ်တမ်းများ', general: '💬 အထွေထွေ ရင်ဖွင့်ခြင်းများ'
+                };
                 this.defaultPrompts = {
                     morning: ["ဒီမနက်ခင်းမှာ ဘယ်အရာက သင့်ကို အားအပြည့်ဆုံးဖြစ်စေသလဲ။", "ဒီနေ့ကို အကောင်းဆုံးနေ့တစ်နေ့ ဖြစ်စေဖို့ ဘယ်လိုရည်ရွယ်ချက်မျိုး ထားရှိထားပါသလဲ။", "သင့်ကိုယ်သင် ပျော်ရွှင်အောင် ဒီနေ့ ဘာလုပ်ပေးဖို့ စဉ်းစားထားပါသလဲ။"],
                     night: ["ဒီနေ့ သင်ယူလိုက်ရတဲ့ အရေးကြီးဆုံးအရာက ဘာဖြစ်မလဲ။", "ဘယ်အဖြစ်အပျက်က သင့်ကို ပြုံးပျော်စေခဲ့ပါသလဲ။", "ဒီနေ့အတွက် စိတ်ထဲကနေ ထုတ်ချပစ်ချင်တဲ့ အရာတစ်ခုခု ရှိပါသလား။"],
                     gratitude: ["ယနေ့ သင်ကျေးဇူးတင်မိတဲ့ လူပုဂ္ဂိုလ်တစ်ဦးက ဘယ်သူလဲ၊ ဘာကြောင့်လဲ။", "သင့်ဘဝမှာ လက်ရှိပိုင်ဆိုင်ထားတဲ့အရာတွေထဲက ဘာတွေအတွက် ကျေးဇူးတင်မိပါသလဲ။", "ယနေ့ သင့်ကို ပျော်ရွှင်စေခဲ့တဲ့ သေးငယ်တဲ့အရာတစ်ခုကို ဖော်ပြပါ။"],
-                    general: ["အခုအချိန်မှာ သင့်စိတ်ထဲမှာ ဘယ်လိုခံစားနေရပါသလဲ။", "အဲ့ဒီခံစားချက်ကို ဖြစ်စေတဲ့ အကြောင်းရင်းက ဘာဖြစ်နိုင်မလဲ။", "သင့်အတွက် ဘာလုပ်ပေးရင် စိတ်သက်သာရာရနိုင်မလဲဆိုတာ ပြောပြပေးပါ။"]
+                    general: ["အခုအချိန်မှာ သင့်စိတ်ထဲမှာ ဘယ်လိုခံစားနေရပါလဲ။", "အဲ့ဒီခံစားချက်ကို ဖြစ်စေတဲ့ အကြောင်းရင်းက ဘာဖြစ်နိုင်မလဲ။", "သင့်အတွက် ဘာလုပ်ပေးရင် စိတ်သက်သာရာရနိုင်မလဲဆိုတာ ပြောပြပေးပါ။"]
                 };
                 this.resetPromptState();
                 this.init();
             }
 
             init() {
-                this.showVpnWarningOnce();
+                this.showVpnWarning();
                 if (!this.apiKey) { this.showSettings(); } 
                 else { this.showJournalSection(); }
             }
 
-            showVpnWarningOnce() {
+            showVpnWarning() {
+                // Show VPN warning only once
                 if (!StorageUtil.load('vpnWarningShown')) {
                     const vpnModalEl = document.getElementById('vpnWarningModal');
                     if (vpnModalEl) {
@@ -424,7 +450,6 @@
                 document.getElementById('backToMainFromSettingsBtn').onclick = () => this.showJournalSection();
             }
             
-            // START: Updated History Page Logic
             bindHistoryPageEvents() {
                 const moodFilter = document.getElementById('moodFilter');
                 const typeFilter = document.getElementById('typeFilter');
@@ -441,7 +466,6 @@
                     
                     this.renderHistoryList(filteredEntries);
                     
-                    // Update button listeners to pass the filtered list
                     document.getElementById('summarizeAllBtn').onclick = () => this.summarizeJournals(filteredEntries);
                     document.getElementById('analyzeMoodBtn').onclick = () => this.analyzeMoodTrends(filteredEntries);
                 };
@@ -450,7 +474,6 @@
                 typeFilter.onchange = renderFilteredHistory;
                 document.getElementById('backToMainFromHistoryBtn').onclick = () => this.showJournalSection();
                 
-                // Initial render
                 renderFilteredHistory();
             }
 
@@ -464,32 +487,34 @@
                 noFilterResultMsg.classList.add('hidden');
 
                 if (this.journalEntries.length === 0) {
-                    noHistoryMsg.classList.remove('hidden');
-                    return;
+                    noHistoryMsg.classList.remove('hidden'); return;
                 }
 
                 if (entries.length === 0) {
-                    noFilterResultMsg.classList.remove('hidden');
-                    return;
+                    noFilterResultMsg.classList.remove('hidden'); return;
                 }
 
                 entries.sort((a,b) => new Date(b.date + ' ' + b.time) - new Date(a.date + ' ' + a.time)).forEach(entry => {
                     const item = document.createElement('a');
                     item.href = '#';
                     item.className = 'list-group-item list-group-item-action history-item';
+                    
+                    const moodDisplay = (entry.mood && entry.mood !== 'မသတ်မှတ်ထား') 
+                        ? `<p class="mb-1">စိတ်ခံစားမှု: ${entry.mood}</p>` 
+                        : '';
+                        
                     item.innerHTML = `
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">${JournalApp.getPromptTitle(entry.mode)}</h5>
                             <small>${new Date(entry.date).toLocaleDateString('en-CA')}</small>
                         </div>
-                        <p class="mb-1">စိတ်ခံစားမှု: ${entry.mood}</p>
+                        ${moodDisplay}
                         <small class="text-muted">${entry.text.substring(0, 80)}...</small>
                     `;
                     item.onclick = (e) => { e.preventDefault(); this.showJournalEntryDetail(entry); };
                     container.appendChild(item);
                 });
             }
-            // END: Updated History Page Logic
 
             bindPromptButtons() {
                 document.getElementById('prompt-title').innerHTML = JournalApp.getPromptTitle(this.journalMode);
@@ -526,9 +551,15 @@
             }
 
             startJournalingSession(mode) {
-                const mood = document.getElementById('selectedMood')?.value;
-                if (!mood) {
-                    UIUtil.showToast('စတင်ရန် လက်ရှိစိတ်ခံစားမှုကို ရွေးပေးပါ။', 'warning');
+                // Capture date and mood at the start of the session
+                const journalDateInput = document.getElementById('journalDate');
+                const selectedMoodInput = document.getElementById('selectedMood');
+
+                this.currentJournalDate = journalDateInput ? journalDateInput.value : '';
+                this.currentJournalMood = selectedMoodInput ? selectedMoodInput.value : 'မသတ်မှတ်ထား';
+
+                if (mode === 'general' && !this.currentJournalMood) {
+                    UIUtil.showToast('ရင်ဖွင့်ခြင်းအတွက် လက်ရှိစိတ်ခံစားမှုကို ရွေးပေးပါ။', 'warning');
                     return;
                 }
                 
@@ -578,8 +609,9 @@
                 UIUtil.setLoading(combineBtn, true, 'သုံးသပ်နေသည်');
                 UIUtil.showToast('AI အကြံပြုချက် ရယူနေပါသည်။ ခေတ္တစောင့်ဆိုင်းပေးပါ။', 'info');
 
-                const date = document.getElementById('journalDate').value;
-                const mood = document.getElementById('selectedMood').value;
+                // Use stored date and mood properties
+                const date = this.currentJournalDate;
+                const mood = this.currentJournalMood;
                 const time = new Date().toLocaleTimeString('en-GB');
 
                 const combinedAnswers = this.promptAnswers.map((answer, i) => 
@@ -631,7 +663,7 @@
                 } catch (error) {
                     UIUtil.showToast(error.message, 'danger');
                 } finally {
-                    UIUtil.setLoading(summarizeBtn, false, '');
+                    UIUtil.setLoading(summarizeBtn, false, '✨ အနှစ်ချုပ်မည်');
                 }
             }
 
@@ -658,13 +690,17 @@
                 } catch (error) {
                     UIUtil.showToast(error.message, 'danger');
                 } finally {
-                    UIUtil.setLoading(analyzeBtn, false, '');
+                    UIUtil.setLoading(analyzeBtn, false, '📊 စိတ်ခံစားမှု ခွဲခြမ်းစိတ်ဖြာမည်');
                 }
             }
 
             bindAnalysisSuccessButtons() {
                 const actionsDiv = document.getElementById('analysis-actions');
-                actionsDiv.innerHTML = `<button id="backToMainSuccessBtn" class="btn btn-primary">ပြီးပြီ</button>`;
+                actionsDiv.innerHTML = `
+                    <button id="copySuccessTextBtn" class="btn btn-secondary">မှတ်တမ်းကူးယူမည်</button>
+                    <button id="backToMainSuccessBtn" class="btn btn-outline-primary">ပင်မစာမျက်နှာသို့</button>
+                `;
+                document.getElementById('copySuccessTextBtn').onclick = () => navigator.clipboard.writeText(this.fullJournalText).then(() => UIUtil.showToast('မှတ်တမ်းကို ကူးယူပြီးပါပြီ။', 'success'));
                 document.getElementById('backToMainSuccessBtn').onclick = () => this.showJournalSection();
             }
 
@@ -672,9 +708,11 @@
                 const actionsDiv = document.getElementById('analysis-actions');
                 actionsDiv.innerHTML = `
                     <button id="tryAgainBtn" class="btn btn-primary">ထပ်မံကြိုးစားမည်</button>
+                    <button id="copyFailTextBtn" class="btn btn-secondary">မှတ်တမ်းကူးယူမည်</button>
                     <button id="backToMainFailBtn" class="btn btn-outline-primary">ပင်မစာမျက်နှာသို့</button>
                 `;
                 document.getElementById('tryAgainBtn').onclick = () => this.combineAnswers();
+                document.getElementById('copyFailTextBtn').onclick = () => navigator.clipboard.writeText(this.fullJournalText).then(() => UIUtil.showToast('မှတ်တမ်းကို ကူးယူပြီးပါပြီ။', 'success'));
                 document.getElementById('backToMainFailBtn').onclick = () => this.showJournalSection();
             }
             
@@ -689,7 +727,17 @@
                     <hr>
                     <h5 class="fw-bold mt-3">သင်၏ မှတ်တမ်းအပြည့်အစုံ</h5>
                     <textarea class="form-control" rows="15" readonly>${entry.text}</textarea>
+                    <div class="mt-3 d-grid">
+                        <button class="btn btn-secondary" id="copyHistoryTextBtn">မှတ်တမ်းကူးယူမည်</button>
+                    </div>
                 `;
+                
+                document.getElementById('copyHistoryTextBtn').onclick = () => {
+                    navigator.clipboard.writeText(entry.text)
+                        .then(() => UIUtil.showToast('မှတ်တမ်းကို ကူးယူပြီးပါပြီ။', 'success'))
+                        .catch(err => UIUtil.showToast('ကူးယူ၍ မရပါ', 'danger'));
+                };
+
                 modal.show();
             }
 
