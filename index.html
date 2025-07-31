@@ -62,21 +62,11 @@
         .settings-btn { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; padding: 0; border-radius: 50%; }
         .history-category-title { font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
         
-        /* START: Responsive adjustments for mobile screens */
         @media (max-width: 576px) {
-            .card {
-                padding: 1.25rem;
-            }
-            .prompt-box {
-                padding-top: 1rem;
-                padding-bottom: 1rem;
-            }
-            #promptAnswerTextarea {
-                min-height: 180px; /* Increase height on small screens */
-            }
+            .card { padding: 1.25rem; }
+            .prompt-box { padding-top: 1rem; padding-bottom: 1rem; }
+            #promptAnswerTextarea { min-height: 180px; }
         }
-        /* END: Responsive adjustments */
-
     </style>
 </head>
 <body class="d-flex align-items-center justify-content-center">
@@ -103,16 +93,16 @@
             <div class="modal-content border-0 shadow-lg" style="border-radius: 1.5rem;">
                 <div class="modal-header border-bottom-0">
                     <h5 class="modal-title w-100 text-center fw-bold" id="vpnWarningModalLabel">
-                        <i data-feather="shield" class="text-primary me-2"></i>မေတ္တာဖြင့် အကြံပြုချက်
+                        မေတ္တာဖြင့် အသိပေးချက်
                     </h5>
                 </div>
                 <div class="modal-body text-center px-4">
                     <p class="mb-0" style="line-height: 1.8;">
-                        ညီမလေး/မောင်လေးတို့ရဲ့ လုံခြုံရေးအတွက်၊ ဒီအက်ပ်လေးကို အသုံးပြုတဲ့အခါ VPN လေးတစ်ခု ချိတ်ဆက်ထားပေးဖို့ အကြံပြုပါရစေရှင်။<br><br>ဒါမှ AI ဝန်ဆောင်မှုတွေကို အပြည့်အဝနဲ့ အဆင်ပြေချောမွေ့စွာ အသုံးပြုနိုင်မှာပါရှင့်။
+                        ယခုအခါတွင် ဖွင့်ဟ (Pwin Ha) အက်ပ်ကို VPN မလိုဘဲ အသုံးပြုနိုင်ပြီဖြစ်ကြောင်း သတင်းကောင်းပါးအပ်ပါသည်။<br><br>သင်၏ အချက်အလက်လုံခြုံရေးအတွက် ကျွန်ုပ်တို့ အစဉ်တစိုက် ကြိုးစားလျက်ရှိပါသည်။
                     </p>
                 </div>
                 <div class="modal-footer border-top-0 justify-content-center pb-4">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">နားလည်ပါပြီရှင်</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">နားလည်ပါပြီ</button>
                 </div>
             </div>
         </div>
@@ -167,7 +157,7 @@
                     <label for="userNameInput" class="form-label">သင့်အမည် (သို့မဟုတ်) နာမည်ပြောင်:</label>
                     <input type="text" id="userNameInput" class="form-control" placeholder="ဥပမာ - အောင်အောင်">
                 </div>
-                <div class="mb-3">
+                <div class="mb-4">
                     <label class="form-label">ကျား/မ:</label>
                     <div class="d-flex justify-content-center gap-3">
                         <div class="form-check">
@@ -184,11 +174,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mb-4">
-                    <label for="apiKeyInput" class="form-label">Gemini API Key: <a href="https://aistudio.google.com/app/apikey" target="_blank" class="small text-decoration-none">(API Key အခမဲ့ရယူရန်)</a></label>
-                    <input type="password" id="apiKeyInput" class="form-control" placeholder="သင်၏ API Key ကိုထည့်ပါ">
-                </div>
-                <div class="d-grid gap-2">
+                <div class="d-grid gap-2 mt-4">
                     <button id="saveSettingsBtn" class="btn btn-primary">သိမ်းမည်</button>
                     <button id="backToMainFromSettingsBtn" class="btn btn-outline-primary">ပင်မစာမျက်နှာသို့</button>
                 </div>
@@ -230,7 +216,6 @@
             `,
             journalHistorySection: `
                 <h2 class="h3 fw-bold text-center mb-4">ကျွန်ုပ်၏ မှတ်တမ်းများ</h2>
-                
                 <div class="row g-3 mb-4">
                     <div class="col-12 col-md-6">
                         <label for="typeFilter" class="form-label">အမျိုးအစားအလိုက် စစ်ထုတ်ရန်:</label>
@@ -258,11 +243,9 @@
                         </select>
                     </div>
                 </div>
-
                 <div id="history-container" class="list-group"></div>
                 <p id="noHistoryMessage" class="text-center text-muted hidden mt-4">မှတ်တမ်းများ မရှိသေးပါ။</p>
                 <p id="noFilterResultMessage" class="text-center text-muted hidden mt-4">ရွေးချယ်ထားသော စစ်ထုတ်မှုနှင့် ကိုက်ညီသည့် မှတ်တမ်းများ မရှိပါ။</p>
-                
                 <div class="mt-4 text-center">
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-3">
                         <button id="summarizeAllBtn" class="btn btn-primary btn-sm">✨ အနှစ်ချုပ်မည်</button>
@@ -321,44 +304,27 @@
             }
         };
         
+        // --- NEW: Universal API caller that goes through our backend proxy ---
         const GeminiAPI = {
-            async generateText(prompt, apiKey) {
-                const model = "gemini-1.5-flash";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-                const requestBody = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: { responseMimeType: "text/plain" },
-                    safetySettings: [
-                        { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' }, { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-                        { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' }, { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-                    ]
-                };
+            async generateText(prompt) {
+                // All AI requests go to our single, secure backend file.
+                const apiUrl = '/api/analyze.js';
                 try {
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(requestBody) });
-                    if (!response.ok) {
-                        const err = await response.json().catch(() => ({}));
-                        if (err?.error?.message?.includes("API key not valid")) { throw new Error("သင်၏ API Key မမှန်ကန်ပါ။ ဆက်တင်များတွင် ပြန်လည်စစ်ဆေးပါ။"); }
-                        throw new Error("AI နှင့် ချိတ်ဆက်ရာတွင် အဆင်မပြေဖြစ်သွားလို့ပါရှင်။");
-                    }
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt })
+                    });
                     const result = await response.json();
-                    return result.candidates?.[0]?.content?.parts?.[0]?.text;
-                } catch (error) { console.error("API Call Failed:", error); throw error; }
-            },
-
-            async fetchCounselorAdvice(journalText, mood, mode, apiKey, gender = 'unspecified') {
-                let genderInstruction = "သင့်အနေနဲ့ ကျား/မ လိင်ကွဲပြားမှုမရှိတဲ့ ယေဘုယျလေသံ (gender-neutral tone) ကိုသာ အသုံးပြုပြီး ရေးသားပေးပါ။";
-                if (gender === 'male') {
-                    genderInstruction = "အရေးကြီး: သင်၏တုံ့ပြန်မှုသည် အသုံးပြုသူကို 'မောင်လေး' သို့မဟုတ် 'သား' ဟု နွေးထွေးစွာခေါ်ပြီး 'ခင်ဗျာ' ဆိုသည့်နောက်ဆက်တွဲဖြင့် ယဉ်ကျေးစွာရေးသားရမည်။";
-                } else if (gender === 'female') {
-                    genderInstruction = "အရေးကြီး: သင်၏တုံ့ပြန်မှုသည် အသုံးပြုသူကို 'ညီမလေး' သို့မဟုတ် 'သမီး' ဟု နွေးထွေးစွာခေါ်ပြီး 'ရှင့်' ဆိုသည့်နောက်ဆက်တွဲဖြင့် ယဉ်ကျေးစွာရေးသားရမည်။";
+                    if (!response.ok) {
+                        throw new Error(result.error || 'AI နှင့် ချိတ်ဆက်ရာတွင် အမှားတစ်ခုဖြစ်ပွားခဲ့သည်။');
+                    }
+                    // The backend returns the suggestion in a 'suggestion' field
+                    return result.suggestion;
+                } catch (error) {
+                    console.error("Backend Proxy API Call Failed:", error);
+                    throw error;
                 }
-                
-                const moodText = (mood === 'မသတ်မှတ်ထား') 
-                    ? "The user has not specified a mood." 
-                    : `Their stated mood is '${mood}'.`;
-
-                const prompt = `You are a warm, wise, and deeply compassionate Burmese mind therapist. ${genderInstruction} A user has just completed a '${mode}' reflection. ${moodText} Their journal entry is below.\n\n---\n${journalText}\n---\n\nYour task is to respond in flawless, natural, and flowing Burmese that feels like a heartfelt message from a caring, wise friend, not an AI. Strictly avoid robotic phrasing and clinical jargon. Follow these steps precisely:\n1. Acknowledge their feelings with genuine, deep empathy.\n2. Offer a fresh, gentle perspective on their thoughts.\n3. Provide one or two simple, truly actionable suggestions.\n4. End with a sincerely warm and encouraging closing statement.\nYour entire response must be a single, coherent block of text in perfect Burmese.`;
-                return this.generateText(prompt, apiKey);
             }
         };
 
@@ -368,9 +334,7 @@
                 this.mainContent = document.getElementById('app-content');
                 this.journalEntries = StorageUtil.load('journalEntries') || [];
                 this.userName = StorageUtil.load('userName') || '';
-                this.apiKey = StorageUtil.load('geminiApiKey') || '';
                 this.gender = StorageUtil.load('userGender') || 'unspecified';
-                // Properties to store current journaling session's date and mood
                 this.currentJournalDate = '';
                 this.currentJournalMood = '';
 
@@ -390,18 +354,16 @@
 
             init() {
                 this.showVpnWarning();
-                if (!this.apiKey) { this.showSettings(); } 
-                else { this.showJournalSection(); }
+                this.showJournalSection(); 
             }
 
             showVpnWarning() {
-                // Show VPN warning only once
-                if (!StorageUtil.load('vpnWarningShown')) {
+                if (!StorageUtil.load('vpnWarningV2Shown')) {
                     const vpnModalEl = document.getElementById('vpnWarningModal');
                     if (vpnModalEl) {
                         const vpnModal = new bootstrap.Modal(vpnModalEl);
                         vpnModal.show();
-                        StorageUtil.save('vpnWarningShown', true);
+                        StorageUtil.save('vpnWarningV2Shown', true);
                     }
                 }
             }
@@ -442,7 +404,6 @@
             
             bindSettingsButtons() {
                 document.getElementById('userNameInput').value = this.userName;
-                document.getElementById('apiKeyInput').value = this.apiKey;
                 const genderRadio = document.querySelector(`input[name="genderOptions"][value="${this.gender}"]`);
                 if (genderRadio) genderRadio.checked = true;
                 
@@ -489,7 +450,6 @@
                 if (this.journalEntries.length === 0) {
                     noHistoryMsg.classList.remove('hidden'); return;
                 }
-
                 if (entries.length === 0) {
                     noFilterResultMsg.classList.remove('hidden'); return;
                 }
@@ -498,11 +458,7 @@
                     const item = document.createElement('a');
                     item.href = '#';
                     item.className = 'list-group-item list-group-item-action history-item';
-                    
-                    const moodDisplay = (entry.mood && entry.mood !== 'မသတ်မှတ်ထား') 
-                        ? `<p class="mb-1">စိတ်ခံစားမှု: ${entry.mood}</p>` 
-                        : '';
-                        
+                    const moodDisplay = (entry.mood && entry.mood !== 'မသတ်မှတ်ထား') ? `<p class="mb-1">စိတ်ခံစားမှု: ${entry.mood}</p>` : '';
                     item.innerHTML = `
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1">${JournalApp.getPromptTitle(entry.mode)}</h5>
@@ -525,49 +481,33 @@
                 this.displayCurrentPrompt();
             }
 
-            bindSummaryButtons(filteredEntries) {
-                document.getElementById('backFromSummaryBtn').onclick = () => this.showHistory();
-            }
-
-            bindMoodAnalysisButtons(filteredEntries) {
-                document.getElementById('backFromMoodAnalysisBtn').onclick = () => this.showHistory();
-            }
+            bindSummaryButtons(filteredEntries) { document.getElementById('backFromSummaryBtn').onclick = () => this.showHistory(); }
+            bindMoodAnalysisButtons(filteredEntries) { document.getElementById('backFromMoodAnalysisBtn').onclick = () => this.showHistory(); }
 
             saveSettings() {
                 this.userName = document.getElementById('userNameInput').value.trim();
-                this.apiKey = document.getElementById('apiKeyInput').value.trim();
                 const selectedGender = document.querySelector('input[name="genderOptions"]:checked');
                 this.gender = selectedGender ? selectedGender.value : 'unspecified';
 
-                if (!this.apiKey) {
-                    UIUtil.showToast('API Key ဖြည့်စွက်ရန် လိုအပ်ပါသည်။', 'danger');
-                    return;
-                }
                 StorageUtil.save('userName', this.userName); 
-                StorageUtil.save('geminiApiKey', this.apiKey);
                 StorageUtil.save('userGender', this.gender);
                 UIUtil.showToast('ဆက်တင်များကို သိမ်းဆည်းပြီးပါပြီ။', 'success');
                 this.showJournalSection();
             }
 
             startJournalingSession(mode) {
-                // Capture date and mood at the start of the session
                 const journalDateInput = document.getElementById('journalDate');
                 const selectedMoodInput = document.getElementById('selectedMood');
-
                 this.currentJournalDate = journalDateInput ? journalDateInput.value : '';
                 this.currentJournalMood = selectedMoodInput ? selectedMoodInput.value : 'မသတ်မှတ်ထား';
-
                 if (mode === 'general' && !this.currentJournalMood) {
                     UIUtil.showToast('ရင်ဖွင့်ခြင်းအတွက် လက်ရှိစိတ်ခံစားမှုကို ရွေးပေးပါ။', 'warning');
                     return;
                 }
-                
                 this.journalMode = mode;
                 this.resetPromptState();
                 this.activePrompts = this.defaultPrompts[mode];
                 this.promptAnswers = Array(this.activePrompts.length).fill('');
-                
                 this.renderView(templates.promptsSection, this.bindPromptButtons);
             }
 
@@ -577,11 +517,9 @@
                     const progress = ((this.currentPromptIndex + 1) / this.activePrompts.length) * 100;
                     progressBar.style.width = `${progress}%`;
                 }
-
                 document.getElementById('currentPromptText').textContent = this.activePrompts[this.currentPromptIndex];
                 document.getElementById('promptAnswerTextarea').value = this.promptAnswers[this.currentPromptIndex] || '';
                 document.getElementById('promptAnswerTextarea').focus();
-                
                 document.getElementById('promptCounter').textContent = `${this.currentPromptIndex + 1} / ${this.activePrompts.length}`;
                 document.getElementById('prevPromptBtn').disabled = (this.currentPromptIndex === 0);
                 const isLast = this.currentPromptIndex === this.activePrompts.length - 1;
@@ -609,7 +547,6 @@
                 UIUtil.setLoading(combineBtn, true, 'သုံးသပ်နေသည်');
                 UIUtil.showToast('AI အကြံပြုချက် ရယူနေပါသည်။ ခေတ္တစောင့်ဆိုင်းပေးပါ။', 'info');
 
-                // Use stored date and mood properties
                 const date = this.currentJournalDate;
                 const mood = this.currentJournalMood;
                 const time = new Date().toLocaleTimeString('en-GB');
@@ -624,13 +561,23 @@
                 document.getElementById('combinedJournalText').value = this.fullJournalText;
 
                 try {
-                    const advice = await GeminiAPI.fetchCounselorAdvice(combinedAnswers, mood, this.journalMode, this.apiKey, this.gender);
-                    document.getElementById('aiSuggestionDisplay').textContent = advice;
+                    // --- Construct the specific prompt for counselor advice ---
+                    let genderInstruction = "သင့်အနေနဲ့ ကျား/မ လိင်ကွဲပြားမှုမရှိတဲ့ ယေဘုယျလေသံ (gender-neutral tone) ကိုသာ အသုံးပြုပြီး ရေးသားပေးပါ။";
+                    if (this.gender === 'male') {
+                        genderInstruction = "အရေးကြီး: သင်၏တုံ့ပြန်မှုသည် အသုံးပြုသူကို 'မောင်လေး' သို့မဟုတ် 'သား' ဟု နွေးထွေးစွာခေါ်ပြီး 'ခင်ဗျာ' ဆိုသည့်နောက်ဆက်တွဲဖြင့် ယဉ်ကျေးစွာရေးသားရမည်။";
+                    } else if (this.gender === 'female') {
+                        genderInstruction = "အရေးကြီး: သင်၏တုံ့ပြန်မှုသည် အသုံးပြုသူကို 'ညီမလေး' သို့မဟုတ် 'သမီး' ဟု နွေးထွေးစွာခေါ်ပြီး 'ရှင့်' ဆိုသည့်နောက်ဆက်တွဲဖြင့် ယဉ်ကျေးစွာရေးသားရမည်။";
+                    }
+                    const moodText = (mood === 'မသတ်မှတ်ထား') ? "The user has not specified a mood." : `Their stated mood is '${mood}'.`;
+                    const counselorPrompt = `You are a warm, wise, and deeply compassionate Burmese mind therapist. ${genderInstruction} A user has just completed a '${this.journalMode}' reflection. ${moodText} Their journal entry is below.\n\n---\n${combinedAnswers}\n---\n\nYour task is to respond in flawless, natural, and flowing Burmese that feels like a heartfelt message from a caring, wise friend, not an AI. Strictly avoid robotic phrasing and clinical jargon. Follow these steps precisely:\n1. Acknowledge their feelings with genuine, deep empathy.\n2. Offer a fresh, gentle perspective on their thoughts.\n3. Provide one or two simple, truly actionable suggestions.\n4. End with a sincerely warm and encouraging closing statement.\nYour entire response must be a single, coherent block of text in perfect Burmese.`;
                     
+                    // --- Call the universal API ---
+                    const advice = await GeminiAPI.generateText(counselorPrompt);
+
+                    document.getElementById('aiSuggestionDisplay').textContent = advice;
                     const newEntry = { date, time, mood, mode: this.journalMode, text: this.fullJournalText, aiSuggestion: advice };
                     this.journalEntries.push(newEntry);
                     StorageUtil.save('journalEntries', this.journalEntries);
-                    
                     this.bindAnalysisSuccessButtons();
                 } catch (error) {
                     document.getElementById('aiSuggestionDisplay').textContent = `တောင်းပန်ပါတယ်ရှင်။ ${error.message} ခဏနေပြီး 'ထပ်မံကြိုးစားမည်' ကို နှိပ်ကြည့်ပေးပါနော်။`;
@@ -642,75 +589,46 @@
             
             async summarizeJournals(entriesToSummarize) {
                 if (entriesToSummarize.length === 0) {
-                    UIUtil.showToast('အနှစ်ချုပ်ရန် မှတ်တမ်းများ မရှိသေးပါ။', 'warning');
-                    return;
+                    UIUtil.showToast('အနှစ်ချုပ်ရန် မှတ်တမ်းများ မရှိသေးပါ။', 'warning'); return;
                 }
-
                 const summarizeBtn = document.getElementById('summarizeAllBtn');
                 UIUtil.setLoading(summarizeBtn, true, '...');
                 UIUtil.showToast('AI မှ မှတ်တမ်းများ အနှစ်ချုပ်နေပါသည်။ ခေတ္တစောင့်ဆိုင်းပေးပါ။', 'info');
-
-                const allJournalTexts = entriesToSummarize.map(entry => {
-                    return `ရက်စွဲ: ${entry.date}, စိတ်ခံစားမှု: ${entry.mood}\n${entry.text}`;
-                }).join('\n\n---\n\n');
-
+                const allJournalTexts = entriesToSummarize.map(entry => `ရက်စွဲ: ${entry.date}, စိတ်ခံစားမှု: ${entry.mood}\n${entry.text}`).join('\n\n---\n\n');
                 const prompt = `You are a helpful assistant. Summarize the following collection of journal entries. Highlight key themes, recurring emotions, and overall progression. Provide a concise overview in Burmese.\n\nJournal Entries:\n${allJournalTexts}`;
-
                 try {
-                    const summary = await GeminiAPI.generateText(prompt, this.apiKey);
+                    const summary = await GeminiAPI.generateText(prompt);
                     this.showSummary(entriesToSummarize);
                     document.getElementById('aiSummaryDisplay').textContent = summary;
-                } catch (error) {
-                    UIUtil.showToast(error.message, 'danger');
-                } finally {
-                    UIUtil.setLoading(summarizeBtn, false, '✨ အနှစ်ချုပ်မည်');
-                }
+                } catch (error) { UIUtil.showToast(error.message, 'danger'); } finally { UIUtil.setLoading(summarizeBtn, false, '✨ အနှစ်ချုပ်မည်'); }
             }
 
             async analyzeMoodTrends(entriesToAnalyze) {
                 if (entriesToAnalyze.length < 2) {
-                    UIUtil.showToast('စိတ်ခံစားမှု ခွဲခြမ်းစိတ်ဖြာရန် မှတ်တမ်းအနည်းဆုံး ၂ ခု လိုအပ်ပါသည်။', 'warning');
-                    return;
+                    UIUtil.showToast('စိတ်ခံစားမှု ခွဲခြမ်းစိတ်ဖြာရန် မှတ်တမ်းအနည်းဆုံး ၂ ခု လိုအပ်ပါသည်။', 'warning'); return;
                 }
-
                 const analyzeBtn = document.getElementById('analyzeMoodBtn');
                 UIUtil.setLoading(analyzeBtn, true, '...');
                 UIUtil.showToast('AI မှ စိတ်ခံစားမှုများကို ခွဲခြမ်းစိတ်ဖြာနေပါသည်။ ခေတ္တစောင့်ဆိုင်းပေးပါ။', 'info');
-
-                const moodData = entriesToAnalyze.map(entry => {
-                    return `ရက်စွဲ: ${entry.date}, စိတ်ခံစားမှု: ${entry.mood}, အကြောင်းအရာအကျဉ်း: ${entry.text.substring(0, 150)}...`;
-                }).join('\n');
-
+                const moodData = entriesToAnalyze.map(entry => `ရက်စွဲ: ${entry.date}, စိတ်ခံစားမှု: ${entry.mood}, အကြောင်းအရာအကျဉ်း: ${entry.text.substring(0, 150)}...`).join('\n');
                 const prompt = `You are an insightful assistant. Analyze the following journal entries to identify mood patterns, emotional shifts, or trends over time. Provide insights into what might be influencing these moods. Offer gentle reflections. Write the analysis in Burmese.\n\nJournal Entries:\n${moodData}`;
-
                 try {
-                    const analysis = await GeminiAPI.generateText(prompt, this.apiKey);
+                    const analysis = await GeminiAPI.generateText(prompt);
                     this.showMoodAnalysis(entriesToAnalyze);
                     document.getElementById('aiMoodAnalysisDisplay').textContent = analysis;
-                } catch (error) {
-                    UIUtil.showToast(error.message, 'danger');
-                } finally {
-                    UIUtil.setLoading(analyzeBtn, false, '📊 စိတ်ခံစားမှု ခွဲခြမ်းစိတ်ဖြာမည်');
-                }
+                } catch (error) { UIUtil.showToast(error.message, 'danger'); } finally { UIUtil.setLoading(analyzeBtn, false, '📊 စိတ်ခံစားမှု ခွဲခြမ်းစိတ်ဖြာမည်'); }
             }
 
             bindAnalysisSuccessButtons() {
                 const actionsDiv = document.getElementById('analysis-actions');
-                actionsDiv.innerHTML = `
-                    <button id="copySuccessTextBtn" class="btn btn-secondary">မှတ်တမ်းကူးယူမည်</button>
-                    <button id="backToMainSuccessBtn" class="btn btn-outline-primary">ပင်မစာမျက်နှာသို့</button>
-                `;
+                actionsDiv.innerHTML = `<button id="copySuccessTextBtn" class="btn btn-secondary">မှတ်တမ်းကူးယူမည်</button><button id="backToMainSuccessBtn" class="btn btn-outline-primary">ပင်မစာမျက်နှာသို့</button>`;
                 document.getElementById('copySuccessTextBtn').onclick = () => navigator.clipboard.writeText(this.fullJournalText).then(() => UIUtil.showToast('မှတ်တမ်းကို ကူးယူပြီးပါပြီ။', 'success'));
                 document.getElementById('backToMainSuccessBtn').onclick = () => this.showJournalSection();
             }
 
             bindAnalysisFailButtons() {
                 const actionsDiv = document.getElementById('analysis-actions');
-                actionsDiv.innerHTML = `
-                    <button id="tryAgainBtn" class="btn btn-primary">ထပ်မံကြိုးစားမည်</button>
-                    <button id="copyFailTextBtn" class="btn btn-secondary">မှတ်တမ်းကူးယူမည်</button>
-                    <button id="backToMainFailBtn" class="btn btn-outline-primary">ပင်မစာမျက်နှာသို့</button>
-                `;
+                actionsDiv.innerHTML = `<button id="tryAgainBtn" class="btn btn-primary">ထပ်မံကြိုးစားမည်</button><button id="copyFailTextBtn" class="btn btn-secondary">မှတ်တမ်းကူးယူမည်</button><button id="backToMainFailBtn" class="btn btn-outline-primary">ပင်မစာမျက်နှာသို့</button>`;
                 document.getElementById('tryAgainBtn').onclick = () => this.combineAnswers();
                 document.getElementById('copyFailTextBtn').onclick = () => navigator.clipboard.writeText(this.fullJournalText).then(() => UIUtil.showToast('မှတ်တမ်းကို ကူးယူပြီးပါပြီ။', 'success'));
                 document.getElementById('backToMainFailBtn').onclick = () => this.showJournalSection();
@@ -731,13 +649,11 @@
                         <button class="btn btn-secondary" id="copyHistoryTextBtn">မှတ်တမ်းကူးယူမည်</button>
                     </div>
                 `;
-                
                 document.getElementById('copyHistoryTextBtn').onclick = () => {
                     navigator.clipboard.writeText(entry.text)
                         .then(() => UIUtil.showToast('မှတ်တမ်းကို ကူးယူပြီးပါပြီ။', 'success'))
                         .catch(err => UIUtil.showToast('ကူးယူ၍ မရပါ', 'danger'));
                 };
-
                 modal.show();
             }
 
