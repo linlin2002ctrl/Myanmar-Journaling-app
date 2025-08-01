@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ဖွင့်ဟ (Pwin Ha) - Journaling App</title>
+    <!-- Browser Tab တွင် ပေါ်မည့်နာမည်ကို ဤနေရာတွင် ပြင်ဆင်ထားသည် -->
+    <title>Pwin Ha (ဖွင့်ဟ)</title>
 
     <!-- ======== App Icon Links ======== -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
@@ -308,7 +309,7 @@
         const GeminiAPI = {
             async generateText(prompt) {
                 // All AI requests go to our single, secure backend file.
-                const apiUrl = '/api/analyze.js';
+                const apiUrl = '/api/analyze'; // Note: .js extension is not needed when calling
                 try {
                     const response = await fetch(apiUrl, {
                         method: 'POST',
@@ -319,7 +320,6 @@
                     if (!response.ok) {
                         throw new Error(result.error || 'AI နှင့် ချိတ်ဆက်ရာတွင် အမှားတစ်ခုဖြစ်ပွားခဲ့သည်။');
                     }
-                    // The backend returns the suggestion in a 'suggestion' field
                     return result.suggestion;
                 } catch (error) {
                     console.error("Backend Proxy API Call Failed:", error);
@@ -571,7 +571,6 @@
                     const moodText = (mood === 'မသတ်မှတ်ထား') ? "The user has not specified a mood." : `Their stated mood is '${mood}'.`;
                     const counselorPrompt = `You are a warm, wise, and deeply compassionate Burmese mind therapist. ${genderInstruction} A user has just completed a '${this.journalMode}' reflection. ${moodText} Their journal entry is below.\n\n---\n${combinedAnswers}\n---\n\nYour task is to respond in flawless, natural, and flowing Burmese that feels like a heartfelt message from a caring, wise friend, not an AI. Strictly avoid robotic phrasing and clinical jargon. Follow these steps precisely:\n1. Acknowledge their feelings with genuine, deep empathy.\n2. Offer a fresh, gentle perspective on their thoughts.\n3. Provide one or two simple, truly actionable suggestions.\n4. End with a sincerely warm and encouraging closing statement.\nYour entire response must be a single, coherent block of text in perfect Burmese.`;
                     
-                    // --- Call the universal API ---
                     const advice = await GeminiAPI.generateText(counselorPrompt);
 
                     document.getElementById('aiSuggestionDisplay').textContent = advice;
