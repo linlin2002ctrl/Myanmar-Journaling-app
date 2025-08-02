@@ -2,181 +2,92 @@
 @import url('https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap');
 
 :root {
-    --primary-green: #10b981; /* emerald-500 */
-    --light-green: #ecfdf5;  /* emerald-50 */
-    --dark-green: #065f46;   /* emerald-800 */
-    --text-color: #374151;   /* gray-700 */
-    --light-text: #6b7280;   /* gray-500 */
-    --border-color: #d1d5db; /* gray-300 */
-    --white: #ffffff;
+    --bg-soft: #F9FAFB; /* Very light gray, almost white */
+    --primary-accent: #2dd4bf; /* teal-400 */
+    --primary-accent-dark: #14b8a6; /* teal-500 */
+    --card-bg: #FFFFFF;
+    --text-dark: #1f2937; /* gray-800 */
+    --text-light: #6b7280; /* gray-500 */
+    --border-color: #e5e7eb; /* gray-200 */
+    
+    /* Card specific pastel colors */
+    --card-morning: #FEF3C7; /* amber-100 */
+    --card-night: #E0E7FF; /* indigo-100 */
+    --card-gratitude: #FCE7F3; /* pink-100 */
+    --card-therapist: #D1FAE5; /* emerald-100 */
 }
 
 body {
     font-family: 'Padauk', sans-serif;
-    background-color: var(--light-green);
-    color: var(--text-color);
+    background-color: var(--bg-soft);
+    color: var(--text-dark);
     margin: 0;
-    padding: 1rem;
 }
 
-/* --- Main App Structure --- */
+/* --- Main App Container --- */
 .app-container {
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
+    padding: 1.5rem 1rem;
 }
 
-.header {
-    text-align: center;
+.greeting-header {
+    padding: 0 0.5rem;
     margin-bottom: 2rem;
 }
 
-.header h1 {
-    font-size: 2rem;
+.greeting-header h1 {
+    font-size: 1.8rem;
     font-weight: 700;
-    color: var(--dark-green);
     margin: 0;
 }
 
-.header p {
-    color: var(--primary-green);
-    margin-top: 0.25rem;
-}
-
-/* --- Journaling Tabs (Mobile Friendly) --- */
-.tabs {
-    display: flex;
-    justify-content: space-around;
-    border-bottom: 2px solid #a7f3d0; /* emerald-200 */
-    margin-bottom: 1.5rem;
-}
-
-.tab-btn {
-    flex-grow: 1;
-    padding: 0.75rem 0.5rem;
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: var(--light-text);
-    background-color: transparent;
-    border: none;
-    border-bottom: 3px solid transparent;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-
-.tab-btn.active {
-    color: var(--primary-green);
-    border-bottom: 3px solid var(--primary-green);
-}
-
-/* --- Main Content Area --- */
-.main-content {
-    background-color: var(--white);
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-/* --- Mood Selector --- */
-.mood-selector h3 {
-    text-align: center;
-    font-weight: bold;
-    color: var(--dark-green);
-    margin-top: 0;
-    margin-bottom: 1rem;
-}
-
-.mood-options {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 1.5rem;
-}
-
-.mood-btn {
-    background: none;
-    border: 2px solid transparent;
-    border-radius: 50%;
-    padding: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.mood-btn.selected {
-    border-color: var(--primary-green);
-    background-color: var(--light-green);
-}
-
-.mood-btn svg { /* For future icon usage */
-    width: 2.5rem;
-    height: 2.5rem;
-}
-
-/* --- Prompt & Textarea --- */
-.prompt-area {
-    text-align: center;
-    font-style: italic;
-    color: var(--light-text);
-    background-color: #f9fafb; /* gray-50 */
-    padding: 0.75rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-}
-
-#journal-entry {
-    width: 100%;
-    min-height: 200px;
-    padding: 1rem;
+.greeting-header p {
     font-size: 1rem;
-    line-height: 1.6;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    box-sizing: border-box; /* Important for width */
-    transition: border-color 0.2s;
+    color: var(--text-light);
+    margin: 0.25rem 0 0;
 }
 
-#journal-entry:focus {
-    outline: none;
-    border-color: var(--primary-green);
+/* --- Home Screen Grid --- */
+.home-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
 }
 
-/* --- Submit & Loading --- */
-.submit-btn {
-    width: 100%;
-    padding: 1rem;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--white);
-    background-color: var(--primary-green);
-    border: none;
-    border-radius: 8px;
+/* --- Feature Card --- */
+.feature-card {
+    padding: 1.25rem;
+    border-radius: 1.25rem; /* More rounded */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border-color);
     cursor: pointer;
-    transition: background-color 0.2s;
-    margin-top: 1rem;
-}
-
-.submit-btn:hover {
-    background-color: var(--dark-green);
-}
-
-.submit-btn:disabled {
-    background-color: #9ca3af; /* gray-400 */
-    cursor: not-allowed;
-}
-
-#loading-indicator, #response-container {
-    margin-top: 2rem;
-    text-align: center;
-}
-
-#response-card {
-    background-color: var(--light-green);
-    padding: 1.5rem;
-    border-left: 5px solid var(--primary-green);
-    border-radius: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     text-align: left;
-    white-space: pre-wrap;
-    line-height: 1.7;
 }
+.feature-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06); }
+.feature-card .icon-bg { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+.feature-card h2 { font-size: 1.1rem; font-weight: bold; color: var(--text-dark); margin: 0 0 0.25rem; }
+.feature-card p { font-size: 0.85rem; color: var(--text-light); margin: 0; line-height: 1.5; }
 
-.hidden {
-    display: none;
-}
+/* Assigning colors to cards */
+.card-morning .icon-bg { background-color: #fffbeb; } /* amber-50 */
+.card-night .icon-bg { background-color: #eef2ff; } /* indigo-50 */
+.card-gratitude .icon-bg { background-color: #fdf2f8; } /* pink-50 */
+.card-therapist .icon-bg { background-color: #ecfdf5; } /* emerald-50 */
+
+/* --- Writing Screen --- */
+.writing-screen { background-color: var(--card-bg); padding: 1.5rem; border-radius: 1.5rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+.writing-header { display: flex; align-items: center; margin-bottom: 1.5rem; }
+.back-btn { background: none; border: none; cursor: pointer; padding: 0.5rem; }
+.writing-header h2 { font-size: 1.5rem; margin: 0 0 0 0.5rem; }
+.prompt-area { font-style: normal; font-size: 1rem; text-align: left; background-color: var(--bg-soft); padding: 1rem; border-radius: 0.75rem; margin-bottom: 1rem; line-height: 1.6; border-left: 4px solid var(--primary-accent); }
+#journal-entry { width: 100%; min-height: 250px; padding: 1rem; font-size: 1rem; line-height: 1.6; border: 1px solid var(--border-color); border-radius: 0.75rem; box-sizing: border-box; transition: all 0.2s; background-color: var(--bg-soft); }
+#journal-entry:focus { outline: none; border-color: var(--primary-accent); background-color: var(--card-bg); box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.2); }
+.submit-btn { width: 100%; padding: 1rem; font-size: 1.1rem; font-weight: bold; color: var(--card-bg); background-color: var(--primary-accent); border: none; border-radius: 0.75rem; cursor: pointer; transition: background-color 0.2s; margin-top: 1rem; }
+.submit-btn:hover { background-color: var(--primary-accent-dark); }
+.submit-btn:disabled { background-color: #d1d5db; cursor: not-allowed; color: var(--text-light); }
+
+#loading-indicator, #response-container { margin-top: 2rem; text-align: center; }
+#response-card { background-color: var(--bg-soft); padding: 1.5rem; border-left: 4px solid var(--primary-accent); border-radius: 0.75rem; text-align: left; white-space: pre-wrap; line-height: 1.7; }
+.hidden { display: none; }
