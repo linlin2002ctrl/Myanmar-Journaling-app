@@ -1,44 +1,59 @@
-// File: /api/analyze.js
+// Import the Google Generative AI library
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-export default async function handler(request, response) {
-  if (request.method !== 'POST') {
-    return response.status(405).json({ error: 'Method Not Allowed' });
-  }
-  try {
-    const { journalText, mood, mode, gender } = request.body;
-    const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-    if (!GEMINI_API_KEY) {
-      throw new Error("API Key is not configured on the server.");
+// This is the main handler for the Vercel Serverless Function
+module.exports = async (req, res) => {
+    // 1. Set CORS headers to allow requests from your frontend
+    // Adjust the origin if your Vercel frontend has a specific production URL
+    res.setHeader('Access-Control-Allow-Origin', '*'); 
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Handle preflight OPTIONS request for CORS
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
     }
-    let genderInstruction = "သင့်အနေနဲ့ ကျား/မ လိင်ကွဲပြားမှုမရှိတဲ့ ယေဘုယျလေသံ (gender-neutral tone) ကိုသာ အသုံးပြုပြီး ရေးသားပေးပါ။";
-    if (gender === 'male') {
-        genderInstruction = "အရေးကြီး: သင်၏တုံ့ပြန်မှုသည် အသုံးပြုသူကို 'မောင်လေး' သို့မဟုတ် 'သား' ဟု နွေးထွေးစွာခေါ်ပြီး 'ခင်ဗျာ' ဆိုသည့်နောက်ဆက်တွဲဖြင့် ယဉ်ကျေးစွာရေးသားရမည်။";
-    } else if (gender === 'female') {
-        genderInstruction = "အရေးကြီး: သင်၏တုံ့ပြန်မှုသည် အသုံးပြုသူကို 'ညီမလေး' သို့မဟုတ် 'သမီး' ဟု နွေးထွေးစွာခေါ်ပြီး 'ရှင့်' ဆိုသည့်နောက်ဆက်တွဲဖြင့် ယဉ်ကျေးစွာရေးသားရမည်။";
+
+    // 2. Ensure the request method is POST
+    if (req.method !== 'POST') {
+        res.setHeader('Allow', ['POST']);
+        return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
     }
-    const moodText = (mood === 'မသတ်မှတ်ထား') ? "The user has not specified a mood." : `Their stated mood is '${mood}'.`;
-    const prompt = `You are a warm, wise, and deeply compassionate Burmese mind therapist. ${genderInstruction} A user has just completed a '${mode}' reflection. ${moodText} Their journal entry is below.\n\n---\n${journalText}\n---\n\nYour task is to respond in flawless, natural, and flowing Burmese that feels like a heartfelt message from a caring, wise friend, not an AI. Strictly avoid robotic phrasing and clinical jargon. Follow these steps precisely:\n1. Acknowledge their feelings with genuine, deep empathy.\n2. Offer a fresh, gentle perspective on their thoughts.\n3. Provide one or two simple, truly actionable suggestions.\n4. End with a sincerely warm and encouraging closing statement.\nYour entire response must be a single, coherent block of text in perfect Burmese.`;
-    const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: "text/plain" },
-            safetySettings: [
-                { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_NONE' }, { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_NONE' },
-                { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_NONE' }, { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-            ]
-        }),
-    });
-    if (!geminiResponse.ok) {
-        console.error('Gemini API Error:', await geminiResponse.text());
-        throw new Error('An error occurred with the AI service.');
+
+    try {
+        // 3. Get the Gemini API key from Vercel Environment Variables
+        const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+        if (!GEMINI_API_KEY) {
+            throw new Error("GEMINI_API_KEY is not set in environment variables.");
+        }
+
+        // 4. Initialize the generative AI model
+        const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+        // 5. Get the user's prompt from the request body
+        const { prompt } = req.body;
+        if (!prompt) {
+            return res.status(400).json({ error: "Prompt is missing from the request body." });
+        }
+
+        // 6. Create a more empathetic prompt for the AI
+        const fullPrompt = `You are a warm, empathetic, and supportive friend from Myanmar. Your name is 'ဖွင့်ဟ'. A user is sharing their feelings with you in Burmese. Your task is to listen carefully and provide a comforting, encouraging, and non-judgmental response in Burmese. Do not give medical advice. Focus on validating their feelings and offering gentle support.
+
+User's journal entry: "${prompt}"
+
+Your supportive response (in Burmese):`;
+
+        // 7. Call the Gemini API to get the response
+        const result = await model.generateContent(fullPrompt);
+        const aiResponse = await result.response.text();
+
+        // 8. Send the AI's response back to the frontend
+        res.status(200).json({ response: aiResponse });
+
+    } catch (error) {
+        // 9. Handle any errors that occur
+        console.error("Error in serverless function:", error);
+        res.status(500).json({ error: "An internal server error occurred while contacting the AI." });
     }
-    const result = await geminiResponse.json();
-    const analysisText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-    response.status(200).json({ suggestion: analysisText });
-  } catch (error) {
-    console.error(error);
-    response.status(500).json({ error: 'Failed to get analysis from the server.' });
-  }
-}
+};
