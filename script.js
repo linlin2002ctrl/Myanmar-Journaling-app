@@ -1,119 +1,174 @@
-// Wait for the entire page to load before running the script
 document.addEventListener('DOMContentLoaded', () => {
+
+    // --- App State and Data ---
+    const appData = {
+        'general': {
+            title: 'အထွေထွေ',
+            prompts: {
+                happy: 'ဒီနေ့ သင့်ကိုပျော်ရွှင်စေတဲ့အရာတွေအကြောင်း ပြောပြပေးပါ။',
+                neutral: 'ဒီနေ့ သင့်စိတ်ထဲမှာ အလေးအနက်မထားမိဘဲ ရှိနေတဲ့အတွေးက ဘာဖြစ်မလဲ။',
+                sad: 'သင့်ကို စိတ်မကောင်းဖြစ်စေတဲ့ ခံစားချက်ကို ဒီနေရာမှာ ရင်ဖွင့်လိုက်ပါနော်။'
+            },
+            placeholder: 'စိတ်ခံစားမှုတစ်ခုကို ရွေးချယ်ပြီး စတင်ရေးသားပါ။'
+        },
+        'morning': {
+            title: 'Morning',
+            prompt: 'ဒီမနက်ခင်းမှာ ဘယ်လိုရည်မှန်းချက်တွေနဲ့ နေ့သစ်ကိုစတင်ချင်လဲ။',
+            placeholder: 'သင်၏ မျှော်လင့်ချက်များ၊ ရည်မှန်းချက်များကို ရေးသားပါ...'
+        },
+        'night': {
+            title: 'Night',
+            prompt: 'ဒီနေ့တာကို ပြန်လည်သုံးသပ်ကြည့်တဲ့အခါ ဘာကိုအမှတ်ရဆုံးလဲ။',
+            placeholder: 'သင်၏ တစ်နေ့တာအတွေ့အကြုံကို ပြန်လည်သုံးသပ်ပါ...'
+        }
+    };
+
+    let currentState = {
+        activeTab: 'general',
+        mood: null // 'happy', 'neutral', 'sad'
+    };
 
     const appContainer = document.getElementById('app-container');
 
-    // --- Dynamically generate the User Interface (UI) ---
+    // --- Build the entire UI ---
     function buildUI() {
         appContainer.innerHTML = `
-            <!-- Header Section -->
-            <header class="text-center mt-3 mb-4">
-                <h1 class="header-title">
-                    <i data-feather="edit-3" class="header-icon"></i>ဖွင့်ဟ (Pwin Ha)
-                </h1>
-                <p class="header-subtitle">သင်၏စိတ်ခံစားမှုများကို ရင်ဖွင့်ရေးသားပြီး AI ထံမှ နွေးထွေးသောအကြံပြုချက်များ ရယူပါ</p>
+            <header class="header">
+                <h1>ဖွင့်ဟ (Pwin Ha)</h1>
+                <p>သင်၏ AI စိတ်ကျန်းမာရေး အဖော်မွန်</p>
             </header>
 
-            <!-- Journal Form -->
-            <main>
+            <nav class="tabs">
+                <button class="tab-btn" data-tab="general">အထွေထွေ</button>
+                <button class="tab-btn" data-tab="morning">Morning</button>
+                <button class="tab-btn" data-tab="night">Night</button>
+            </nav>
+
+            <main class="main-content">
+                <div id="mood-selector" class="mood-selector">
+                    <h3>ဒီနေ့ ဘယ်လိုခံစားနေရလဲ။</h3>
+                    <div class="mood-options">
+                        <button class="mood-btn" data-mood="happy" aria-label="Happy">😊</button>
+                        <button class="mood-btn" data-mood="neutral" aria-label="Neutral">😐</button>
+                        <button class="mood-btn" data-mood="sad" aria-label="Sad">😢</button>
+                    </div>
+                </div>
+
+                <div class="prompt-area" id="prompt-area"></div>
+                
                 <form id="journal-form">
-                    <div class="mb-3">
-                        <label for="journal-entry" class="form-label visually-hidden">Journal Entry</label>
-                        <textarea class="form-control" id="journal-entry" rows="8" placeholder="ဒီနေရာမှာ ရင်ဖွင့်ရေးသားပါ..."></textarea>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary submit-btn">
-                            <i data-feather="send" style="vertical-align: text-top; margin-right: 5px;"></i> အကြံဉာဏ်တောင်းမည်
-                        </button>
-                    </div>
+                    <textarea id="journal-entry" rows="10"></textarea>
+                    <button type="submit" id="submit-btn" class="submit-btn">AI ထံသို့ ပေးပို့မည်</button>
                 </form>
-
-                <!-- Loading Spinner -->
-                <div id="loading-indicator" class="text-center hidden">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <p class="mt-2 text-muted">AI က သင့်အတွက် အကြံဉာဏ်ပေးရန် စဉ်းစားနေပါသည်...</p>
-                </div>
-
-                <!-- AI Response Card -->
-                <div id="response-container">
-                    <!-- AI response will be injected here -->
-                </div>
             </main>
-        `;
 
-        // After creating the UI, render the icons
-        feather.replace();
+            <div id="loading-indicator" class="hidden">
+                <p>ခေတ္တစောင့်ဆိုင်းပါ... AI က သင့်အတွက် စဉ်းစားပေးနေပါတယ်ရှင်...</p>
+            </div>
+            <div id="response-container"></div>
+        `;
+        updateUI(); // Set initial UI state
+    }
+
+    // --- Update UI based on the current state ---
+    function updateUI() {
+        // Update active tab button
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === currentState.activeTab);
+        });
+
+        const moodSelector = document.getElementById('mood-selector');
+        const journalEntry = document.getElementById('journal-entry');
+        const submitBtn = document.getElementById('submit-btn');
+        const promptArea = document.getElementById('prompt-area');
+        
+        // Handle 'General' tab logic
+        if (currentState.activeTab === 'general') {
+            moodSelector.classList.remove('hidden');
+            document.querySelectorAll('.mood-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.mood === currentState.mood);
+            });
+            
+            if (currentState.mood) {
+                promptArea.textContent = appData.general.prompts[currentState.mood];
+                journalEntry.placeholder = 'ဒီမေးခွန်းလေးကို အခြေခံပြီး ရင်ဖွင့်နိုင်ပါတယ်...';
+                journalEntry.disabled = false;
+                submitBtn.disabled = false;
+            } else {
+                promptArea.textContent = 'ရင်ဖွင့်မရေးခင် သင်၏စိတ်ခံစားချက်ကို ရွေးချယ်ပေးပါနော်။';
+                journalEntry.placeholder = appData.general.placeholder;
+                journalEntry.disabled = true;
+                submitBtn.disabled = true;
+            }
+        } else {
+            // Handle 'Morning' and 'Night' tabs
+            moodSelector.classList.add('hidden');
+            const tabData = appData[currentState.activeTab];
+            promptArea.textContent = tabData.prompt;
+            journalEntry.placeholder = tabData.placeholder;
+            journalEntry.disabled = false;
+            submitBtn.disabled = false;
+        }
     }
 
     // --- Event Handlers ---
     function attachEventListeners() {
-        const journalForm = document.getElementById('journal-form');
-        if (journalForm) {
-            journalForm.addEventListener('submit', handleFormSubmit);
-        }
+        appContainer.addEventListener('click', (e) => {
+            // Handle tab switching
+            if (e.target.matches('.tab-btn')) {
+                currentState.activeTab = e.target.dataset.tab;
+                currentState.mood = null; // Reset mood when changing tabs
+                document.getElementById('journal-entry').value = '';
+                document.getElementById('response-container').innerHTML = '';
+                updateUI();
+            }
+            // Handle mood selection
+            if (e.target.matches('.mood-btn')) {
+                currentState.mood = e.target.dataset.mood;
+                updateUI();
+            }
+        });
+        
+        document.getElementById('journal-form').addEventListener('submit', handleFormSubmit);
     }
-
-    // --- Main Logic: Handle Form Submission ---
+    
+    // --- Handle Form Submission ---
     async function handleFormSubmit(event) {
-        event.preventDefault(); // Prevent default page reload
-
-        const journalEntry = document.getElementById('journal-entry');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const responseContainer = document.getElementById('response-container');
-        const submitButton = document.querySelector('.submit-btn');
-
-        const userText = journalEntry.value.trim();
-
+        event.preventDefault();
+        const userText = document.getElementById('journal-entry').value.trim();
         if (userText === '') {
-            alert('ကျေးဇူးပြု၍ သင်၏ခံစားချက်များကို အရင်ရေးသားပါ။');
+            alert('ကျေးဇူးပြု၍ သင်၏ခံစားချက်များကို အရင်ရေးသားပါရှင်။');
             return;
         }
 
-        // --- UI Updates: Show loading state ---
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const responseContainer = document.getElementById('response-container');
+        const submitBtn = document.getElementById('submit-btn');
+        
         loadingIndicator.classList.remove('hidden');
-        responseContainer.innerHTML = ''; // Clear previous response
-        submitButton.disabled = true;
-        submitButton.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>  ခေတ္တစောင့်ဆိုင်းပါ...`;
+        responseContainer.innerHTML = '';
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'စဉ်းစားနေပါသည်...';
 
         try {
-            // --- Call the Backend Proxy (Vercel Function) ---
             const response = await fetch('/api/analyze.js', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ prompt: userText }),
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    prompt: userText,
+                    type: currentState.activeTab,
+                    mood: currentState.mood
+                }),
             });
-
-            if (!response.ok) {
-                throw new Error(`Server error: ${response.statusText}`);
-            }
-
+            if (!response.ok) throw new Error('Server error');
             const data = await response.json();
-            const aiResponse = data.response;
-
-            // --- UI Updates: Display AI response ---
-            responseContainer.innerHTML = `
-                <div id="response-card">${aiResponse}</div>
-            `;
-
+            responseContainer.innerHTML = `<div id="response-card">${data.response}</div>`;
         } catch (error) {
-            console.error('Error fetching AI response:', error);
-            responseContainer.innerHTML = `
-                <div id="response-card" class="bg-danger-subtle border-danger">
-                    <strong>အမှားအယွင်းတစ်ခု ဖြစ်ပွားခဲ့ပါသည်</strong>
-                    <p class="mt-2 mb-0">AI နှင့်ဆက်သွယ်ရာတွင် အဆင်မပြေဖြစ်သွားပါသည်။ ကျေးဇူးပြု၍ ခဏအကြာတွင် ထပ်မံကြိုးစားကြည့်ပါ။</p>
-                </div>
-            `;
+            responseContainer.innerHTML = `<div id="response-card">အမှားအယွင်းတစ်ခု ဖြစ်ပွားခဲ့ပါသည်။ AI နှင့် ဆက်သွယ်၍မရပါရှင်။</div>`;
         } finally {
-            // --- UI Updates: Hide loading state ---
             loadingIndicator.classList.add('hidden');
-            submitButton.disabled = false;
-            // Restore button text using innerHTML to include the icon
-            submitButton.innerHTML = `<i data-feather="send" style="vertical-align: text-top; margin-right: 5px;"></i> အကြံဉာဏ်တောင်းမည်`;
-            feather.replace(); // Re-render icons if they are in the button
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'AI ထံသို့ ပေးပို့မည်';
         }
     }
 
