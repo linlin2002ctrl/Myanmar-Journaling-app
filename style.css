@@ -1,94 +1,182 @@
-/* -------------------
-   Google Font (Padauk)
-------------------- */
+/* --- Google Font & Global Styles --- */
 @import url('https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap');
 
-/* -------------------
-   Global Styles
-------------------- */
+:root {
+    --primary-green: #10b981; /* emerald-500 */
+    --light-green: #ecfdf5;  /* emerald-50 */
+    --dark-green: #065f46;   /* emerald-800 */
+    --text-color: #374151;   /* gray-700 */
+    --light-text: #6b7280;   /* gray-500 */
+    --border-color: #d1d5db; /* gray-300 */
+    --white: #ffffff;
+}
+
 body {
-  font-family: 'Padauk', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f8f9fa; /* Bootstrap's light gray */
-  color: #212529; /* Bootstrap's default text color */
+    font-family: 'Padauk', sans-serif;
+    background-color: var(--light-green);
+    color: var(--text-color);
+    margin: 0;
+    padding: 1rem;
 }
 
-.container {
-  max-width: 720px;
+/* --- Main App Structure --- */
+.app-container {
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-/* -------------------
-   Header / Title
-------------------- */
-.header-title {
-  font-weight: 700;
-  color: #343a40;
-  text-align: center;
-  margin-bottom: 0.5rem;
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
-.header-icon {
-  width: 40px;
-  height: 40px;
-  vertical-align: text-bottom;
-  margin-right: 8px;
+.header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-green);
+    margin: 0;
 }
 
-.header-subtitle {
-  text-align: center;
-  color: #6c757d; /* Bootstrap's secondary text color */
-  margin-bottom: 2.5rem;
+.header p {
+    color: var(--primary-green);
+    margin-top: 0.25rem;
 }
 
-/* -------------------
-   Journal Entry Form
-------------------- */
+/* --- Journaling Tabs (Mobile Friendly) --- */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    border-bottom: 2px solid #a7f3d0; /* emerald-200 */
+    margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+    flex-grow: 1;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: var(--light-text);
+    background-color: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.tab-btn.active {
+    color: var(--primary-green);
+    border-bottom: 3px solid var(--primary-green);
+}
+
+/* --- Main Content Area --- */
+.main-content {
+    background-color: var(--white);
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Mood Selector --- */
+.mood-selector h3 {
+    text-align: center;
+    font-weight: bold;
+    color: var(--dark-green);
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.mood-options {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 1.5rem;
+}
+
+.mood-btn {
+    background: none;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mood-btn.selected {
+    border-color: var(--primary-green);
+    background-color: var(--light-green);
+}
+
+.mood-btn svg { /* For future icon usage */
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+/* --- Prompt & Textarea --- */
+.prompt-area {
+    text-align: center;
+    font-style: italic;
+    color: var(--light-text);
+    background-color: #f9fafb; /* gray-50 */
+    padding: 0.75rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
 #journal-entry {
-  min-height: 200px;
-  box-shadow: none;
-  border-color: #ced4da;
-  font-size: 1.1rem;
-  line-height: 1.6;
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    box-sizing: border-box; /* Important for width */
+    transition: border-color 0.2s;
 }
 
 #journal-entry:focus {
-  border-color: #86b7fe; /* Bootstrap's focus color */
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
+    outline: none;
+    border-color: var(--primary-green);
 }
 
-/* -------------------
-   Submit Button
-------------------- */
+/* --- Submit & Loading --- */
 .submit-btn {
-  padding: 0.75rem 1.5rem;
-  font-size: 1.1rem;
-  font-weight: bold;
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--white);
+    background-color: var(--primary-green);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 1rem;
 }
 
-/* -------------------
-   Loading Spinner
-------------------- */
-#loading-indicator {
-  padding: 3rem 0;
+.submit-btn:hover {
+    background-color: var(--dark-green);
 }
 
-/* -------------------
-   AI Response Card
-------------------- */
+.submit-btn:disabled {
+    background-color: #9ca3af; /* gray-400 */
+    cursor: not-allowed;
+}
+
+#loading-indicator, #response-container {
+    margin-top: 2rem;
+    text-align: center;
+}
+
 #response-card {
-  background-color: #ffffff;
-  border-left: 5px solid #0d6efd; /* Bootstrap's primary color */
-  margin-top: 2rem;
-  padding: 1.5rem;
-  border-radius: 0.3rem;
-  white-space: pre-wrap; /* To preserve line breaks from AI response */
-  font-size: 1.1rem;
-  line-height: 1.7;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    background-color: var(--light-green);
+    padding: 1.5rem;
+    border-left: 5px solid var(--primary-green);
+    border-radius: 8px;
+    text-align: left;
+    white-space: pre-wrap;
+    line-height: 1.7;
 }
 
-/* -------------------
-   Utility Classes
-------------------- */
 .hidden {
-  display: none !important;
+    display: none;
 }
